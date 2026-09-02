@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O‘quvchi nazorat platformasi</title>
+<style>
+:root{--blue:#0758c9;--dark:#0d2a5b;--green:#2fa85f;--shadow:0 8px 28px rgba(13,42,91,.10)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);color:#12203b}
+.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff;min-height:142px;position:relative;overflow:hidden}
+.header:after{content:"";position:absolute;right:-80px;top:-110px;width:430px;height:300px;border-radius:50%;border:45px solid rgba(255,255,255,.05)}
+.header-inner{max-width:1180px;margin:auto;min-height:142px;display:flex;align-items:center;gap:24px;padding:22px 28px}
+.logo{width:88px;height:88px;border-radius:50%;border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-size:35px;font-weight:800;background:rgba(255,255,255,.08);flex:none}
+.header h1{margin:0;font-size:30px;line-height:1.12;letter-spacing:-.4px}.header p{margin:12px 0 0;font-size:16px}
+.container{max-width:1180px;margin:0 auto;padding:22px 24px 40px}.card{background:#fff;border:1px solid #e3eaf3;border-radius:15px;box-shadow:var(--shadow)}
+.top-card{padding:28px;display:grid;grid-template-columns:42% 58%;gap:30px}
+.section-title{display:flex;align-items:center;gap:12px;color:var(--dark);font-size:22px;font-weight:800;margin:4px 0 24px}
+.icon{width:34px;height:34px;border-radius:10px;background:#eaf3ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
+label{display:block;font-size:16px;font-weight:600;margin:0 0 9px}
+select,input{width:100%;height:54px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 15px;font-size:16px;color:#172744;outline:none}
+select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.field{margin-bottom:22px}
+.notice{margin-top:10px;padding:17px 18px;border-radius:10px;border:1px solid #cce0ff;background:#eef6ff;color:#153b78;line-height:1.65;font-size:14px}
+.notice strong{display:block;font-size:16px;margin-bottom:4px}
+.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.test-card{border:1px solid #d5deea;border-radius:12px;padding:18px;min-height:168px;position:relative;background:#fff;transition:.2s}
+.test-card.available{border-color:#1268df;box-shadow:0 4px 14px rgba(7,88,201,.10);cursor:pointer}.test-card.available:hover{transform:translateY(-2px)}
+.test-card.disabled{cursor:not-allowed}
+.test-head{display:flex;justify-content:space-between;align-items:center}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:34px;padding:0 11px;border-radius:8px;font-weight:800;background:#0d64d6;color:#fff}
+.lock{width:42px;height:42px;border-radius:50%;background:#f1f3f6;color:#58677d;display:grid;place-items:center;font-size:20px}
+.test-card h3{font-size:17px;margin:17px 0 12px;color:#1354aa}.test-card.locked h3{color:#6b7484}
+.status{display:inline-block;padding:5px 12px;border-radius:7px;background:#e7edf4;color:#26354e;font-size:13px}.status.ok{background:#31a961;color:#fff}
+.test-card small{display:block;margin-top:10px;color:#4d5d75;font-size:13px}
+.info-strip{margin-top:22px;padding:15px 20px;display:grid;grid-template-columns:1fr 1fr 1.15fr;border:1px solid #e2e9f2;border-radius:11px;background:#f9fbfe}
+.info-item{display:flex;align-items:center;gap:14px;padding:3px 22px;border-right:1px solid #dfe6ef}.info-item:last-child{border-right:0}
+.info-icon{width:43px;height:43px;border-radius:50%;background:#e9f3ff;color:var(--blue);display:grid;place-items:center;font-size:20px;flex:none}.info-item b{display:block;font-size:14px;margin-bottom:5px}.info-item span{font-size:13px;color:#526178}
+.exam{margin-top:18px;overflow:hidden}.exam-head{background:linear-gradient(100deg,#08429b,#075bc7);color:#fff;padding:19px 28px;display:flex;align-items:center;justify-content:space-between}
+.exam-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800}.exam-title .circle{width:38px;height:38px;border-radius:50%;background:#1d72dc;display:grid;place-items:center}
+.timer{font-size:16px;display:flex;align-items:center;gap:12px}.timer strong{font-size:30px}
+.exam-body{display:grid;grid-template-columns:280px 1fr;min-height:410px}.sidebar{border-right:1px solid #e0e6ef;padding:25px 28px;background:#fbfcfe}.sidebar h4{margin:0 0 18px;font-size:16px}
+.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.qbtn{height:34px;border:1px solid #ccd7e6;border-radius:6px;background:#fff;color:#15233e;font-weight:600;cursor:pointer}.qbtn.active{background:#0a65d5;color:#fff;border-color:#0a65d5}.qbtn.answered{background:#0a65d5;color:#fff;border-color:#0a65d5}
+.legend{margin-top:28px;font-size:12px;color:#3f4e64;line-height:2.4}.dot{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:-3px;margin-right:7px;border:1px solid #ccd7e6}.dot.blue{background:#0a65d5;border-color:#0a65d5}.dot.yellow{background:#ffb53c;border-color:#ffb53c}
+.exam-content{padding:30px}.question-no{color:#0b5dca;font-weight:800;font-size:17px;margin-bottom:22px}.question{font-size:18px;font-weight:700;line-height:1.5;margin-bottom:22px}
+.answer{display:block;border:1px solid #ccd7e6;border-radius:9px;padding:14px 16px;margin:10px 0;font-size:15px;cursor:pointer;background:#fff}.answer:hover{border-color:#8db7ed;background:#f7fbff}.answer.selected{border-color:#0a65d5;background:#eef6ff}.answer input{width:auto;height:auto;margin-right:10px;vertical-align:middle}
+.exam-actions{display:flex;justify-content:space-between;align-items:center;margin-top:25px;gap:10px}.btn{height:48px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 20px;font-size:15px;font-weight:700;color:#162641;cursor:pointer}.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}.btn:disabled{opacity:.45;cursor:not-allowed}
+.result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:50%;background:#2fa85f;color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
+.footer{margin-top:18px;background:#08489e;color:#fff;padding:18px;text-align:center;font-size:13px}
+.hidden{display:none!important}.login-message{margin-top:12px;color:#c0392b;font-size:14px;font-weight:600;min-height:18px}
+@media(max-width:900px){.top-card{grid-template-columns:1fr}.exam-body{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid #e0e6ef}}
+@media(max-width:600px){.header-inner{padding:18px 16px;gap:13px}.logo{width:60px;height:60px;font-size:24px}.header h1{font-size:21px}.header p{font-size:13px;margin-top:7px}.container{padding:12px 10px 25px}.top-card{padding:18px;gap:20px}.controls-grid{gap:10px}.test-card{padding:13px;min-height:150px}.info-strip{grid-template-columns:1fr;gap:8px}.info-item{border-right:0;border-bottom:1px solid #e1e7ef;padding:10px 8px}.info-item:last-child{border-bottom:0}.exam-head{padding:15px}.exam-body{min-height:0}.exam-content{padding:20px 16px}.sidebar{padding:18px 16px}.result{padding:20px;align-items:flex-start;flex-direction:column}.exam-actions{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="header-inner">
+<div class="logo">G</div>
+<div><h1>Guliston davlat<br>Universiteti akademik litseyi</h1><p>Dasturchi <b>Husenov Jahongir</b></p></div>
+</div>
+</header>
+
+<main class="container">
+<section class="card top-card">
+<div>
+<div class="section-title"><span class="icon">▣</span> O‘QUVCHI MA’LUMOTLARI</div>
+<div class="field"><label>Guruhni tanlang</label><select id="group"><option value="">Guruhni tanlang</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option></select></div>
+<div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div><div class="field"><label>Fanni tanlang</label><select id="subject"><option value="">Fanni tanlang</option><option>Geografiya</option><option>Matematika</option><option>Ingliz tili</option><option>Ona tili</option><option>Fizika</option><option>Kimyo</option></select></div>
+<div class="notice"><strong>ⓘ Eslatma</strong>Joriy nazoratlar bosqichma-bosqich ochiladi.<br>Avval guruh va ism-familiyangizni kiriting, so‘ng 1-joriy nazoratni boshlang.</div>
+<div id="loginMessage" class="login-message"></div>
+</div>
+
+<div>
+<div class="section-title"><span class="icon">⚯</span> JORIY NAZORATLAR</div>
+<div class="controls-grid">
+<div class="test-card available" id="startCard">
+<div class="test-head"><span class="badge">1-JN</span><span class="lock">▤</span></div>
+<h3>1-JORIY NAZORAT</h3><span class="status ok">Mavjud</span><small>25 ta test</small>
+</div>
+<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">2-JN</span><span class="lock">♙</span></div><h3>2-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
+<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">3-JN</span><span class="lock">♙</span></div><h3>3-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
+<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">4-JN</span><span class="lock">♙</span></div><h3>4-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
+</div>
+</div>
+
+<div class="info-strip" style="grid-column:1/-1">
+<div class="info-item"><div class="info-icon">♙</div><div><b>Har bir nazorat</b><span>25 ta testdan iborat</span></div></div>
+<div class="info-item"><div class="info-icon">◷</div><div><b>Vaqt</b><span>45 daqiqa</span></div></div>
+<div class="info-item"><div class="info-icon">✓</div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
+</div>
+</section>
+
+<section class="card exam hidden" id="exam">
+<div class="exam-head"><div class="exam-title"><span class="circle">▤</span><span id="examTitle">1-JORIY NAZORAT</span></div><div class="timer">◷ <span>Qolgan vaqt</span> <strong id="timer">45:00</strong></div></div>
+<div class="exam-body">
+<aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
+<div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
+<div class="exam-content">
+<div class="question-no" id="questionNo"></div><div class="question" id="question"></div><div id="answers"></div>
+<div class="exam-actions"><button class="btn" id="prevBtn">← Oldingi</button><button class="btn" id="markBtn">♧ Belgilash</button><button class="btn primary" id="nextBtn">Keyingi →</button><button class="btn primary hidden" id="finishBtn">Nazoratni yakunlash</button></div>
+</div></div>
+</section>
+
+<section class="result hidden" id="result">
+<div class="result-left"><div class="check">✓</div><div><h2>Nazorat yakunlandi</h2><p id="resultText"></p></div></div>
+<button class="btn" onclick="window.location.reload()">⌂ &nbsp; Bosh sahifaga qaytish</button>
+</section>
+</main>
+<footer class="footer">© 2024 Guliston davlat universiteti akademik litseyi. Barcha huquqlar himoyalangan.</footer>
+
+<script>
+const QUESTION_BANKS={
+"Geografiya":[
+["Geografiya fanlari tizimining asosiy o‘rganish obyekti qaysi?","Tabiat va jamiyatning hududiy tashkil topishi",["Faqat tog‘ jinslari","Faqat davlatlar tarixi","Faqat iqlim","Tabiat va jamiyatning hududiy tashkil topishi"]],
+["Geografiya fanining eng muhim xususiyatlaridan biri nima?","Hududiylik va o‘zaro aloqadorlikni o‘rganish",["Faqat xarita chizish","Hududiylik va o‘zaro aloqadorlikni o‘rganish","Faqat matematik hisoblash","Faqat tarixiy sanalarni yodlash"]],
+["Qadimgi geografik bilimlarning rivojiga katta hissa qo‘shgan alloma kim?","Muhammad al-Xorazmiy",["Alisher Navoiy","Abu Ali ibn Sino","Muhammad al-Xorazmiy","Amir Temur"]],
+["Geografik kashfiyotlar tarixida Yerning shar shaklda ekanini amaliy jihatdan tasdiqlagan sayohat qaysi?","Magellan ekspeditsiyasi",["Kolumb sayohati","Magellan ekspeditsiyasi","Beruniy sayohati","Cook ekspeditsiyasi"]],
+["Hozirgi zamon geografiyasida GIS texnologiyalarining asosiy vazifalaridan biri nima?","Geografik ma’lumotlarni yig‘ish, saqlash va tahlil qilish",["Faqat matn terish","Geografik ma’lumotlarni yig‘ish, saqlash va tahlil qilish","Faqat rasm chizish","Faqat video montaj qilish"]],
+["Yer yuzasi tabiatining shakllanishida Quyosh energiyasining asosiy roli nimada?","Yer yuzasidagi ko‘plab tabiiy jarayonlarni energiya bilan ta’minlaydi",["Faqat zilzilalarni yuzaga keltiradi","Yer yuzasidagi ko‘plab tabiiy jarayonlarni energiya bilan ta’minlaydi","Faqat tog‘larni hosil qiladi","Faqat okeanlarni hosil qiladi"]],
+["Yerning o‘z o‘qi atrofida aylanishi qanday hodisaga sabab bo‘ladi?","Kun va tun almashinishiga",["Fasllar almashinishiga","Kun va tun almashinishiga","Materiklar siljishiga","Oy fazalariga"]],
+["Yerning Quyosh atrofida aylanishi va o‘qining qiyaligi nimaga sabab bo‘ladi?","Fasllar almashinishiga",["Kun va tun almashinishiga","Fasllar almashinishiga","Zilzilalarga","Suv toshqinlariga"]],
+["Yerning shakli qanday?","Geoidga yaqin sharsimon",["Tekis disk","Kub shaklida","Geoidga yaqin sharsimon","Mukammal silindr"]],
+["Litosfera asosan nimadan tashkil topgan?","Yer po‘sti va yuqori mantiyaning qattiq qismidan",["Faqat yadrodan","Yer po‘sti va yuqori mantiyaning qattiq qismidan","Faqat okean suvidan","Faqat atmosferadan"]],
+["Yerning ichki tuzilishidagi asosiy qatlamlar qaysilar?","Yer po‘sti, mantiya va yadro",["Atmosfera, gidrosfera va biosfera","Yer po‘sti, mantiya va yadro","Faqat mantiya","Faqat yadro"]],
+["Yer po‘stining materik va okean qismlari o‘rtasidagi asosiy farq nima?","Qalinligi va tarkibi bilan farqlanadi",["Faqat rangi bilan","Qalinligi va tarkibi bilan farqlanadi","Harorati mutlaqo bir xil","Farqi yo‘q"]],
+["Tektonik plitalarning harakati ko‘proq qaysi hodisalar bilan bog‘liq?","Zilzila va vulqonizm bilan",["Yomg‘ir va qor bilan","Zilzila va vulqonizm bilan","Shamol va tuman bilan","Daryo oqimi bilan"]],
+["Mantiyadagi konvektiv harakatlar nimaga ta’sir ko‘rsatadi?","Litosfera plitalarining harakatiga",["Faqat bulutlarga","Litosfera plitalarining harakatiga","Faqat okean sho‘rligiga","Faqat o‘simliklarga"]],
+["Yer yuzasi tabiatining uzoq tarixiy rivojlanishida qaysi omil muhim?","Geologik va tabiiy jarayonlarning davomiy ta’siri",["Faqat inson faoliyati","Geologik va tabiiy jarayonlarning davomiy ta’siri","Faqat shamol","Faqat yog‘in"]],
+["Materiklarning qadimgi davrlarda birlashgan ulkan quruqlik massasi qanday atalgan?","Pangeya",["Lavrasiya","Pangeya","Gondvana","Tetis"]],
+["Pangeyaning parchalanishi nimaga olib kelgan?","Hozirgi materiklarning shakllanish jarayoniga",["Oyning paydo bo‘lishiga","Hozirgi materiklarning shakllanish jarayoniga","Atmosferaning yo‘qolishiga","Daryolarning qurishiga"]],
+["Geologik vaqt davomida tog‘larning shakllanishida qaysi jarayon muhim?","Tektonik harakatlar",["Faqat yog‘in","Tektonik harakatlar","Faqat shamol","Faqat muzlash"]],
+["Vulqon otilishi Yerning qaysi jarayonlari bilan bog‘liq?","Ichki geologik jarayonlar bilan",["Tashqi biologik jarayonlar bilan","Ichki geologik jarayonlar bilan","Faqat atmosfera jarayonlari bilan","Faqat gidrologik jarayonlar bilan"]],
+["Yer yuzasi tabiatining rivojlanishiga tashqi kuchlar qanday ta’sir ko‘rsatadi?","Relyefni yemiradi va qayta shakllantiradi",["Faqat tog‘larni balandlashtiradi","Relyefni yemiradi va qayta shakllantiradi","Faqat vulqonlarni uyg‘otadi","Faqat zilzila hosil qiladi"]],
+["Quyoshdan keladigan energiyaning Yer yuzasida notekis taqsimlanishining asosiy sababi nima?","Yerning sharsimonligi va o‘qining qiyaligi",["Faqat okeanlar mavjudligi","Yerning sharsimonligi va o‘qining qiyaligi","Faqat shamollar","Faqat vulqonlar"]],
+["Tektonik plitalar bir-biridan uzoqlashganda qanday hodisa yuz berishi mumkin?","Yangi okean tubi hosil bo‘lishi",["Materiklar butunlay yo‘qolishi","Yangi okean tubi hosil bo‘lishi","Atmosfera yo‘qolishi","Quyosh sovishi"]],
+["Yerning ichki issiqligi qanday jarayonlarning muhim manbalaridan biridir?","Tektonik jarayonlarning",["Fotosintezning","Tektonik jarayonlarning","Yog‘inlarning","Shamolning"]],
+["Geografik qobiq rivojlanishining tarixiy xususiyati qaysi javobda to‘g‘ri?","Tabiat komponentlari o‘zaro ta’sirda doimiy o‘zgarib boradi",["Tabiat umuman o‘zgarmaydi","Tabiat komponentlari o‘zaro ta’sirda doimiy o‘zgarib boradi","Faqat iqlim o‘zgaradi","Faqat relyef o‘zgaradi"]],
+["Quyidagi jarayonlardan qaysi biri Yer yuzi tabiatining shakllanishida ichki kuchlarga tegishli?","Tektonik harakat",["Daryo eroziyasi","Shamol eroziyasi","Tektonik harakat","Muzlik faoliyati"]]
+],
+"Matematika":[
+["12+8×2 ning qiymati nechaga teng?","28",["40","28","32","24"]],["x+7=15 bo‘lsa, x nechaga teng?","8",["6","7","8","9"]],
+["3x=21 bo‘lsa, x nechaga teng?","7",["6","7","8","9"]],["2x+5=17 tenglamaning yechimi?","6",["5","6","7","8"]],
+["1/2 + 1/4 nechaga teng?","3/4",["1/4","1/2","3/4","1"]],["0,6 × 5 nechaga teng?","3",["2","2,5","3","3,5"]],
+["25 ning 20 foizi nechaga teng?","5",["4","5","6","10"]],["Kvadratning tomoni 6 sm. Yuzi qancha?","36 sm²",["12 sm²","24 sm²","36 sm²","48 sm²"]],
+["To‘g‘ri to‘rtburchakning tomonlari 5 va 8 sm. Perimetri?","26 sm",["13 sm","26 sm","40 sm","20 sm"]],
+["x²=49 bo‘lsa, x ning musbat qiymati?","7",["5","6","7","8"]],["√81 nechaga teng?","9",["7","8","9","10"]],
+["2³ nechaga teng?","8",["6","8","9","12"]],["5, 10, 15, 20, ... ketma-ketlikdagi keyingi son?","25",["22","24","25","30"]],
+["1000 ning 15 foizi?","150",["100","120","150","200"]],["a=3, b=4 bo‘lsa, a²+b² nechaga teng?","25",["7","12","25","49"]],
+["Uchburchak ichki burchaklari yig‘indisi?","180°",["90°","180°","270°","360°"]],
+["Parallel to‘g‘ri chiziqlar qanday bo‘ladi?","Bir tekislikda kesishmaydi",["Har doim kesishadi","Bir tekislikda kesishmaydi","Faqat bir nuqtada kesishadi","Perpendikulyar bo‘ladi"]],
+["2/3 ning 6 ga ko‘paytmasi?","4",["2","3","4","6"]],["4x−3=13 bo‘lsa, x?","4",["3","4","5","6"]],
+["10²−6² nechaga teng?","64",["36","64","76","100"]],["Aylananing diametri 10 sm bo‘lsa, radiusi?","5 sm",["2 sm","5 sm","10 sm","20 sm"]],
+["3,5+2,7 nechaga teng?","6,2",["5,2","6,0","6,2","6,7"]],["7/8−3/8 nechaga teng?","1/2",["1/4","1/2","3/8","5/8"]],
+["Agar 5 ta daftar 25 000 so‘m bo‘lsa, 1 tasi qancha?","5 000 so‘m",["4 000 so‘m","5 000 so‘m","6 000 so‘m","7 000 so‘m"]],
+["To‘g‘ri burchak necha gradus?","90°",["45°","90°","120°","180°"]]],
+"Ingliz tili":[
+["Choose the correct form: She ___ a student.","is",["am","is","are","be"]],["What is the past form of “go”?","went",["goed","gone","went","goes"]],
+["Choose the correct article: ___ apple","an",["a","an","the","—"]],["“Book” so‘zining ko‘plik shakli?","books",["bookes","books","bookies","book"]],
+["Choose: They ___ football every Sunday.","play",["plays","play","playing","played"]],["What is the opposite of “big”?","small",["long","small","high","fast"]],
+["“Beautiful” so‘zining o‘zbekcha ma’nosi?","chiroyli",["tez","chiroyli","kichik","qiziqarli"]],
+["Choose: I ___ breakfast at 7 o’clock every day.","have",["has","have","having","had"]],
+["What is the plural of “child”?","children",["childs","childes","children","child"]],
+["Choose the correct sentence.","He can swim.",["He cans swim.","He can swims.","He can swim.","He swimming can."]],
+["“Yesterday” qaysi zamonni ko‘rsatadi?","Past Simple",["Present Simple","Past Simple","Future Simple","Present Continuous"]],
+["Choose: There ___ two books on the table.","are",["is","are","am","be"]],["What is the comparative form of “good”?","better",["gooder","best","better","more good"]],
+["“Teacher” so‘zining ma’nosi?","o‘qituvchi",["shifokor","o‘qituvchi","muhandis","haydovchi"]],
+["Choose: We ___ studying now.","are",["is","am","are","be"]],["What is the opposite of “early”?","late",["fast","late","near","easy"]],
+["Choose the correct pronoun: ___ am a pupil.","I",["He","She","I","They"]],
+["“How old are you?” savoliga mos javob?","I am 16 years old.",["I am from Tashkent.","I am 16 years old.","My name is Ali.","I like football."]],
+["Choose: My brother ___ English very well.","speaks",["speak","speaks","speaking","spoken"]],
+["What does “weather” mean?","ob-havo",["tabiat","ob-havo","sayohat","maktab"]],
+["Choose the correct past form: They ___ at home yesterday.","were",["was","were","are","is"]],
+["“Fast” so‘zining antonimi?","slow",["quick","slow","strong","high"]],
+["Choose: If it rains, we ___ at home.","will stay",["stay","stayed","will stay","staying"]],
+["What is the superlative form of “small”?","the smallest",["smaller","smallest","the smallest","more small"]],
+["Choose: I have ___ my homework.","finished",["finish","finishing","finished","finishes"]]],
+"Ona tili":[
+["Ot so‘z turkumi nimani bildiradi?","Shaxs, narsa, joy nomini",["Harakatni","Belgini","Shaxs, narsa, joy nomini","Miqdorni"]],
+["Sifat nimani bildiradi?","Predmetning belgisini",["Predmetning belgisini","Harakatni","Miqdorni","Shaxsni"]],
+["Fe’l nimani bildiradi?","Harakat va holatni",["Predmetni","Harakat va holatni","Belgini","Sonni"]],
+["“Kitoblar” so‘zidagi -lar qo‘shimchasi nimani bildiradi?","Ko‘plikni",["Egalikni","Ko‘plikni","Kelishikni","Zamonni"]],
+["O‘zbek tilida nechta unli tovush bor?","6 ta",["5 ta","6 ta","7 ta","8 ta"]],
+["“Men maktabga bordim” gapida kesim qaysi?","bordim",["Men","maktabga","bordim","gapda kesim yo‘q"]],
+["Gapning bosh bo‘laklari qaysilar?","Ega va kesim",["Aniqlovchi va to‘ldiruvchi","Ega va kesim","Hol va aniqlovchi","Faqat kesim"]],
+["“Chiroyli” so‘zi qaysi so‘z turkumiga mansub?","Sifat",["Ot","Sifat","Fe’l","Ravish"]],
+["“Tez yugurdi” birikmasida “tez” qaysi turkum?","Ravish",["Ot","Sifat","Ravish","Olmosh"]],
+["Olmoshning vazifasi nima?","Ot, sifat, son kabi so‘zlar o‘rnida kelish",["Faqat harakatni bildirish","Ot, sifat, son kabi so‘zlar o‘rnida kelish","Faqat belgini bildirish","Gapni tugatish"]],
+["“Men” qaysi so‘z turkumi?","Olmosh",["Ot","Olmosh","Fe’l","Sifat"]],["“Besh” qaysi so‘z turkumiga mansub?","Son",["Ot","Son","Sifat","Ravish"]],
+["So‘zning ma’noli eng kichik qismi nima?","Morfema",["Gap","Morfema","Bo‘g‘in","Matn"]],
+["“Do‘stlik” so‘zida yasovchi qo‘shimcha qaysi?","-lik",["do‘st","-lik","d","st"]],
+["Sinonim so‘zlar qanday so‘zlar?","Ma’nodosh so‘zlar",["Qarama-qarshi ma’noli","Ma’nodosh so‘zlar","Shakldosh so‘zlar","Faqat qisqa so‘zlar"]],
+["Antonim so‘zlar qanday so‘zlar?","Qarama-qarshi ma’noli so‘zlar",["Ma’nodosh","Qarama-qarshi ma’noli so‘zlar","Shakldosh","Bir xil yoziladigan"]],
+["“Katta” so‘zining antonimi?","kichik",["uzun","kichik","baland","chiroyli"]],["“Go‘zal” so‘zining sinonimi?","chiroyli",["xunuk","chiroyli","kichik","tez"]],
+["Undalma nima?","Murojaatni bildiruvchi so‘z",["Harakatni bildiradi","Murojaatni bildiruvchi so‘z","Predmet belgisini bildiradi","Miqdorni bildiradi"]],
+["Nuqta odatda qachon qo‘yiladi?","Darak gap oxirida",["So‘roq gap boshida","Darak gap oxirida","Har bir so‘zdan keyin","Faqat undalmadan keyin"]],
+["So‘roq gap oxiriga qaysi belgi qo‘yiladi?","?",[".","!","?",":"]],["Undov gap oxiriga qaysi belgi qo‘yiladi?","!",[".","!","?",","]],
+["“Bugun havo iliq.” qanday gap?","Darak gap",["So‘roq gap","Buyruq gap","Darak gap","Undov gap"]],
+["“Sen kitob o‘qidingmi?” qanday gap?","So‘roq gap",["Darak gap","So‘roq gap","Undov gap","Buyruq gap"]]],
+"Fizika":[
+["Tezlikning formulasi qaysi?","v=s/t",["v=t/s","v=s/t","v=s×t","v=t−s"]],["Kuchning SI dagi birligi?","Nyuton",["Joul","Vatt","Nyuton","Paskal"]],
+["Ishning SI dagi birligi?","Joul",["Nyuton","Joul","Vatt","Om"]],["Quvvatning birligi?","Vatt",["Joul","Vatt","Nyuton","Amper"]],
+["Tok kuchining birligi?","Amper",["Volt","Amper","Om","Kulon"]],["Kuchlanishning birligi?","Volt",["Amper","Volt","Om","Vatt"]],
+["Elektr qarshilik birligi?","Om",["Volt","Om","Amper","Joul"]],["Zichlik formulasi?","ρ=m/V",["ρ=V/m","ρ=m/V","ρ=mV","ρ=V−m"]],
+["Yerda erkin tushish tezlanishi taxminan?","9,8 m/s²",["4,9 m/s²","9,8 m/s²","15 m/s²","20 m/s²"]],
+["Nyutonning ikkinchi qonuni?","F=ma",["F=m/a","F=ma","F=a/m","F=m+a"]],
+["Bosim formulasi?","p=F/S",["p=FS","p=F/S","p=S/F","p=F+S"]],
+["Issiqlik miqdori formulasi?","Q=cmΔT",["Q=c/m","Q=cmΔT","Q=m/c","Q=c+ΔT"]],
+["Yorug‘lik vakuumda taxminan qanday tezlikda tarqaladi?","3×10⁸ m/s",["3×10⁶ m/s","3×10⁷ m/s","3×10⁸ m/s","3×10⁹ m/s"]],
+["Mexanik energiyaning birligi?","Joul",["Vatt","Joul","Nyuton","Paskal"]],
+["Magnit maydonning mavjudligini nimadan bilish mumkin?","Magnit kuch ta’siridan",["Faqat tovushdan","Magnit kuch ta’siridan","Haroratdan","Bosimdan"]],
+["Ampermetr nimani o‘lchaydi?","Tok kuchini",["Kuchlanishni","Tok kuchini","Qarshilikni","Quvvatni"]],
+["Voltmetr nimani o‘lchaydi?","Kuchlanishni",["Tok kuchini","Kuchlanishni","Massani","Zichlikni"]],
+["Om qonuni qaysi?","I=U/R",["I=UR","I=U/R","I=R/U","I=U+R"]],["Jismning massasi 2 kg, tezlanishi 3 m/s². Kuch?","6 N",["5 N","6 N","9 N","12 N"]],
+["10 N kuch 2 m masofada ish bajarsa, ish qancha?","20 J",["5 J","10 J","20 J","40 J"]],
+["100 J ish 20 s da bajarildi. Quvvat?","5 W",["2 W","5 W","20 W","200 W"]],
+["Temperatura SI tizimida qaysi birlikda o‘lchanadi?","Kelvin",["Selsiy","Kelvin","Farengeyt","Joul"]],
+["Tovush vakuumda tarqaladimi?","Yo‘q",["Ha","Yo‘q","Faqat kechasi","Faqat sovuqda"]],
+["Jismga tashqi kuch ta’sir qilmasa, u o‘z holatini saqlash xususiyati nima?","Inersiya",["Diffuziya","Inersiya","Rezonans","Konveksiya"]]],
+"Kimyo":[
+["Suvning kimyoviy formulasi?","H₂O",["CO₂","H₂O","O₂","NaCl"]],["Kislorodning kimyoviy belgisi?","O",["C","O","N","H"]],
+["Vodorodning kimyoviy belgisi?","H",["He","H","Hg","Ho"]],["Osh tuzining formulasi?","NaCl",["KCl","NaCl","NaOH","HCl"]],
+["Karbonat angidrid formulasi?","CO₂",["CO","CO₂","CaCO₃","CH₄"]],["Atom yadrosida qanday zarralar mavjud?","Proton va neytron",["Faqat elektron","Proton va neytron","Faqat proton","Faqat neytron"]],
+["Elektronning zaryadi qanday?","Manfiy",["Musbat","Manfiy","Neytral","O‘zgaruvchan"]],["Protonning zaryadi qanday?","Musbat",["Musbat","Manfiy","Neytral","Zaryadsiz"]],
+["pH=7 bo‘lgan eritma qanday muhit?","Neytral",["Kislotali","Ishqoriy","Neytral","Juda kislotali"]],
+["Kislotalar tarkibida odatda qaysi ion bo‘ladi?","H⁺",["Na⁺","H⁺","Cl⁻","O²⁻"]],["Ishqorlar tarkibida qaysi ion bo‘ladi?","OH⁻",["H⁺","OH⁻","Na⁺","Cl⁻"]],
+["NaOH qanday modda?","Ishqor",["Kislota","Ishqor","Tuz","Oksid"]],["HCl qanday modda?","Kislota",["Tuz","Oksid","Kislota","Ishqor"]],
+["CaCO₃ qaysi modda?","Kalsiy karbonat",["Kalsiy xlorid","Kalsiy karbonat","Natriy karbonat","Kalsiy oksid"]],
+["Oksidlar tarkibida kislorod bilan birga nima bo‘ladi?","Bitta boshqa element",["Faqat vodorod","Bitta boshqa element","Faqat metall","Faqat uglerod"]],
+["Yonish jarayonida ko‘pincha qaysi gaz ishtirok etadi?","Kislorod",["Azot","Kislorod","Vodorod","Karbonat angidrid"]],
+["Atom raqami nimani bildiradi?","Protonlar sonini",["Neytronlar sonini","Protonlar sonini","Elektron qavatlar sonini","Molekulalar sonini"]],
+["Molekula nima?","Moddaning kimyoviy xossalarini saqlovchi eng kichik zarracha",["Faqat atom yadrosi","Moddaning kimyoviy xossalarini saqlovchi eng kichik zarracha","Faqat elektron","Faqat ion"]],
+["Avogadro doimiysi taxminan nechaga teng?","6,02×10²³",["6,02×10²⁰","6,02×10²²","6,02×10²³","6,02×10²⁴"]],
+["Suvning qaynash temperaturasi normal bosimda?","100°C",["0°C","50°C","100°C","212°C"]],["Suvning muzlash temperaturasi normal bosimda?","0°C",["−10°C","0°C","10°C","100°C"]],
+["CH₄ qanday modda?","Metan",["Etan","Metan","Propan","Butan"]],["O₂ molekulasida nechta kislorod atomi bor?","2 ta",["1 ta","2 ta","3 ta","4 ta"]],
+["NaCl qanday bog‘lanishga ega?","Ion bog‘lanish",["Kovalent","Ion bog‘lanish","Metall","Vodorod"]],
+["Kimyoviy reaksiya belgilaridan biri?","Yangi modda hosil bo‘lishi",["Faqat rang o‘zgarishi shart","Yangi modda hosil bo‘lishi","Faqat erish","Faqat bug‘lanish"]]
+]};
+const questions=QUESTION_BANKS["Geografiya"];
+
+let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false;
+const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
+const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
+const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
+
+// Telegram/backend sozlamasi. Bot tokenini BU YERGA yozmang.
+// Backend manzilini keyin shu o'zgaruvchiga qo'yish mumkin.
+const RESULT_API_URL="https://script.google.com/macros/s/AKfycbxLt8mISL4FBeU5-g4uZ6iA-qZK6Jf2XKBpZeIqMDyMAHqSco1GNOGjqUyZ0xGr9DcylQ/exec";
+
+function key(){return "jn1_"+subjectEl.value+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
+function valid(){
+  const name=studentEl.value.trim();
+  if(!groupEl.value){msg.textContent="Avval guruhni tanlang.";groupEl.focus();return false}
+  if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
+  if(localStorage.getItem(key())){msg.textContent="Bu o‘quvchi 1-JN nazoratini allaqachon topshirgan.";return false}
+  msg.textContent="";return true;
+}
+function seededRandom(seed){
+  let t=seed>>>0;
+  return function(){t+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}
+}
+function hashString(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function shuffle(arr,rng){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a;
+}
+function prepareExam(){
+  const seed=hashString(subjectEl.value+"|"+groupEl.value+"|"+studentEl.value.trim().toLowerCase()+"|1-JN");
+  const rng=seededRandom(seed);
+  const activeQuestions=QUESTION_BANKS[subjectEl.value]||QUESTION_BANKS["Geografiya"];const qOrder=shuffle(activeQuestions.map((_,i)=>i),rng);
+  examQuestions=qOrder.map(originalIndex=>{
+    const q=activeQuestions[originalIndex];
+    return {text:q[0],correct:q[1],options:shuffle(q[2],rng),originalIndex};
+  });
+  answers=Array(25).fill(null);marked=Array(25).fill(false);current=0;
+}
+function buildGrid(){
+  qgrid.innerHTML="";
+  examQuestions.forEach((_,i)=>{
+    const b=document.createElement("button");b.className="qbtn";b.textContent=i+1;
+    b.onclick=()=>{current=i;renderQuestion()};qgrid.appendChild(b);
+  });
+}
+function renderQuestion(){
+  const q=examQuestions[current];
+  questionNo.textContent=(current+1)+"-savol / 25";
+  question.textContent=q.text;
+  answersBox.innerHTML="";
+  q.options.forEach((opt,i)=>{
+    const label=document.createElement("label");label.className="answer"+(answers[current]===opt?" selected":"");
+    const radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.value=opt;radio.checked=answers[current]===opt;
+    radio.onchange=()=>{answers[current]=opt;renderQuestion()};
+    label.append(radio,document.createTextNode(String.fromCharCode(65+i)+") "+opt));answersBox.appendChild(label);
+  });
+  [...qgrid.children].forEach((b,i)=>{b.classList.toggle("active",i===current);b.classList.toggle("answered",answers[i]!==null)});
+  prevBtn.disabled=current===0;nextBtn.classList.toggle("hidden",current===24);finishBtn.classList.toggle("hidden",current!==24);
+  markBtn.textContent=marked[current]?"★ Belgilangan":"♧ Belgilash";
+}
+function start(){
+  if(!valid())return;
+  started=true;prepareExam();document.getElementById("examTitle").textContent=subjectEl.value+" — 1-JORIY NAZORAT";exam.classList.remove("hidden");document.getElementById("startCard").style.pointerEvents="none";
+  buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
+  timerId=setInterval(()=>{seconds--;const m=Math.floor(seconds/60),s=seconds%60;timer.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(timerId);finish()}},1000);
+}
+function getGrade(score){
+  const pct=score/25*100;
+  if(pct>=86)return 5;
+  if(pct>=71)return 4;
+  if(pct>=55)return 3;
+  return 2;
+}
+async function sendResultToTelegram(data){
+  if(!RESULT_API_URL)return;
+  try{
+    await fetch(RESULT_API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(data),keepalive:true});
+  }catch(e){console.warn("Natijani serverga yuborib bo'lmadi",e)}
+}
+function finish(){
+  if(!started)return;
+  clearInterval(timerId);
+  let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
+  const grade=getGrade(score);
+  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:25,percent:Math.round(score/25*100),grade,finishedAt:new Date().toISOString()};
+  localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
+  sendResultToTelegram(data);
+  exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
+  // O'quvchiga baho va to'g'ri javoblar ko'rsatilmaydi.
+  document.getElementById("resultText").textContent=`${studentEl.value.trim()} — ${groupEl.value}-guruh. Nazorat muvaffaqiyatli yakunlandi. Natija o‘qituvchiga yuborildi.`;
+  window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
+}
+document.getElementById("startCard").onclick=start;
+prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
+nextBtn.onclick=()=>{if(current<24){current++;renderQuestion()}};
+finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()};
+markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
+groupEl.onchange=()=>{msg.textContent=""};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent=""};
+</script>
+</body>
+</html>
