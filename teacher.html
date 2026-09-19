@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Ustoz paneli — GulDU akademik litseyi</title>
+<style>
+:root{--blue:#0758c9;--dark:#0d2a5b;--line:#e3eaf3;--shadow:0 8px 28px rgba(13,42,91,.10)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);color:#12203b}
+.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff}
+.header-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:18px;padding:20px 24px}
+.logo{width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-size:26px;font-weight:800;background:rgba(255,255,255,.08);flex:none}
+.header h1{margin:0;font-size:24px;line-height:1.15}
+.header p{margin:6px 0 0;font-size:14px;opacity:.9}
+.container{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.hidden{display:none!important}
+.muted{color:#6b7484}
+
+/* Login */
+.login-card{max-width:440px;margin:30px auto;padding:28px}
+.section-title{color:var(--dark);font-size:20px;font-weight:800;margin:0 0 22px}
+label{display:block;font-size:15px;font-weight:600;margin:0 0 8px}
+input[type=text],input[type=password],input[type=date],select{width:100%;height:46px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 13px;font-size:15px;color:#172744;outline:none}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.field{margin-bottom:18px}
+.btn{height:44px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 18px;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.btn:hover{border-color:#8db7ed}
+.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.msg{margin-top:12px;font-size:14px;font-weight:600;min-height:18px}
+.msg.error{color:#c0392b}
+.msg.info{color:#153b78}
+
+/* Panel */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;margin-bottom:16px;flex-wrap:wrap}
+.bar-title{font-size:18px;font-weight:800;color:var(--dark)}
+.bar-sub{font-size:14px;color:#526178;margin-top:4px}
+.bar-actions{display:flex;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat span{display:block;font-size:13px;color:#526178;margin-bottom:8px}
+.stat b{font-size:26px;color:var(--dark)}
+.gline{display:flex;gap:6px;flex-wrap:wrap}
+.filters{padding:18px 20px;margin-bottom:16px}
+.filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.filters label{font-size:13px;margin-bottom:6px}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;height:46px}
+.check input{width:18px;height:18px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{height:42px;padding:0 18px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.tab.active{background:#075fc9;color:#fff;border-color:#075fc9}
+.table-card{overflow:hidden}
+.table-info{padding:12px 18px;font-size:13px;color:#526178;border-bottom:1px solid var(--line)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
+th{background:#f7f9fc;color:#26354e;font-size:13px}
+td.name{white-space:normal;min-width:180px;font-weight:600}
+td .sub{display:block;font-size:12px;color:#6b7484;margin-top:2px}
+tr:hover td{background:#fbfcfe}
+.badge{display:inline-block;min-width:34px;text-align:center;padding:4px 9px;border-radius:7px;font-weight:800;font-size:13px;color:#fff;background:#8a94a6}
+.g5{background:#2fa85f}.g4{background:#0d64d6}.g3{background:#e08a1e}.g2{background:#c0392b}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:700;margin-left:6px}
+.empty{padding:34px 20px;text-align:center;color:#526178;font-size:15px}
+.note{padding:12px 18px;font-size:13px;color:#526178}
+
+@media(max-width:700px){
+  .container{padding:14px 12px 30px}
+  .header-inner{padding:16px}
+  .logo{width:52px;height:52px;font-size:22px}
+  .header h1{font-size:20px}
+  .stats{grid-template-columns:1fr 1fr}
+  .bar{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="header-inner">
+<div class="logo">G</div>
+<div><h1>Ustoz paneli</h1><p>Guliston davlat universiteti akademik litseyi</p></div>
+</div>
+</header>
+
+<main class="container">
+
+<!-- ================= LOGIN ================= -->
+<section id="loginView" class="card login-card">
+<div class="section-title">Ustoz kirishi</div>
+<form id="loginForm" autocomplete="on">
+<div class="field"><label for="username">Login</label><input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+<div class="field"><label for="password">Parol</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+<button class="btn primary" id="loginBtn" type="submit">Kirish</button>
+<div id="loginMsg" class="msg error" role="alert"></div>
+</form>
+</section>
+
+<!-- ================= PANEL ================= -->
+<section id="panelView" class="hidden">
+
+<div class="card bar">
+<div><div class="bar-title" id="teacherName"></div><div class="bar-sub">Fan: <b id="teacherSubject"></b></div></div>
+<div class="bar-actions"><button class="btn" id="refreshBtn" type="button">Yangilash</button><button class="btn" id="logoutBtn" type="button">Chiqish</button></div>
+</div>
+
+<div id="panelMsg" class="msg info"></div>
+
+<div class="stats" id="stats"></div>
+
+<div class="card filters">
+<div class="filters-grid">
+<div><label for="fGroup">Guruh</label><select id="fGroup"></select></div>
+<div><label for="fJn">Nazorat</label><select id="fJn"></select></div>
+<div><label for="fSearch">O‘quvchi (ism/familiya)</label><input id="fSearch" type="text" placeholder="Qidirish..." autocomplete="off"></div>
+<div><label for="fFrom">Sanadan</label><input id="fFrom" type="date"></div>
+<div><label for="fTo">Sanagacha</label><input id="fTo" type="date"></div>
+<div class="check"><input id="fDup" type="checkbox"><label for="fDup" style="margin:0">Takroriy urinishlar</label></div>
+<div><button class="btn" id="clearBtn" type="button" style="width:100%">Filtrlarni tozalash</button></div>
+</div>
+</div>
+
+<div class="tabs">
+<button class="tab active" type="button" data-tab="results">Natijalar</button>
+<button class="tab" type="button" data-tab="groups">Guruhlar bo‘yicha</button>
+</div>
+
+<!-- Natijalar jadvali -->
+<div class="card table-card" id="tabResults">
+<div class="table-info" id="resultsInfo"></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>№</th><th>Sana (Toshkent)</th><th>Guruh</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th></tr></thead>
+<tbody id="resultsBody"></tbody>
+</table>
+</div>
+<div class="empty hidden" id="emptyMsg"></div>
+</div>
+
+<!-- Guruhlar bo'yicha -->
+<div class="card table-card hidden" id="tabGroups">
+<div class="table-info">Har bir guruhning nazoratlar bo‘yicha o‘rtacha foizi. Bu jadvalga guruh va nazorat filtrlari ta’sir qilmaydi, sana, qidiruv va takroriy urinishlar filtri ta’sir qiladi.</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Guruh</th><th>1-JN</th><th>2-JN</th><th>3-JN</th><th>4-JN</th><th>Jami</th></tr></thead>
+<tbody id="groupsBody"></tbody>
+</table>
+</div>
+</div>
+
+</section>
+</main>
+
+<script>
+// index.html ichidagi RESULT_API_URL bilan BIR XIL manzilni shu yerga qo'ying
+const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+
+const JN_LIST=["1-JN","2-JN","3-JN","4-JN"];
+const DEFAULT_GROUPS=["101","102","103","104","105","106"];
+const TZ="Asia/Tashkent";
+
+let token=sessionStorage.getItem("gt_token")||"";
+let allRows=[];
+
+const $=id=>document.getElementById(id);
+
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ---------- Sana (Toshkent vaqti) ---------- */
+const dtf=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false});
+function tk(iso){
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return {date:"",full:String(iso||"")};
+  const p={};
+  dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
+  const hh=p.hour==="24"?"00":p.hour;
+  return {date:p.year+"-"+p.month+"-"+p.day, full:p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute};
+}
+
+/* ---------- Serverga so'rov ---------- */
+async function api(action,payload){
+  if(!API_URL||API_URL.indexOf("BU_YERGA")===0){
+    throw new Error("teacher.html ichida API_URL kiritilmagan. index.html dagi RESULT_API_URL manzilini qo‘ying.");
+  }
+  let res;
+  try{
+    res=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(Object.assign({action:action},payload||{}))
+    });
+  }catch(e){
+    throw new Error("Serverga ulanib bo‘lmadi. Internetni va API_URL manzilini tekshiring.");
+  }
+  const text=await res.text();
+  let data;
+  try{ data=JSON.parse(text); }
+  catch(e){ throw new Error("Serverdan kutilmagan javob keldi. Apps Script yangi versiyada deploy qilinganini tekshiring."); }
+  if(data&&data.source==="doPost"){
+    throw new Error("Apps Script'da ustoz paneli qismi ishlamayapti: Code.gs dagi doPost'ga qo‘shimcha kiritilganini va yangi versiya deploy qilinganini tekshiring.");
+  }
+  return data;
+}
+
+/* ---------- Ko'rinishlar ---------- */
+function showLogin(message){
+  token="";
+  sessionStorage.removeItem("gt_token");
+  allRows=[];
+  $("panelView").classList.add("hidden");
+  $("loginView").classList.remove("hidden");
+  $("loginMsg").textContent=message||"";
+  $("password").value="";
+}
+function showPanel(){
+  $("loginView").classList.add("hidden");
+  $("panelView").classList.remove("hidden");
+}
+
+/* ---------- Login ---------- */
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const btn=$("loginBtn");
+  const username=$("username").value.trim();
+  const password=$("password").value;
+  if(!username||!password){ $("loginMsg").textContent="Login va parolni kiriting."; return; }
+  btn.disabled=true;
+  $("loginMsg").textContent="Tekshirilmoqda...";
+  try{
+    const r=await api("login",{username:username,password:password});
+    if(!r.ok){ $("loginMsg").textContent=r.error||"Kirish mumkin emas."; return; }
+    token=r.token;
+    sessionStorage.setItem("gt_token",token);
+    $("teacherName").textContent=r.name||"";
+    $("teacherSubject").textContent=r.subject||"";
+    $("loginMsg").textContent="";
+    $("password").value="";
+    showPanel();
+    await loadResults();
+  }catch(err){
+    $("loginMsg").textContent=err.message;
+  }finally{
+    btn.disabled=false;
+  }
+});
+
+$("logoutBtn").addEventListener("click",async ()=>{
+  const t=token;
+  showLogin("");
+  try{ await api("logout",{token:t}); }catch(e){}
+});
+
+$("refreshBtn").addEventListener("click",()=>loadResults());
+
+/* ---------- Natijalarni yuklash ---------- */
+async function loadResults(){
+  const msg=$("panelMsg");
+  msg.className="msg info";
+  msg.textContent="Yuklanmoqda...";
+  $("refreshBtn").disabled=true;
+  try{
+    const r=await api("results",{token:token});
+    if(r.code==="AUTH"){ showLogin("Sessiya tugagan. Qayta kiring."); return; }
+    if(!r.ok){ msg.className="msg error"; msg.textContent=r.error||"Natijalarni olib bo‘lmadi."; return; }
+    $("teacherName").textContent=r.name||"";
+    $("teacherSubject").textContent=r.subject||"";
+    allRows=(r.rows||[]).map(x=>Object.assign({},x,{d:tk(x.t)}));
+    msg.textContent="";
+    buildGroupFilter();
+    render();
+  }catch(err){
+    msg.className="msg error";
+    msg.textContent=err.message;
+  }finally{
+    $("refreshBtn").disabled=false;
+  }
+}
+
+/* ---------- Filtrlar ---------- */
+function groupList(){
+  const set=new Set(DEFAULT_GROUPS);
+  allRows.forEach(r=>{ if(r.group) set.add(r.group); });
+  return Array.from(set).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+}
+function buildGroupFilter(){
+  const sel=$("fGroup");
+  const old=sel.value;
+  sel.innerHTML='<option value="">Barcha guruhlar</option>'+groupList().map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join("");
+  if(old&&groupList().indexOf(old)!==-1) sel.value=old;
+}
+function buildJnFilter(){
+  $("fJn").innerHTML='<option value="">Barcha nazoratlar</option>'+JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
+}
+function baseFiltered(){
+  const q=$("fSearch").value.trim().toLowerCase();
+  const from=$("fFrom").value, to=$("fTo").value;
+  const showDup=$("fDup").checked;
+  return allRows.filter(r=>{
+    if(!showDup&&r.status==="takror") return false;
+    if(from&&r.d.date<from) return false;
+    if(to&&r.d.date>to) return false;
+    if(q&&r.student.toLowerCase().indexOf(q)===-1) return false;
+    return true;
+  });
+}
+function tableFiltered(base){
+  const g=$("fGroup").value, jn=$("fJn").value;
+  return base.filter(r=>(!g||r.group===g)&&(!jn||r.jn===jn));
+}
+
+/* ---------- Chizish ---------- */
+function gradeBadge(g){
+  return g>=2&&g<=5?'<span class="badge g'+g+'">'+g+'</span>':'<span class="badge">—</span>';
+}
+function avgPercent(rows){
+  return rows.length?Math.round(rows.reduce((s,r)=>s+r.percent,0)/rows.length):0;
+}
+function renderStats(rows){
+  const n=rows.length;
+  const uniq=new Set(rows.map(r=>r.group+"|"+r.student.toLowerCase())).size;
+  const gc={5:0,4:0,3:0,2:0};
+  rows.forEach(r=>{ if(gc[r.grade]!==undefined) gc[r.grade]++; });
+  $("stats").innerHTML=
+    '<div class="stat"><span>Natijalar</span><b>'+n+'</b></div>'+
+    '<div class="stat"><span>O‘quvchilar</span><b>'+uniq+'</b></div>'+
+    '<div class="stat"><span>O‘rtacha foiz</span><b>'+(n?avgPercent(rows)+'%':'—')+'</b></div>'+
+    '<div class="stat"><span>Baholar</span><div class="gline">'+
+      [5,4,3,2].map(g=>'<span class="badge g'+g+'">'+g+': '+gc[g]+'</span>').join("")+
+    '</div></div>';
+}
+function renderTable(rows){
+  $("resultsBody").innerHTML=rows.map((r,i)=>
+    '<tr><td>'+(i+1)+'</td>'+
+    '<td>'+esc(r.d.full)+'</td>'+
+    '<td>'+esc(r.group)+'</td>'+
+    '<td class="name">'+esc(r.student)+(r.status==="takror"?'<span class="tag">takror</span>':'')+'</td>'+
+    '<td>'+esc(r.jn)+'</td>'+
+    '<td>'+esc(r.correct)+'/'+esc(r.total)+'</td>'+
+    '<td>'+esc(r.percent)+'%</td>'+
+    '<td>'+gradeBadge(r.grade)+'</td></tr>'
+  ).join("");
+  $("resultsInfo").textContent="Ko‘rsatilgan natijalar: "+rows.length+" ta";
+  const empty=$("emptyMsg");
+  if(!rows.length){
+    empty.textContent=allRows.length?"Filtrga mos natija topilmadi.":"Hozircha natija yo‘q. O‘quvchilar nazorat topshirgach, natijalar shu yerda paydo bo‘ladi.";
+    empty.classList.remove("hidden");
+  }else{
+    empty.classList.add("hidden");
+  }
+}
+function renderGroups(base){
+  $("groupsBody").innerHTML=groupList().map(g=>{
+    const gr=base.filter(r=>r.group===g);
+    const cells=JN_LIST.map(jn=>{
+      const x=gr.filter(r=>r.jn===jn);
+      return x.length?'<td><b>'+avgPercent(x)+'%</b><span class="sub">'+x.length+' ta</span></td>':'<td class="muted">—</td>';
+    }).join("");
+    const total=gr.length?'<td><b>'+avgPercent(gr)+'%</b><span class="sub">'+gr.length+' ta</span></td>':'<td class="muted">—</td>';
+    return '<tr><td><b>'+esc(g)+'</b></td>'+cells+total+'</tr>';
+  }).join("");
+}
+function render(){
+  const base=baseFiltered();
+  const rows=tableFiltered(base);
+  renderStats(rows);
+  renderTable(rows);
+  renderGroups(base);
+}
+
+/* ---------- Hodisalar ---------- */
+["fGroup","fJn","fFrom","fTo","fDup"].forEach(id=>$(id).addEventListener("change",render));
+$("fSearch").addEventListener("input",render);
+$("clearBtn").addEventListener("click",()=>{
+  $("fGroup").value="";$("fJn").value="";$("fSearch").value="";
+  $("fFrom").value="";$("fTo").value="";$("fDup").checked=false;
+  render();
+});
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
+  $("tabResults").classList.toggle("hidden",b.dataset.tab!=="results");
+  $("tabGroups").classList.toggle("hidden",b.dataset.tab!=="groups");
+}));
+
+/* ---------- Ishga tushirish ---------- */
+buildJnFilter();
+buildGroupFilter();
+if(token){
+  showPanel();
+  $("teacherName").textContent=sessionStorage.getItem("gt_name")||"";
+  loadResults();
+}
+</script>
+</body>
+</html>
