@@ -320,21 +320,25 @@ function sendResultToTelegram(data){
   }
 
   try{
-    // GitHub Pages -> Google Apps Script uchun GET so'rovi.
-    // CORS talab qilmaydi va brauzer redirectlarini ham normal bajaradi.
     const payload = encodeURIComponent(JSON.stringify(data));
     const url = RESULT_API_URL + "?payload=" + payload;
 
-    let frame = document.getElementById("telegramSubmitFrame");
-    if(!frame){
-      frame = document.createElement("iframe");
-      frame.id = "telegramSubmitFrame";
-      frame.name = "telegramSubmitFrame";
-      frame.style.display = "none";
-      document.body.appendChild(frame);
-    }
+    // GitHub Pages -> Google Apps Script uchun eng sodda va CORSsiz GET beacon.
+    // IMG yuklanishi cross-origin GET so'rovini brauzer orqali yuboradi.
+    const beacon = new Image();
+    beacon.width = 1;
+    beacon.height = 1;
+    beacon.style.position = "fixed";
+    beacon.style.left = "-9999px";
+    beacon.style.top = "-9999px";
+    beacon.alt = "";
+    beacon.onload = () => console.log("Telegram backend GET qabul qildi.");
+    beacon.onerror = () => console.log("Backend so'rovi yuborildi, javob rasm sifatida o'qilmadi.");
+    beacon.src = url;
+    document.body.appendChild(beacon);
 
-    frame.src = url;
+    // Brauzer so'rovni bekor qilmasligi uchun biroz ushlab turamiz.
+    setTimeout(() => beacon.remove(), 10000);
 
     console.log("Telegram backendga natija yuborildi:", data);
     return true;
