@@ -320,6 +320,23 @@ function sendResultToTelegram(data){
   }
 
   try{
+    const url = RESULT_API_URL + "?payload=" + encodeURIComponent(JSON.stringify(data));
+
+    console.log("Telegram backendga GET natija yuborilmoqda:", data);
+
+    fetch(url, { method: "GET", mode: "no-cors", keepalive: true })
+      .then(() => console.log("So'rov yuborildi"))
+      .catch(err => console.error("So'rov xatosi:", err));
+
+    return true;
+
+  }catch(e){
+    console.error("Telegramga natija yuborishda xato:", e);
+    return false;
+  }
+}
+
+  try{
     // GitHub Pages -> Google Apps Script uchun CORS talab qilmaydigan
     // oddiy HTML form POST ishlatiladi. Apps Script doPost(e)
     // e.parameter.payload ni qabul qiladi.
