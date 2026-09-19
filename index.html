@@ -312,11 +312,35 @@ function getGrade(score){
   if(pct>=55)return 3;
   return 2;
 }
-async function sendResultToTelegram(data){
-  if(!RESULT_API_URL)return;
+function sendResultToTelegram(data){
+  if(!RESULT_API_URL)return false;
+
+  const body = JSON.stringify(data);
+
   try{
-    await fetch(RESULT_API_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(data),keepalive:true});
-  }catch(e){console.warn("Natijani serverga yuborib bo'lmadi",e)}
+    // Beacon sahifa natija oynasiga o'tganda ham POSTni yuborishni davom ettiradi.
+    if(navigator.sendBeacon){
+      const blob = new Blob([body], {type:"text/plain;charset=UTF-8"});
+      return navigator.sendBeacon(RESULT_API_URL, blob);
+    }
+  }catch(e){
+    console.warn("sendBeacon ishlamadi:", e);
+  }
+
+  // Beacon ishlamasa, keepalive fetch zaxira sifatida ishlaydi.
+  try{
+    fetch(RESULT_API_URL,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=UTF-8"},
+      body:body,
+      keepalive:true
+    });
+    return true;
+  }catch(e){
+    console.warn("Natijani serverga yuborib bo'lmadi:", e);
+    return false;
+  }
 }
 function finish(){
   if(!started)return;
@@ -326,7 +350,8 @@ function finish(){
   const grade=getGrade(score);
   const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,finishedAt:new Date().toISOString()};
   localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
-  sendResultToTelegram(data);
+  const sent = sendResultToTelegram(data);
+  console.log("Telegram natijasi yuborish holati:", sent);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
   // O'quvchiga baho va to'g'ri javoblar ko'rsatilmaydi.
   document.getElementById("resultText").textContent=`${studentEl.value.trim()} — ${groupEl.value}-guruh. Nazorat muvaffaqiyatli yakunlandi. Natija o‘qituvchiga yuborildi.`;
