@@ -305,42 +305,38 @@ function start(){
   buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
   timerId=setInterval(()=>{seconds--;const m=Math.floor(seconds/60),s=seconds%60;timer.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(timerId);finish()}},1000);
 }
-function getGrade(score){
-  const pct=score/25*100;
+function getGrade(score,total){
+  const pct = total ? (score/total*100) : 0;
   if(pct>=86)return 5;
   if(pct>=71)return 4;
   if(pct>=55)return 3;
   return 2;
 }
+
 function sendResultToTelegram(data){
-  if(!RESULT_API_URL) return false;
+  if(!RESULT_API_URL){
+    console.error("RESULT_API_URL mavjud emas");
+    return false;
+  }
 
   try{
-    let iframe = document.getElementById("telegramSubmitFrame");
-    if(!iframe){
-      iframe = document.createElement("iframe");
-      iframe.id = "telegramSubmitFrame";
-      iframe.name = "telegramSubmitFrame";
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
+    // GitHub Pages -> Google Apps Script uchun GET so'rovi.
+    // CORS talab qilmaydi va brauzer redirectlarini ham normal bajaradi.
+    const payload = encodeURIComponent(JSON.stringify(data));
+    const url = RESULT_API_URL + "?payload=" + payload;
+
+    let frame = document.getElementById("telegramSubmitFrame");
+    if(!frame){
+      frame = document.createElement("iframe");
+      frame.id = "telegramSubmitFrame";
+      frame.name = "telegramSubmitFrame";
+      frame.style.display = "none";
+      document.body.appendChild(frame);
     }
 
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = RESULT_API_URL;
-    form.target = "telegramSubmitFrame";
-    form.style.display = "none";
+    frame.src = url;
 
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "payload";
-    input.value = JSON.stringify(data);
-
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(() => form.remove(), 3000);
+    console.log("Telegram backendga natija yuborildi:", data);
     return true;
   }catch(e){
     console.error("Telegramga natija yuborishda xato:", e);
@@ -353,7 +349,7 @@ function finish(){
   started=false;
   clearInterval(timerId);
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
-  const grade=getGrade(score);
+  const grade=getGrade(score,examQuestions.length);
   const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,finishedAt:new Date().toISOString()};
   localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
   const sent = sendResultToTelegram(data);
