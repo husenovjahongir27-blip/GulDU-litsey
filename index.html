@@ -320,26 +320,45 @@ function sendResultToTelegram(data){
   }
 
   try{
-    const payload = encodeURIComponent(JSON.stringify(data));
-    const url = RESULT_API_URL + "?payload=" + payload + "&_=" + Date.now();
+    // GitHub Pages -> Google Apps Script uchun CORS talab qilmaydigan
+    // oddiy HTML form POST ishlatiladi. Apps Script doPost(e)
+    // e.parameter.payload ni qabul qiladi.
+    let frame = document.getElementById("telegramSubmitFrame");
 
-    // GitHub Pages -> Google Apps Script: CORSsiz GET so'rov.
-    // no-cors javobni o'qishga ruxsat bermaydi, lekin so'rovni backendga yuboradi.
-    fetch(url, {
-      method: "GET",
-      mode: "no-cors",
-      cache: "no-store",
-      keepalive: true
-    })
-    .then(() => {
-      console.log("Telegram backend GET so'rovi yuborildi.");
-    })
-    .catch((e) => {
-      console.error("Telegram backend GET xatosi:", e);
-    });
+    if(!frame){
+      frame = document.createElement("iframe");
+      frame.id = "telegramSubmitFrame";
+      frame.name = "telegramSubmitFrame";
+      frame.style.display = "none";
+      frame.setAttribute("aria-hidden", "true");
+      document.body.appendChild(frame);
+    }
 
-    console.log("Telegram backendga natija yuborildi:", data);
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = RESULT_API_URL;
+    form.target = "telegramSubmitFrame";
+    form.enctype = "application/x-www-form-urlencoded";
+    form.style.display = "none";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(data);
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    console.log("Telegram backendga POST natija yuborilmoqda:", data);
+    form.submit();
+
+    // Form yuborilgandan keyin DOMdan olib tashlaymiz.
+    setTimeout(() => {
+      try{ form.remove(); }catch(e){}
+    }, 3000);
+
     return true;
+
   }catch(e){
     console.error("Telegramga natija yuborishda xato:", e);
     return false;
