@@ -272,7 +272,7 @@ function prepareExam(){
     const q=activeQuestions[originalIndex];
     return {text:q[0],correct:q[1],options:shuffle(q[2],rng),originalIndex};
   });
-  answers=Array(25).fill(null);marked=Array(25).fill(false);current=0;
+  answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
 }
 function buildGrid(){
   qgrid.innerHTML="";
@@ -283,7 +283,7 @@ function buildGrid(){
 }
 function renderQuestion(){
   const q=examQuestions[current];
-  questionNo.textContent=(current+1)+"-savol / 25";
+  questionNo.textContent=(current+1)+"-savol / "+examQuestions.length;
   question.textContent=q.text;
   answersBox.innerHTML="";
   q.options.forEach((opt,i)=>{
@@ -293,7 +293,10 @@ function renderQuestion(){
     label.append(radio,document.createTextNode(String.fromCharCode(65+i)+") "+opt));answersBox.appendChild(label);
   });
   [...qgrid.children].forEach((b,i)=>{b.classList.toggle("active",i===current);b.classList.toggle("answered",answers[i]!==null)});
-  prevBtn.disabled=current===0;nextBtn.classList.toggle("hidden",current===24);finishBtn.classList.toggle("hidden",current!==24);
+  prevBtn.disabled=current===0;
+  const isLastQuestion=current===examQuestions.length-1;
+  nextBtn.classList.toggle("hidden",isLastQuestion);
+  finishBtn.classList.toggle("hidden",!isLastQuestion);
   markBtn.textContent=marked[current]?"★ Belgilangan":"♧ Belgilash";
 }
 function start(){
@@ -317,10 +320,11 @@ async function sendResultToTelegram(data){
 }
 function finish(){
   if(!started)return;
+  started=false;
   clearInterval(timerId);
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
   const grade=getGrade(score);
-  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:25,percent:Math.round(score/25*100),grade,finishedAt:new Date().toISOString()};
+  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,finishedAt:new Date().toISOString()};
   localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
   sendResultToTelegram(data);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
@@ -330,7 +334,12 @@ function finish(){
 }
 document.getElementById("startCard").onclick=start;
 prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
-nextBtn.onclick=()=>{if(current<24){current++;renderQuestion()}};
+nextBtn.onclick=()=>{
+  if(current<examQuestions.length-1){
+    current++;
+    renderQuestion();
+  }
+};
 finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()};
 markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
 groupEl.onchange=()=>{msg.textContent=""};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent=""};
