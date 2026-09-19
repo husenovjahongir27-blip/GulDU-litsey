@@ -313,35 +313,41 @@ function getGrade(score){
   return 2;
 }
 function sendResultToTelegram(data){
-  if(!RESULT_API_URL)return false;
-
-  const body = JSON.stringify(data);
+  if(!RESULT_API_URL) return false;
 
   try{
-    // Beacon sahifa natija oynasiga o'tganda ham POSTni yuborishni davom ettiradi.
-    if(navigator.sendBeacon){
-      const blob = new Blob([body], {type:"text/plain;charset=UTF-8"});
-      return navigator.sendBeacon(RESULT_API_URL, blob);
+    let iframe = document.getElementById("telegramSubmitFrame");
+    if(!iframe){
+      iframe = document.createElement("iframe");
+      iframe.id = "telegramSubmitFrame";
+      iframe.name = "telegramSubmitFrame";
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
     }
-  }catch(e){
-    console.warn("sendBeacon ishlamadi:", e);
-  }
 
-  // Beacon ishlamasa, keepalive fetch zaxira sifatida ishlaydi.
-  try{
-    fetch(RESULT_API_URL,{
-      method:"POST",
-      mode:"no-cors",
-      headers:{"Content-Type":"text/plain;charset=UTF-8"},
-      body:body,
-      keepalive:true
-    });
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = RESULT_API_URL;
+    form.target = "telegramSubmitFrame";
+    form.style.display = "none";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(data);
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => form.remove(), 3000);
     return true;
   }catch(e){
-    console.warn("Natijani serverga yuborib bo'lmadi:", e);
+    console.error("Telegramga natija yuborishda xato:", e);
     return false;
   }
 }
+
 function finish(){
   if(!started)return;
   started=false;
