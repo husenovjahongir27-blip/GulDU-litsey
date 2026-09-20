@@ -67,7 +67,73 @@ tr:hover td{background:#fbfcfe}
 .empty{padding:34px 20px;text-align:center;color:#526178;font-size:15px}
 .note{padding:12px 18px;font-size:13px;color:#526178}
 
+/* Parol ko'zchasi */
+.pw{position:relative}
+.pw input{padding-right:48px}
+.eye{position:absolute;right:2px;top:0;width:44px;height:46px;border:0;background:none;color:#526178;cursor:pointer;display:grid;place-items:center;border-radius:9px}
+.eye:hover{color:var(--blue)}
+.eye:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+
+.tabs{flex-wrap:wrap}
+
+/* Tugmalar / umumiy */
+.btn.small{height:34px;padding:0 12px;font-size:13px}
+.btn.danger{color:#c0392b;border-color:#e6b9b3}
+.btn.danger:hover{border-color:#c0392b;background:#fdf3f2}
+textarea{width:100%;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:11px 13px;font:inherit;font-size:15px;color:#172744;outline:none;resize:vertical;min-height:64px}
+textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.pane-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.chip{display:inline-block;padding:3px 9px;border-radius:999px;background:#eaf2fd;color:#0b4fae;font-size:12px;font-weight:700;margin:2px 4px 2px 0}
+
+/* Natijalarni o'chirish */
+.bulk{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 18px;background:#fff6f5;border-bottom:1px solid #f0d3cf;font-size:14px;font-weight:700;color:#8c2b20}
+th.chk,td.chk{width:38px;padding-right:0}
+td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
+
+/* Testlar */
+.pad{padding:16px 20px}
+.editor{padding-bottom:22px}
+.editor .pane-head{margin-bottom:18px}
+.editor>.ed-body{padding:0 20px}
+.ed-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.chk-list{display:flex;flex-wrap:wrap;gap:8px}
+.chk-list label{display:flex;align-items:center;gap:7px;margin:0;padding:7px 12px;border:1px solid #cbd6e5;border-radius:8px;font-size:14px;cursor:pointer;background:#fff}
+.chk-list input{width:17px;height:17px}
+.hint{background:#f3f7fc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;color:#33445f;line-height:1.5;margin-bottom:16px}
+.hint pre{margin:8px 0 0;padding:10px 12px;background:#fff;border:1px dashed #b9c9df;border-radius:8px;font:13px/1.55 Consolas,Menlo,monospace;color:#12203b;white-space:pre-wrap}
+.ed-tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.file-btn{display:inline-flex;align-items:center;margin:0;font-size:14px}
+.qcard{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fbfcfe}
+.qcard.bad{border-color:#d9534f;background:#fff7f6}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:var(--dark)}
+.orow{display:flex;align-items:center;gap:8px;margin-top:8px}
+.olab{flex:none;width:30px;height:30px;border-radius:50%;background:#e3eaf3;color:#26354e;display:grid;place-items:center;font-weight:800;font-size:13px}
+.orow.ok .olab{background:#2fa85f;color:#fff}
+.orow.ok input{border-color:#9bd3b1;background:#f5fcf8}
+.orow input{height:42px}
+.ed-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.prev-q{padding:12px 0;border-bottom:1px solid var(--line)}
+.prev-q:last-child{border-bottom:0}
+.prev-o{padding:3px 0 3px 8px;font-size:14px}
+.prev-o.ok{color:#1f7a44;font-weight:700}
+.keyline{margin-top:12px;padding:10px 12px;background:#f3f7fc;border-radius:8px;font-weight:700;font-size:14px;color:var(--dark);line-height:1.6}
+
+/* Guruhlarni boshqarish */
+.grp-add{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.grp-add .field{margin:0;min-width:200px}
+.grp-list{display:flex;flex-wrap:wrap;gap:10px}
+.grp-item{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border:1px solid #cbd6e5;border-radius:10px;background:#fff;font-weight:700;color:var(--dark)}
+
+/* Modal */
+.modal-back{position:fixed;inset:0;background:rgba(9,20,45,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:22px}
+.modal h3{margin:0 0 14px;color:var(--dark);font-size:18px}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
 @media(max-width:700px){
+  .ed-grid{grid-template-columns:1fr}
+  .pane-head{padding:14px}
+  .editor>.ed-body{padding:0 14px}
   .container{padding:14px 12px 30px}
   .header-inner{padding:16px}
   .logo{width:52px;height:52px;font-size:22px}
@@ -93,7 +159,15 @@ tr:hover td{background:#fbfcfe}
 <div class="section-title">Ustoz kirishi</div>
 <form id="loginForm" autocomplete="on">
 <div class="field"><label for="username">Login</label><input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
-<div class="field"><label for="password">Parol</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+<div class="field"><label for="password">Parol</label>
+<div class="pw">
+<input id="password" name="password" type="password" autocomplete="current-password" required>
+<button class="eye" id="pwToggle" type="button" aria-label="Parolni ko‘rsatish" aria-pressed="false" title="Parolni ko‘rsatish / yashirish">
+<svg id="eyeOn" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+<svg id="eyeOff" class="hidden" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+</button>
+</div>
+</div>
 <button class="btn primary" id="loginBtn" type="submit">Kirish</button>
 <div id="loginMsg" class="msg error" role="alert"></div>
 </form>
@@ -109,6 +183,7 @@ tr:hover td{background:#fbfcfe}
 
 <div id="panelMsg" class="msg info"></div>
 
+<div id="resultsTop">
 <div class="stats" id="stats"></div>
 
 <div class="card filters">
@@ -122,18 +197,22 @@ tr:hover td{background:#fbfcfe}
 <div><button class="btn" id="clearBtn" type="button" style="width:100%">Filtrlarni tozalash</button></div>
 </div>
 </div>
+</div>
 
 <div class="tabs">
 <button class="tab active" type="button" data-tab="results">Natijalar</button>
 <button class="tab" type="button" data-tab="groups">Guruhlar bo‘yicha</button>
+<button class="tab" type="button" data-tab="tests">Testlar</button>
+<button class="tab" type="button" data-tab="manage">Guruhlarni boshqarish</button>
 </div>
 
 <!-- Natijalar jadvali -->
 <div class="card table-card" id="tabResults">
 <div class="table-info" id="resultsInfo"></div>
+<div class="bulk hidden" id="bulkBar"><span id="bulkCount"></span><button class="btn small danger" id="bulkDelete" type="button">Tanlanganlarni o‘chirish</button><button class="btn small" id="bulkClear" type="button">Tanlovni bekor qilish</button></div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>№</th><th>Sana (Toshkent)</th><th>Guruh</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th></tr></thead>
+<thead><tr><th class="chk"><input type="checkbox" id="chkAll" aria-label="Hammasini tanlash"></th><th>№</th><th>Sana (Toshkent)</th><th>Guruh</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th><th></th></tr></thead>
 <tbody id="resultsBody"></tbody>
 </table>
 </div>
@@ -151,12 +230,81 @@ tr:hover td{background:#fbfcfe}
 </div>
 </div>
 
+<!-- Testlar -->
+<div id="tabTests" class="hidden">
+<div id="testsMsg" class="msg info"></div>
+
+<div id="testsListView" class="card table-card">
+<div class="pane-head">
+<div><div class="bar-title">Mening testlarim</div><div class="bar-sub">Testni guruhlarga biriktiring — o‘quvchilar faqat o‘z guruhiga biriktirilgan testni ko‘radi.</div></div>
+<button class="btn primary" id="newTestBtn" type="button">＋ Yangi test</button>
+</div>
+<div id="testsList"></div>
+</div>
+
+<div id="testEditor" class="card editor hidden">
+<div class="pane-head">
+<div class="bar-title" id="edHeading">Yangi test</div>
+<button class="btn" id="edBack" type="button">← Testlar ro‘yxati</button>
+</div>
+<div class="ed-body">
+<div class="ed-grid">
+<div><label for="edTitle">Test nomi</label><input id="edTitle" type="text" maxlength="120" placeholder="Masalan: Mexanika, 1-nazorat" autocomplete="off"></div>
+<div><label for="edNazorat">Nazorat</label><select id="edNazorat"></select></div>
+</div>
+<div class="field"><label>Qaysi guruhlarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
+
+<div class="hint">
+<b>Savollarni kiritish.</b> Word (.docx) faylda har bir savol shunday yozilsin: avval savol, undan keyin 4 ta javob (A, B, C, D). <b>To‘g‘ri javob doim A bo‘lsin</b> — tizim savollar va javoblar tartibini har bir o‘quvchi uchun o‘zi aralashtiradi. Qo‘lda kiritganda ham xuddi shunday: A maydoniga to‘g‘ri javobni yozing.
+<pre>1. Erkin tushish tezlanishi qancha?
+A) 9,8 m/s²
+B) 8,9 m/s²
+C) 10,8 m/s²
+D) 6,7 m/s²</pre>
+Rasmlar Word’dan ko‘chmaydi; formulalar oddiy matn ko‘rinishida o‘tadi. Word’dan o‘qilgan savollarni saqlashdan oldin tekshirib chiqing.
+</div>
+
+<div class="ed-tools">
+<label class="btn file-btn">Word (.docx) fayldan qo‘shish<input id="docxInput" type="file" accept=".docx" hidden></label>
+<button class="btn" id="addQBtn" type="button">＋ Savol qo‘shish</button>
+<button class="btn" id="previewBtn" type="button">Aralashtirib ko‘rish</button>
+<button class="btn danger" id="clearQBtn" type="button">Hammasini tozalash</button>
+</div>
+
+<div id="edQuestions"></div>
+
+<div class="ed-foot">
+<button class="btn primary" id="saveTestBtn" type="button">Testni saqlash</button>
+<button class="btn" id="cancelTestBtn" type="button">Bekor qilish</button>
+<span id="edCount" class="muted"></span>
+</div>
+<div id="edMsg" class="msg" role="status"></div>
+</div>
+</div>
+</div>
+
+<!-- Guruhlarni boshqarish -->
+<div class="card table-card hidden" id="tabManage">
+<div class="pane-head"><div><div class="bar-title">Guruhlarim</div><div class="bar-sub">Bu yerda qo‘shilgan guruhlarga test biriktirish mumkin. Guruh o‘chirilsa, u testlardan ham olib tashlanadi; eski natijalar saqlanib qoladi.</div></div></div>
+<div class="pad">
+<form class="grp-add" id="groupAddForm" autocomplete="off">
+<div class="field"><label for="groupName">Yangi guruh</label><input id="groupName" type="text" maxlength="30" placeholder="Masalan: 107"></div>
+<button class="btn primary" id="groupAddBtn" type="submit">Qo‘shish</button>
+</form>
+<div id="manageMsg" class="msg info"></div>
+<div id="groupsManage" class="grp-list"></div>
+</div>
+</div>
+
 </section>
 </main>
 
+<!-- Modal -->
+<div id="modalBack" class="modal-back hidden"><div class="modal card" role="dialog" aria-modal="true"><div id="modalBody"></div></div></div>
+
 <script>
 // index.html ichidagi RESULT_API_URL bilan BIR XIL manzilni shu yerga qo'ying
-const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+const API_URL="BU_YERGA_index.html_DAGI_/exec_MANZIL";
 
 const JN_LIST=["1-JN","2-JN","3-JN","4-JN"];
 const DEFAULT_GROUPS=["101","102","103","104","105","106"];
@@ -164,6 +312,9 @@ const TZ="Asia/Tashkent";
 
 let token=sessionStorage.getItem("gt_token")||"";
 let allRows=[];
+let serverGroups=null;      // ustozning guruhlari (serverdan)
+let viewRows=[];            // jadvalda ko‘rinib turgan natijalar
+const selected=new Set();   // o‘chirish uchun tanlangan natijalar
 
 const $=id=>document.getElementById(id);
 
@@ -204,6 +355,9 @@ async function api(action,payload){
   if(data&&data.source==="doPost"){
     throw new Error("Apps Script'da ustoz paneli qismi ishlamayapti: Code.gs dagi doPost'ga qo‘shimcha kiritilganini va yangi versiya deploy qilinganini tekshiring.");
   }
+  if(data&&data.ok===false&&data.error==="Noma'lum so'rov."){
+    throw new Error("Serverda yangi funksiyalar yo‘q. Testlar.gs qo‘shilganini, Panel.gs dagi panelRouter ichida default: qatori almashtirilganini tekshiring va yangi versiya deploy qiling.");
+  }
   return data;
 }
 
@@ -212,10 +366,12 @@ function showLogin(message){
   token="";
   sessionStorage.removeItem("gt_token");
   allRows=[];
+  resetPanelState();
   $("panelView").classList.add("hidden");
   $("loginView").classList.remove("hidden");
   $("loginMsg").textContent=message||"";
   $("password").value="";
+  resetPwToggle();
 }
 function showPanel(){
   $("loginView").classList.add("hidden");
@@ -241,6 +397,8 @@ $("loginForm").addEventListener("submit",async e=>{
     $("loginMsg").textContent="";
     $("password").value="";
     showPanel();
+    loadGroups();
+    loadTests();
     await loadResults();
   }catch(err){
     $("loginMsg").textContent=err.message;
@@ -283,7 +441,7 @@ async function loadResults(){
 
 /* ---------- Filtrlar ---------- */
 function groupList(){
-  const set=new Set(DEFAULT_GROUPS);
+  const set=new Set(serverGroups||DEFAULT_GROUPS);
   allRows.forEach(r=>{ if(r.group) set.add(r.group); });
   return Array.from(set).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
 }
@@ -334,15 +492,20 @@ function renderStats(rows){
     '</div></div>';
 }
 function renderTable(rows){
+  viewRows=rows;
+  const vs=new Set(rows);
+  selected.forEach(r=>{ if(!vs.has(r)) selected.delete(r); });
   $("resultsBody").innerHTML=rows.map((r,i)=>
-    '<tr><td>'+(i+1)+'</td>'+
+    '<tr><td class="chk"><input type="checkbox" class="rowchk" data-i="'+i+'"'+(selected.has(r)?' checked':'')+' aria-label="Tanlash"></td>'+
+    '<td>'+(i+1)+'</td>'+
     '<td>'+esc(r.d.full)+'</td>'+
     '<td>'+esc(r.group)+'</td>'+
     '<td class="name">'+esc(r.student)+(r.status==="takror"?'<span class="tag">takror</span>':'')+'</td>'+
     '<td>'+esc(r.jn)+'</td>'+
     '<td>'+esc(r.correct)+'/'+esc(r.total)+'</td>'+
     '<td>'+esc(r.percent)+'%</td>'+
-    '<td>'+gradeBadge(r.grade)+'</td></tr>'
+    '<td>'+gradeBadge(r.grade)+'</td>'+
+    '<td><button class="btn small danger" type="button" data-del="'+i+'">O‘chirish</button></td></tr>'
   ).join("");
   $("resultsInfo").textContent="Ko‘rsatilgan natijalar: "+rows.length+" ta";
   const empty=$("emptyMsg");
@@ -352,6 +515,7 @@ function renderTable(rows){
   }else{
     empty.classList.add("hidden");
   }
+  updateBulk();
 }
 function renderGroups(base){
   $("groupsBody").innerHTML=groupList().map(g=>{
@@ -380,19 +544,635 @@ $("clearBtn").addEventListener("click",()=>{
   $("fFrom").value="";$("fTo").value="";$("fDup").checked=false;
   render();
 });
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
-  $("tabResults").classList.toggle("hidden",b.dataset.tab!=="results");
-  $("tabGroups").classList.toggle("hidden",b.dataset.tab!=="groups");
-}));
+const PANES={results:"tabResults",groups:"tabGroups",tests:"tabTests",manage:"tabManage"};
+function setTab(name){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
+  Object.keys(PANES).forEach(k=>$(PANES[k]).classList.toggle("hidden",k!==name));
+  $("resultsTop").classList.toggle("hidden",name!=="results"&&name!=="groups");
+  const pm=$("panelMsg");
+  if(pm.className.indexOf("error")===-1) pm.textContent="";
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+
+/* =====================================================
+   YANGI QISMLAR: parol ko‘zchasi, natijalarni o‘chirish,
+   testlar (qo‘lda / Word), guruhlarni boshqarish
+   ===================================================== */
+
+/* ---------- Sessiya bilan so‘rov ---------- */
+async function call(action,payload){
+  const r=await api(action,Object.assign({token:token},payload||{}));
+  if(r&&r.code==="AUTH"){
+    showLogin("Sessiya tugagan. Qayta kiring.");
+    const e=new Error("AUTH"); e.auth=true; throw e;
+  }
+  return r;
+}
+
+/* ---------- Modal oyna ---------- */
+function openModal(html){ $("modalBody").innerHTML=html; $("modalBack").classList.remove("hidden"); }
+function closeModal(){ $("modalBack").classList.add("hidden"); $("modalBody").innerHTML=""; }
+$("modalBack").addEventListener("mousedown",e=>{ if(e.target===$("modalBack")) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("modalBack").classList.contains("hidden")) closeModal(); });
+$("modalBody").addEventListener("click",e=>{
+  const b=e.target.closest("[data-m]"); if(!b) return;
+  const a=b.dataset.m;
+  if(a==="close") closeModal();
+  else if(a==="assign") saveAssign(b.dataset.id,b);
+  else if(a==="reshuffle") previewShuffle();
+});
+
+/* ---------- Parol ko‘zchasi ---------- */
+function resetPwToggle(){
+  $("password").type="password";
+  $("pwToggle").setAttribute("aria-pressed","false");
+  $("pwToggle").setAttribute("aria-label","Parolni ko‘rsatish");
+  $("eyeOn").classList.remove("hidden");
+  $("eyeOff").classList.add("hidden");
+}
+$("pwToggle").addEventListener("click",()=>{
+  const inp=$("password");
+  const show=inp.type==="password";
+  inp.type=show?"text":"password";
+  $("pwToggle").setAttribute("aria-pressed",show?"true":"false");
+  $("pwToggle").setAttribute("aria-label",show?"Parolni yashirish":"Parolni ko‘rsatish");
+  $("eyeOn").classList.toggle("hidden",show);
+  $("eyeOff").classList.toggle("hidden",!show);
+  inp.focus();
+});
+
+/* ---------- Natijalarni o‘chirish ---------- */
+function updateBulk(){
+  const n=selected.size;
+  $("bulkBar").classList.toggle("hidden",n===0);
+  $("bulkCount").textContent="Tanlangan: "+n+" ta";
+  const all=$("chkAll");
+  all.checked=viewRows.length>0&&n===viewRows.length;
+  all.indeterminate=n>0&&n<viewRows.length;
+}
+function syncChecks(){
+  document.querySelectorAll(".rowchk").forEach(c=>{ c.checked=selected.has(viewRows[Number(c.dataset.i)]); });
+  updateBulk();
+}
+$("resultsBody").addEventListener("change",e=>{
+  const c=e.target.closest(".rowchk"); if(!c) return;
+  const r=viewRows[Number(c.dataset.i)]; if(!r) return;
+  if(c.checked) selected.add(r); else selected.delete(r);
+  updateBulk();
+});
+$("resultsBody").addEventListener("click",e=>{
+  const b=e.target.closest("[data-del]"); if(!b) return;
+  deleteResults([viewRows[Number(b.dataset.del)]]);
+});
+$("chkAll").addEventListener("change",e=>{
+  if(e.target.checked) viewRows.forEach(r=>selected.add(r)); else selected.clear();
+  syncChecks();
+});
+$("bulkClear").addEventListener("click",()=>{ selected.clear(); syncChecks(); });
+$("bulkDelete").addEventListener("click",()=>deleteResults(Array.from(selected)));
+
+async function deleteResults(list){
+  list=list.filter(Boolean);
+  if(!list.length) return;
+  const text=list.length===1
+    ? "Bu natijani o‘chirmoqchimisiz?\n\n"+list[0].student+" — "+list[0].jn+" ("+list[0].d.full+")\n\nBu amalni qaytarib bo‘lmaydi."
+    : list.length+" ta natijani o‘chirmoqchimisiz?\n\nBu amalni qaytarib bo‘lmaydi.";
+  if(!confirm(text)) return;
+  const pm=$("panelMsg");
+  pm.className="msg info"; pm.textContent="O‘chirilmoqda...";
+  try{
+    let deleted=0;
+    for(let i=0;i<list.length;i+=200){
+      const part=list.slice(i,i+200).map(r=>({t:r.t,group:r.group,student:r.student,jn:r.jn}));
+      const r=await call("resultsDelete",{items:part});
+      if(!r.ok) throw new Error(r.error||"O‘chirib bo‘lmadi.");
+      deleted+=r.deleted||0;
+    }
+    selected.clear();
+    await loadResults();
+    pm.className="msg info"; pm.textContent=deleted+" ta natija o‘chirildi.";
+  }catch(err){
+    if(err.auth) return;
+    pm.className="msg error"; pm.textContent=err.message;
+  }
+}
+
+/* ---------- Word fayl o‘qish (.docx) ---------- */
+async function readDocxXml(file){
+  const buf=new Uint8Array(await file.arrayBuffer());
+  const dv=new DataView(buf.buffer,buf.byteOffset,buf.byteLength);
+  let eocd=-1;
+  for(let i=buf.length-22;i>=Math.max(0,buf.length-65557);i--){
+    if(dv.getUint32(i,true)===0x06054b50){ eocd=i; break; }
+  }
+  if(eocd<0) throw new Error("Bu .docx fayl emas yoki buzilgan. Word’da “Boshqacha saqlash → Word hujjati (.docx)” qilib qayta saqlang.");
+  const count=dv.getUint16(eocd+10,true);
+  let p=dv.getUint32(eocd+16,true);
+  const td=new TextDecoder("utf-8");
+  for(let n=0;n<count;n++){
+    if(dv.getUint32(p,true)!==0x02014b50) break;
+    const method=dv.getUint16(p+10,true);
+    const csize=dv.getUint32(p+20,true);
+    const nlen=dv.getUint16(p+28,true), xlen=dv.getUint16(p+30,true), clen=dv.getUint16(p+32,true);
+    const lho=dv.getUint32(p+42,true);
+    const name=td.decode(buf.subarray(p+46,p+46+nlen));
+    if(name==="word/document.xml"){
+      const start=lho+30+dv.getUint16(lho+26,true)+dv.getUint16(lho+28,true);
+      const data=buf.subarray(start,start+csize);
+      if(method===0) return td.decode(data);
+      if(method===8){
+        if(typeof DecompressionStream==="undefined") throw new Error("Brauzeringiz .docx faylni o‘qiy olmaydi. Chrome yoki Edge’ning yangi versiyasidan foydalaning.");
+        const stream=new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+        return td.decode(await new Response(stream).arrayBuffer());
+      }
+      throw new Error("Word faylning siqish usuli qo‘llab-quvvatlanmaydi.");
+    }
+    p+=46+nlen+xlen+clen;
+  }
+  throw new Error("Word fayl ichidan matn topilmadi.");
+}
+function decodeXml(s){
+  const cp=n=>{ try{ return String.fromCodePoint(n); }catch(e){ return ""; } };
+  return s.replace(/&#x([0-9a-fA-F]+);/g,(m,h)=>cp(parseInt(h,16)))
+          .replace(/&#(\d+);/g,(m,d)=>cp(parseInt(d,10)))
+          .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,"&");
+}
+function xmlToLines(xml){
+  // Word formulalari: kasr, daraja, indeks, ildiz oddiy matnga aylantiriladi
+  xml=xml.replace(/<\/m:num>/g,"<m:t>/</m:t>")
+         .replace(/<m:sup>/g,"<m:t>^</m:t>")
+         .replace(/<m:sub>/g,"<m:t>_</m:t>")
+         .replace(/<m:rad>/g,"<m:t>√</m:t>");
+  const lines=[];
+  xml.split("</w:p>").forEach(chunk=>{
+    let text="",m;
+    const re=/<w:t(?:\s[^>\/]*)?>([\s\S]*?)<\/w:t>|<m:t(?:\s[^>\/]*)?>([\s\S]*?)<\/m:t>|<w:tab\s*\/>|<w:(?:br|cr)(?:\s[^>]*)?\/>/g;
+    while((m=re.exec(chunk))){
+      if(m[1]!==undefined) text+=m[1];
+      else if(m[2]!==undefined) text+=m[2];
+      else if(m[0].indexOf("<w:tab")===0) text+=" ";
+      else text+="\n";
+    }
+    decodeXml(text).split("\n").forEach(l=>{
+      l=l.replace(/\u00a0/g," ").replace(/\s+/g," ").trim();
+      if(l) lines.push(l);
+    });
+  });
+  return lines;
+}
+const OPT_RE=/^\(?\s*([A-DАВС])\s*[.)]\s*(.*)$/i;
+const NUM_RE=/^\s*(?:№\s*)?\d+\s*[.)](?!\d)\s*/;
+function optIdx(ch){
+  const c=ch.toUpperCase();
+  return "ABCD".indexOf(({"А":"A","В":"B","С":"C"})[c]||c);
+}
+// Bitta qatorda "A) .. B) .. C) .. D) .." bo‘lsa, ajratib beradi
+function splitInline(line){
+  const re=/(?:^|\s)\(?([A-DАВС])\s*[.)]\s*/gi;
+  const marks=[]; let m;
+  while((m=re.exec(line))) marks.push({i:optIdx(m[1]),start:m.index,end:re.lastIndex});
+  const seq=[]; let want=0;
+  for(const k of marks){ if(k.i===want){ seq.push(k); want++; if(want===4) break; } }
+  if(seq.length<4) return null;
+  return {
+    pre:line.slice(0,seq[0].start).trim(),
+    o:seq.map((k,j)=>line.slice(k.end,seq[j+1]?seq[j+1].start:line.length).trim())
+  };
+}
+// Qatorlar → savollar. Har bir savol: {q, o:[A,B,C,D]}, A — to‘g‘ri javob
+function parseQuestions(lines){
+  lines=lines.map(l=>l.trim()).filter(Boolean);
+  const strip=t=>t.replace(NUM_RE,"").trim();
+  const hasLabel=k=>lines.some(l=>{ const m=OPT_RE.exec(l); return m&&optIdx(m[1])===k; });
+  const labeled=(hasLabel(0)&&hasLabel(1))||lines.some(l=>splitInline(l));
+  const out=[];
+  let leftover=0;
+  if(!labeled){
+    // Belgisiz format: har 5 ta qator = savol + 4 ta javob
+    let L=lines;
+    if(L.length%5===1) L=L.slice(1);   // yagona ortiqcha qator — odatda sarlavha
+    for(let i=0;i<L.length;i+=5){
+      const ch=L.slice(i,i+5);
+      out.push({q:strip(ch[0]),o:[ch[1]||"",ch[2]||"",ch[3]||"",ch[4]||""]});
+    }
+    leftover=L.length%5;
+  }else{
+    let cur=null;
+    const flush=()=>{ if(cur&&cur.n>0) out.push({q:cur.q.trim(),o:cur.o}); cur=null; };
+    const begin=q=>{ flush(); cur={q:q||"",o:["","","",""],n:0}; };
+    lines.forEach(line=>{
+      const inl=splitInline(line);
+      if(inl){
+        if(inl.pre||!cur||cur.n>0) begin(strip(inl.pre));
+        inl.o.forEach((t,i)=>{ cur.o[i]=t; });
+        cur.n=4;
+        return;
+      }
+      const m=OPT_RE.exec(line);
+      if(m){
+        const idx=optIdx(m[1]);
+        if(cur&&idx===cur.n){ cur.o[idx]=m[2].trim(); cur.n++; return; }
+        if(idx===0){ begin(""); cur.o[0]=m[2].trim(); cur.n=1; return; }
+      }
+      if(!cur){ begin(strip(line)); return; }
+      if(cur.n===0){
+        if(NUM_RE.test(line)&&cur.q) begin(strip(line));
+        else cur.q+=(cur.q?" ":"")+line;
+        return;
+      }
+      if(cur.n>=4||NUM_RE.test(line)){ begin(strip(line)); return; }
+      cur.o[cur.n-1]+=" "+line;   // javob matni keyingi abzatsga o‘tib ketgan
+    });
+    flush();
+  }
+  return {questions:out,incomplete:out.filter(x=>!x.q||x.o.some(v=>!v)).length,leftover:leftover};
+}
+/* ---------- /Word ---------- */
+
+/* ---------- Testlar: holat ---------- */
+let tests=[];
+let editing=null;
+let edDirty=false;
+const LETTERS=["A","B","C","D"];
+const MAX_Q=200;
+const blankQ=()=>({q:"",o:["","","",""]});
+const isEmptyQ=x=>!x.q.trim()&&!x.o.some(v=>v.trim());
+const isBadQ=x=>!x.q.trim()||x.o.some(v=>!v.trim());
+
+function resetPanelState(){
+  tests=[]; editing=null; edDirty=false; serverGroups=null; viewRows=[]; selected.clear();
+  $("testEditor").classList.add("hidden");
+  $("testsListView").classList.remove("hidden");
+  $("testsList").innerHTML="";
+  $("groupsManage").innerHTML="";
+  $("testsMsg").textContent="";
+  $("manageMsg").textContent="";
+  $("panelMsg").textContent="";
+  closeModal();
+  setTab("results");
+}
+
+/* ---------- Guruhlarni boshqarish ---------- */
+async function loadGroups(){
+  const m=$("manageMsg");
+  try{
+    const r=await call("groups");
+    if(!r.ok) throw new Error(r.error||"Guruhlarni olib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    m.textContent="";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+  buildGroupFilter();
+  renderManage();
+  render();
+}
+function renderManage(){
+  const box=$("groupsManage");
+  if(serverGroups===null){ box.innerHTML=""; return; }
+  if(!serverGroups.length){ box.innerHTML='<div class="muted">Hozircha guruh yo‘q. Yuqoridan qo‘shing.</div>'; return; }
+  box.innerHTML=serverGroups.map(g=>'<div class="grp-item">'+esc(g)+'<button class="btn small danger" type="button" data-gdel="'+esc(g)+'">O‘chirish</button></div>').join("");
+}
+$("groupAddForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("groupName").value.trim();
+  const m=$("manageMsg");
+  if(!name) return;
+  $("groupAddBtn").disabled=true;
+  try{
+    const r=await call("groupAdd",{name:name});
+    if(!r.ok) throw new Error(r.error||"Guruh qo‘shib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    $("groupName").value="";
+    m.className="msg info"; m.textContent="Guruh qo‘shildi.";
+    buildGroupFilter(); renderManage(); render();
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }finally{
+    $("groupAddBtn").disabled=false;
+  }
+});
+$("groupsManage").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-gdel]"); if(!b) return;
+  const name=b.dataset.gdel;
+  if(!confirm("“"+name+"” guruhini o‘chirmoqchimisiz?\n\nGuruh testlardan ham olib tashlanadi. Eski natijalar saqlanib qoladi.")) return;
+  const m=$("manageMsg");
+  b.disabled=true;
+  try{
+    const r=await call("groupDelete",{name:name});
+    if(!r.ok) throw new Error(r.error||"Guruhni o‘chirib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    m.className="msg info"; m.textContent="Guruh o‘chirildi.";
+    buildGroupFilter(); renderManage(); render();
+    loadTests();
+  }catch(err){
+    if(err.auth) return;
+    b.disabled=false;
+    m.className="msg error"; m.textContent=err.message;
+  }
+});
+
+/* ---------- Testlar ro‘yxati ---------- */
+async function loadTests(){
+  const m=$("testsMsg");
+  try{
+    const r=await call("tests");
+    if(!r.ok) throw new Error(r.error||"Testlarni olib bo‘lmadi.");
+    tests=r.tests||[];
+    if(r.groups&&serverGroups===null){ serverGroups=r.groups; buildGroupFilter(); renderManage(); }
+    m.textContent="";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+  renderTests();
+}
+function renderTests(){
+  const box=$("testsList");
+  if(!tests.length){
+    box.innerHTML='<div class="empty">Hozircha test yo‘q. “＋ Yangi test” tugmasini bosing.</div>';
+    return;
+  }
+  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Savollar</th><th>Guruhlar</th><th>O‘zgartirilgan</th><th></th></tr></thead><tbody>'+
+    tests.map(t=>{
+      const id=esc(t.id);
+      const chips=(t.groups||[]).length?t.groups.map(g=>'<span class="chip">'+esc(g)+'</span>').join(""):'<span class="muted">biriktirilmagan</span>';
+      return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat)+'</td><td>'+esc(t.count)+' ta</td>'+
+        '<td class="name">'+chips+'</td><td>'+esc(tk(t.updated).full)+'</td>'+
+        '<td><div class="bar-actions">'+
+        '<button class="btn small" type="button" data-act="edit" data-id="'+id+'">Tahrirlash</button>'+
+        '<button class="btn small" type="button" data-act="assign" data-id="'+id+'">Guruhlar</button>'+
+        '<button class="btn small danger" type="button" data-act="del" data-id="'+id+'">O‘chirish</button>'+
+        '</div></td></tr>';
+    }).join("")+'</tbody></table></div>';
+}
+$("testsList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const id=b.dataset.id, a=b.dataset.act;
+  if(a==="edit") openEditor(id);
+  else if(a==="assign") openAssign(id);
+  else if(a==="del") deleteTest(id);
+});
+async function deleteTest(id){
+  const t=tests.find(x=>x.id===id); if(!t) return;
+  if(!confirm("“"+t.title+"” testini o‘chirmoqchimisiz?\n\nTestning barcha savollari o‘chadi. Bu amalni qaytarib bo‘lmaydi.")) return;
+  const m=$("testsMsg");
+  m.className="msg info"; m.textContent="O‘chirilmoqda...";
+  try{
+    const r=await call("testDelete",{id:id});
+    if(!r.ok) throw new Error(r.error||"Testni o‘chirib bo‘lmadi.");
+    await loadTests();
+    m.className="msg info"; m.textContent="Test o‘chirildi.";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+}
+
+/* ---------- Testni guruhlarga biriktirish ---------- */
+function openAssign(id){
+  const t=tests.find(x=>x.id===id); if(!t) return;
+  const gl=serverGroups||[];
+  if(!gl.length){
+    openModal('<h3>Guruhlarga biriktirish</h3><p>Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</p><div class="modal-actions"><button class="btn" type="button" data-m="close">Yopish</button></div>');
+    return;
+  }
+  openModal('<h3>“'+esc(t.title)+'” — guruhlarga biriktirish</h3>'+
+    '<div class="chk-list" id="asGroups">'+gl.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+((t.groups||[]).indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("")+'</div>'+
+    '<div id="asMsg" class="msg"></div>'+
+    '<div class="modal-actions"><button class="btn primary" type="button" data-m="assign" data-id="'+esc(id)+'">Saqlash</button><button class="btn" type="button" data-m="close">Bekor qilish</button></div>');
+}
+async function saveAssign(id,btn){
+  const groups=Array.from(document.querySelectorAll("#asGroups input:checked")).map(i=>i.value);
+  const m=$("asMsg");
+  btn.disabled=true;
+  m.className="msg info"; m.textContent="Saqlanmoqda...";
+  try{
+    const r=await call("testAssign",{id:id,groups:groups});
+    if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
+    closeModal();
+    await loadTests();
+  }catch(err){
+    if(err.auth) return;
+    btn.disabled=false;
+    m.className="msg error"; m.textContent=err.message;
+  }
+}
+
+/* ---------- Test muharriri ---------- */
+$("newTestBtn").addEventListener("click",()=>openEditor(""));
+async function openEditor(id){
+  const m=$("testsMsg");
+  m.className="msg info"; m.textContent="";
+  if(id){
+    m.textContent="Yuklanmoqda...";
+    try{
+      const r=await call("testGet",{id:id});
+      if(!r.ok) throw new Error(r.error||"Testni olib bo‘lmadi.");
+      const t=r.test;
+      editing={id:t.id,title:t.title,nazorat:t.nazorat,groups:t.groups||[],questions:(t.questions||[]).map(x=>({q:x.q,o:x.o.slice(0,4)}))};
+      m.textContent="";
+    }catch(err){
+      if(err.auth) return;
+      m.className="msg error"; m.textContent=err.message;
+      return;
+    }
+  }else{
+    editing={id:"",title:"",nazorat:JN_LIST[0],groups:[],questions:[blankQ()]};
+  }
+  if(!editing.questions.length) editing.questions=[blankQ()];
+  edDirty=false;
+  $("testsListView").classList.add("hidden");
+  $("testEditor").classList.remove("hidden");
+  $("edHeading").textContent=editing.id?"Testni tahrirlash":"Yangi test";
+  $("edTitle").value=editing.title;
+  $("edNazorat").value=editing.nazorat;
+  renderEdGroups();
+  renderQuestions();
+  $("edMsg").textContent="";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function closeEditor(force){
+  if(!force&&edDirty&&!confirm("Saqlanmagan o‘zgarishlar yo‘qoladi. Chiqasizmi?")) return;
+  editing=null; edDirty=false;
+  $("testEditor").classList.add("hidden");
+  $("testsListView").classList.remove("hidden");
+}
+$("edBack").addEventListener("click",()=>closeEditor());
+$("cancelTestBtn").addEventListener("click",()=>closeEditor());
+
+function renderEdGroups(){
+  const box=$("edGroups");
+  if(serverGroups===null){ box.innerHTML='<span class="muted">Guruhlar yuklanmadi. “Guruhlarni boshqarish” bo‘limini tekshiring.</span>'; return; }
+  if(!serverGroups.length){ box.innerHTML='<span class="muted">Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</span>'; return; }
+  box.innerHTML=serverGroups.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+(editing.groups.indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("");
+}
+function renderQuestions(){
+  $("edQuestions").innerHTML=editing.questions.map((x,i)=>
+    '<div class="qcard" data-qi="'+i+'"><div class="qhead"><b>'+(i+1)+'-savol</b><button class="btn small danger" type="button" data-qdel="'+i+'">O‘chirish</button></div>'+
+    '<textarea data-f="q" rows="2" placeholder="Savol matni">'+esc(x.q)+'</textarea>'+
+    LETTERS.map((L,j)=>'<div class="orow'+(j===0?' ok':'')+'"><span class="olab">'+L+'</span><input type="text" data-f="o'+j+'" value="'+esc(x.o[j])+'" placeholder="'+(j===0?'To‘g‘ri javob':'Noto‘g‘ri javob')+'" autocomplete="off"></div>').join("")+
+    '</div>'
+  ).join("");
+  updateEdCount();
+}
+function updateEdCount(){
+  $("edCount").textContent=editing?editing.questions.filter(x=>!isEmptyQ(x)).length+" ta savol":"";
+}
+function markBad(){
+  document.querySelectorAll("#edQuestions .qcard").forEach((c,i)=>{
+    const x=editing.questions[i];
+    c.classList.toggle("bad",!!x&&!isEmptyQ(x)&&isBadQ(x));
+  });
+}
+$("edQuestions").addEventListener("input",e=>{
+  const card=e.target.closest(".qcard"); const f=e.target.dataset.f;
+  if(!card||!editing||!f) return;
+  const x=editing.questions[Number(card.dataset.qi)]; if(!x) return;
+  if(f==="q") x.q=e.target.value; else x.o[Number(f.slice(1))]=e.target.value;
+  card.classList.remove("bad");
+  updateEdCount();
+});
+$("edQuestions").addEventListener("click",e=>{
+  const b=e.target.closest("[data-qdel]"); if(!b||!editing) return;
+  editing.questions.splice(Number(b.dataset.qdel),1);
+  if(!editing.questions.length) editing.questions.push(blankQ());
+  edDirty=true;
+  renderQuestions();
+});
+$("testEditor").addEventListener("input",()=>{ edDirty=true; });
+$("testEditor").addEventListener("change",()=>{ edDirty=true; });
+$("addQBtn").addEventListener("click",()=>{
+  if(!editing) return;
+  editing.questions.push(blankQ());
+  edDirty=true;
+  renderQuestions();
+  const cards=document.querySelectorAll("#edQuestions .qcard");
+  const last=cards[cards.length-1];
+  last.scrollIntoView({behavior:"smooth",block:"center"});
+  last.querySelector("textarea").focus({preventScroll:true});
+});
+$("clearQBtn").addEventListener("click",()=>{
+  if(!editing||!confirm("Barcha savollar tozalansinmi?")) return;
+  editing.questions=[blankQ()];
+  edDirty=true;
+  renderQuestions();
+});
+
+/* ---------- Word fayldan savollar qo‘shish ---------- */
+$("docxInput").addEventListener("change",async ev=>{
+  const f=ev.target.files&&ev.target.files[0];
+  ev.target.value="";
+  if(!f||!editing) return;
+  const m=$("edMsg");
+  m.className="msg error";
+  if(/\.doc$/i.test(f.name)){ m.textContent="Eski .doc format qo‘llab-quvvatlanmaydi. Word’da “Boshqacha saqlash” orqali .docx qilib saqlang."; return; }
+  if(!/\.docx$/i.test(f.name)){ m.textContent="Faqat Word (.docx) fayl yuklash mumkin."; return; }
+  if(f.size>8*1024*1024){ m.textContent="Fayl juda katta (8 MB dan oshmasin)."; return; }
+  m.className="msg info"; m.textContent="Word fayl o‘qilmoqda...";
+  try{
+    const xml=await readDocxXml(f);
+    const res=parseQuestions(xmlToLines(xml));
+    if(!res.questions.length){ m.className="msg error"; m.textContent="Fayldan savol topilmadi. Yuqoridagi namunadagi formatni tekshiring."; return; }
+    editing.questions=editing.questions.filter(x=>!isEmptyQ(x)).concat(res.questions);
+    edDirty=true;
+    renderQuestions();
+    markBad();
+    let t=res.questions.length+" ta savol qo‘shildi.";
+    let warn=false;
+    if(res.incomplete){ t+=" "+res.incomplete+" tasida javoblar to‘liq emas — qizil belgilangan savollarni tekshirib to‘ldiring."; warn=true; }
+    else if(res.leftover){ t+=" Diqqat: qatorlar soni 5 ga karrali emas, oxirgi savollarni tekshiring."; warn=true; }
+    else t+=" Saqlashdan oldin tekshirib chiqing.";
+    if(editing.questions.length>MAX_Q){ t+=" Diqqat: bir testda ko‘pi bilan "+MAX_Q+" ta savol bo‘lishi mumkin."; warn=true; }
+    m.className=warn?"msg error":"msg info";
+    m.textContent=t;
+  }catch(err){
+    m.className="msg error"; m.textContent=err.message;
+  }
+});
+
+/* ---------- Aralashtirib ko‘rish (namuna) ---------- */
+function shuffleArr(a){
+  a=a.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+function previewShuffle(){
+  if(!editing) return;
+  const ok=editing.questions.filter(x=>!isEmptyQ(x)&&!isBadQ(x));
+  if(!ok.length){
+    $("edMsg").className="msg error"; $("edMsg").textContent="Ko‘rish uchun kamida bitta to‘liq savol kerak.";
+    return;
+  }
+  const sh=shuffleArr(ok).map(x=>{
+    const order=shuffleArr([0,1,2,3]);
+    return {q:x.q,o:order.map(k=>x.o[k]),c:order.indexOf(0)};
+  });
+  openModal('<h3>Namuna: o‘quvchi shunday ko‘radi</h3>'+
+    '<div class="muted" style="font-size:13px;margin-bottom:6px">Har bir o‘quvchiga savollar va javoblar tartibi alohida aralashtiriladi, kalit ham shunga mos o‘zgaradi.</div>'+
+    sh.map((x,i)=>'<div class="prev-q"><b>'+(i+1)+'. '+esc(x.q)+'</b>'+
+      x.o.map((t,j)=>'<div class="prev-o'+(j===x.c?' ok':'')+'">'+LETTERS[j]+') '+esc(t)+(j===x.c?' ✓':'')+'</div>').join("")+'</div>').join("")+
+    '<div class="keyline">Kalit: '+sh.map((x,i)=>(i+1)+"-"+LETTERS[x.c]).join(", ")+'</div>'+
+    '<div class="modal-actions"><button class="btn primary" type="button" data-m="reshuffle">Yana aralashtirish</button><button class="btn" type="button" data-m="close">Yopish</button></div>');
+}
+$("previewBtn").addEventListener("click",previewShuffle);
+
+/* ---------- Testni saqlash ---------- */
+$("saveTestBtn").addEventListener("click",saveTest);
+async function saveTest(){
+  if(!editing) return;
+  const msg=$("edMsg");
+  msg.className="msg error";
+  editing.title=$("edTitle").value.trim();
+  editing.nazorat=$("edNazorat").value;
+  editing.groups=Array.from(document.querySelectorAll("#edGroups input:checked")).map(i=>i.value);
+  if(!editing.title){ msg.textContent="Test nomini kiriting."; $("edTitle").focus(); return; }
+  editing.questions=editing.questions.filter(x=>!isEmptyQ(x));
+  if(!editing.questions.length){
+    editing.questions=[blankQ()]; renderQuestions();
+    msg.textContent="Kamida bitta savol kiriting.";
+    return;
+  }
+  if(editing.questions.length>MAX_Q){ msg.textContent="Bir testda ko‘pi bilan "+MAX_Q+" ta savol bo‘lishi mumkin."; return; }
+  renderQuestions(); markBad();
+  const bad=editing.questions.findIndex(isBadQ);
+  if(bad!==-1){
+    msg.textContent=(bad+1)+"-savolda savol matni yoki A, B, C, D javoblaridan biri bo‘sh.";
+    document.querySelectorAll("#edQuestions .qcard")[bad].scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  const btn=$("saveTestBtn");
+  btn.disabled=true;
+  msg.className="msg info"; msg.textContent="Saqlanmoqda...";
+  try{
+    const r=await call("testSave",{
+      id:editing.id,title:editing.title,nazorat:editing.nazorat,groups:editing.groups,
+      questions:editing.questions.map(x=>({q:x.q.trim(),o:x.o.map(v=>v.trim())}))
+    });
+    if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
+    closeEditor(true);
+    await loadTests();
+    const m=$("testsMsg"); m.className="msg info"; m.textContent="Test saqlandi.";
+  }catch(err){
+    if(err.auth) return;
+    msg.className="msg error"; msg.textContent=err.message;
+  }finally{
+    btn.disabled=false;
+  }
+}
 
 /* ---------- Ishga tushirish ---------- */
 buildJnFilter();
+$("edNazorat").innerHTML=JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
 buildGroupFilter();
 if(token){
   showPanel();
   $("teacherName").textContent=sessionStorage.getItem("gt_name")||"";
   loadResults();
+  loadGroups();
+  loadTests();
 }
 </script>
 </body>
