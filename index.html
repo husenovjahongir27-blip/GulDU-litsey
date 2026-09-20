@@ -47,6 +47,7 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 .result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:50%;background:#2fa85f;color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
 .footer{margin-top:18px;background:#08489e;color:#fff;padding:18px;text-align:center;font-size:13px}
 .hidden{display:none!important}.login-message{margin-top:12px;color:#c0392b;font-size:14px;font-weight:600;min-height:18px}
+select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input{margin-top:10px}
 @media(max-width:900px){.top-card{grid-template-columns:1fr}.exam-body{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid #e0e6ef}}
 @media(max-width:600px){.header-inner{padding:18px 16px;gap:13px}.logo{width:60px;height:60px;font-size:24px}.header h1{font-size:21px}.header p{font-size:13px;margin-top:7px}.container{padding:12px 10px 25px}.top-card{padding:18px;gap:20px}.controls-grid{gap:10px}.test-card{padding:13px;min-height:150px}.info-strip{grid-template-columns:1fr;gap:8px}.info-item{border-right:0;border-bottom:1px solid #e1e7ef;padding:10px 8px}.info-item:last-child{border-bottom:0}.exam-head{padding:15px}.exam-body{min-height:0}.exam-content{padding:20px 16px}.sidebar{padding:18px 16px}.result{padding:20px;align-items:flex-start;flex-direction:column}.exam-actions{flex-wrap:wrap}}
 </style>
@@ -64,6 +65,9 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 <section class="card top-card">
 <div>
 <div class="section-title"><span class="icon">▣</span> O‘QUVCHI MA’LUMOTLARI</div>
+<div class="field"><label>Viloyatni tanlang</label><select id="region"></select></div>
+<div class="field"><label>Tuman yoki shaharni tanlang</label><select id="district" disabled></select><input id="districtOther" class="other-input hidden" type="text" placeholder="Tuman yoki shahar nomini yozing" autocomplete="off"></div>
+<div class="field"><label>Ta’lim muassasasini tanlang</label><select id="school" disabled></select><input id="schoolOther" class="other-input hidden" type="text" placeholder="Ta’lim muassasasi nomini yozing" autocomplete="off"></div>
 <div class="field"><label>Guruhni tanlang</label><select id="group"><option value="">Guruhni tanlang</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option></select></div>
 <div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div><div class="field"><label>Fanni tanlang</label><select id="subject"><option value="">Fanni tanlang</option><option>Geografiya</option><option>Matematika</option><option>Ingliz tili</option><option>Ona tili</option><option>Fizika</option><option>Kimyo</option></select></div>
 <div class="notice"><strong>ⓘ Eslatma</strong>Joriy nazoratlar bosqichma-bosqich ochiladi.<br>Avval guruh va ism-familiyangizni kiriting, so‘ng 1-joriy nazoratni boshlang.</div>
@@ -238,7 +242,9 @@ const QUESTION_BANKS={
 const questions=QUESTION_BANKS["Geografiya"];
 
 let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false;
+let currentJn=1, starting=false;
 const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
+const regionEl=document.getElementById("region"), districtEl=document.getElementById("district"), schoolEl=document.getElementById("school"), districtOtherEl=document.getElementById("districtOther"), schoolOtherEl=document.getElementById("schoolOther");
 const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
 const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
 
@@ -246,12 +252,129 @@ const timer=document.getElementById("timer"), prevBtn=document.getElementById("p
 // Backend manzilini keyin shu o'zgaruvchiga qo'yish mumkin.
 const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
-function key(){return "jn1_"+subjectEl.value+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
+/* ================= Hudud: viloyat → tuman/shahar → ta’lim muassasasi =================
+   Ro‘yxatlarni shu yerda tahrirlash mumkin. Ro‘yxatda yo‘q bo‘lsa, o‘quvchi
+   “Boshqa” ni tanlab nomini o‘zi yozadi.
+   Ta’lim muassasalari INSTITUTIONS ga "Viloyat|Tuman" kaliti bilan qo‘shiladi. */
+const OTHER_OPT="Boshqa (ro‘yxatda yo‘q)";
+const REGIONS={
+"Qoraqalpog‘iston Respublikasi":["Nukus shahri","Taxiatosh shahri","Amudaryo tumani","Beruniy tumani","Bo‘zatov tumani","Chimboy tumani","Ellikqal‘a tumani","Kegeyli tumani","Mo‘ynoq tumani","Nukus tumani","Qanliko‘l tumani","Qo‘ng‘irot tumani","Qorao‘zak tumani","Shumanay tumani","Taxtako‘pir tumani","To‘rtko‘l tumani","Xo‘jayli tumani"],
+"Andijon viloyati":["Andijon shahri","Xonobod shahri","Andijon tumani","Asaka tumani","Baliqchi tumani","Bo‘ston tumani","Buloqboshi tumani","Izboskan tumani","Jalaquduq tumani","Marhamat tumani","Oltinko‘l tumani","Paxtaobod tumani","Qo‘rg‘ontepa tumani","Shahrixon tumani","Ulug‘nor tumani","Xo‘jaobod tumani"],
+"Buxoro viloyati":["Buxoro shahri","Kogon shahri","Buxoro tumani","G‘ijduvon tumani","Jondor tumani","Kogon tumani","Olot tumani","Peshku tumani","Qorako‘l tumani","Qorovulbozor tumani","Romitan tumani","Shofirkon tumani","Vobkent tumani"],
+"Farg‘ona viloyati":["Farg‘ona shahri","Marg‘ilon shahri","Qo‘qon shahri","Quvasoy shahri","Bag‘dod tumani","Beshariq tumani","Buvayda tumani","Dang‘ara tumani","Farg‘ona tumani","Furqat tumani","Oltiariq tumani","O‘zbekiston tumani","Qo‘shtepa tumani","Quva tumani","Rishton tumani","So‘x tumani","Toshloq tumani","Uchko‘prik tumani","Yozyovon tumani"],
+"Jizzax viloyati":["Jizzax shahri","Arnasoy tumani","Baxmal tumani","Do‘stlik tumani","Forish tumani","G‘allaorol tumani","Mirzacho‘l tumani","Paxtakor tumani","Sharof Rashidov tumani","Yangiobod tumani","Zafarobod tumani","Zarbdor tumani","Zomin tumani"],
+"Namangan viloyati":["Namangan shahri","Chortoq tumani","Chust tumani","Davlatobod tumani","Kosonsoy tumani","Mingbuloq tumani","Namangan tumani","Norin tumani","Pop tumani","To‘raqo‘rg‘on tumani","Uchqo‘rg‘on tumani","Uychi tumani","Yangiqo‘rg‘on tumani"],
+"Navoiy viloyati":["Navoiy shahri","Zarafshon shahri","Karmana tumani","Konimex tumani","Navbahor tumani","Nurota tumani","Qiziltepa tumani","Tomdi tumani","Uchquduq tumani","Xatirchi tumani"],
+"Qashqadaryo viloyati":["Qarshi shahri","Shahrisabz shahri","Chiroqchi tumani","Dehqonobod tumani","G‘uzor tumani","Kasbi tumani","Kitob tumani","Koson tumani","Ko‘kdala tumani","Mirishkor tumani","Muborak tumani","Nishon tumani","Qamashi tumani","Qarshi tumani","Shahrisabz tumani","Yakkabog‘ tumani"],
+"Samarqand viloyati":["Samarqand shahri","Kattaqo‘rg‘on shahri","Bulung‘ur tumani","Ishtixon tumani","Jomboy tumani","Kattaqo‘rg‘on tumani","Narpay tumani","Nurobod tumani","Oqdaryo tumani","Pastdarg‘om tumani","Paxtachi tumani","Payariq tumani","Qo‘shrabot tumani","Samarqand tumani","Toyloq tumani","Urgut tumani"],
+"Sirdaryo viloyati":["Guliston shahri","Shirin shahri","Yangiyer shahri","Boyovut tumani","Guliston tumani","Mirzaobod tumani","Oqoltin tumani","Sardoba tumani","Sayxunobod tumani","Sirdaryo tumani","Xovos tumani"],
+"Surxondaryo viloyati":["Termiz shahri","Angor tumani","Bandixon tumani","Boysun tumani","Denov tumani","Jarqo‘rg‘on tumani","Muzrabot tumani","Oltinsoy tumani","Qiziriq tumani","Qumqo‘rg‘on tumani","Sariosiyo tumani","Sherobod tumani","Sho‘rchi tumani","Termiz tumani","Uzun tumani"],
+"Toshkent viloyati":["Nurafshon shahri","Angren shahri","Bekobod shahri","Chirchiq shahri","Ohangaron shahri","Olmaliq shahri","Yangiyo‘l shahri","Bekobod tumani","Bo‘ka tumani","Bo‘stonliq tumani","Chinoz tumani","Ohangaron tumani","Oqqo‘rg‘on tumani","O‘rta Chirchiq tumani","Parkent tumani","Piskent tumani","Quyi Chirchiq tumani","Qibray tumani","Toshkent tumani","Yangiyo‘l tumani","Yuqori Chirchiq tumani","Zangiota tumani"],
+"Toshkent shahri":["Bektemir tumani","Chilonzor tumani","Mirobod tumani","Mirzo Ulug‘bek tumani","Olmazor tumani","Sergeli tumani","Shayxontohur tumani","Uchtepa tumani","Yakkasaroy tumani","Yangihayot tumani","Yashnobod tumani","Yunusobod tumani"],
+"Xorazm viloyati":["Urganch shahri","Xiva shahri","Bog‘ot tumani","Gurlan tumani","Hazorasp tumani","Qo‘shko‘pir tumani","Shovot tumani","Tuproqqal‘a tumani","Urganch tumani","Xiva tumani","Xonqa tumani","Yangiariq tumani","Yangibozor tumani"]
+};
+const INSTITUTIONS={
+"Sirdaryo viloyati|Guliston shahri":["Guliston davlat universiteti akademik litseyi"]
+};
+function fillSelect(sel,placeholder,items,withOther){
+  sel.innerHTML="";
+  const first=document.createElement("option");first.value="";first.textContent=placeholder;sel.appendChild(first);
+  items.forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=t;sel.appendChild(o)});
+  if(withOther){const o=document.createElement("option");o.value=OTHER_OPT;o.textContent=OTHER_OPT;sel.appendChild(o)}
+}
+function pick(sel,other){return sel.value===OTHER_OPT?other.value.trim():sel.value}
+function initRegions(){
+  fillSelect(regionEl,"Viloyatni tanlang",Object.keys(REGIONS),false);
+  fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true;
+  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
+}
+regionEl.onchange=()=>{
+  msg.textContent="";
+  districtOtherEl.classList.add("hidden");districtOtherEl.value="";
+  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
+  if(!regionEl.value){fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true}
+  else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",REGIONS[regionEl.value]||[],true);districtEl.disabled=false}
+  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
+};
+districtEl.onchange=()=>{
+  msg.textContent="";
+  const other=districtEl.value===OTHER_OPT;
+  districtOtherEl.classList.toggle("hidden",!other);if(!other)districtOtherEl.value="";
+  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
+  if(!districtEl.value){fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;return}
+  fillSelect(schoolEl,"Ta’lim muassasasini tanlang",other?[]:(INSTITUTIONS[regionEl.value+"|"+districtEl.value]||[]),true);
+  schoolEl.disabled=false;
+  if(other){schoolEl.value=OTHER_OPT;schoolOtherEl.classList.remove("hidden")}
+};
+schoolEl.onchange=()=>{
+  msg.textContent="";
+  const other=schoolEl.value===OTHER_OPT;
+  schoolOtherEl.classList.toggle("hidden",!other);if(!other)schoolOtherEl.value="";
+};
+districtOtherEl.oninput=()=>{msg.textContent=""};schoolOtherEl.oninput=()=>{msg.textContent=""};
+initRegions();
+
+/* ================= Ustoz paneli bilan aloqa (testlar, guruhlar) =================
+   Server javob bermasa yoki ustoz test biriktirmagan bo‘lsa, 1-JN oldingidek
+   yuqoridagi tayyor savollar bankidan o‘tadi. */
+async function api(action,payload){
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const res=await fetch(RESULT_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action:action},payload||{})),signal:ctl.signal});
+    const data=JSON.parse(await res.text());
+    if(data&&data.source==="doPost")throw new Error("Server yangi so‘rovlarni qabul qilmayapti.");
+    return data;
+  }finally{clearTimeout(tm)}
+}
+const cards=[...document.querySelectorAll(".test-card")];
+let teacherTests={}, availSeq=0, availReq=Promise.resolve();
+function setCard(n,on,count,title){
+  const c=cards[n-1];if(!c)return;
+  c.classList.toggle("available",on);c.classList.toggle("disabled",!on);c.classList.toggle("locked",!on);
+  const b=c.querySelector(".badge");b.style.background=on?"":"#c6ced8";b.style.color=on?"":"#26354b";
+  c.querySelector(".lock").textContent=on?"▤":"♙";
+  const st=c.querySelector(".status");st.textContent=on?"Mavjud":"Mavjud emas";st.classList.toggle("ok",on);
+  c.querySelector("small").textContent=(title?title+" — ":"")+(count||25)+" ta test";
+}
+function resetCards(){setCard(1,true,25);[2,3,4].forEach(n=>setCard(n,false,25))}
+function refreshAvailability(){
+  const seq=++availSeq;
+  if(!groupEl.value||!subjectEl.value){teacherTests={};resetCards();availReq=Promise.resolve();return}
+  availReq=(async()=>{
+    const map={};
+    try{
+      const r=await api("pubTests",{subject:subjectEl.value,group:groupEl.value});
+      if(r&&r.ok&&Array.isArray(r.tests))r.tests.forEach(t=>{const n=parseInt(t.nazorat,10);if(n>=1&&n<=4&&!map[n])map[n]=t});
+    }catch(e){console.warn("Testlar ro‘yxatini olib bo‘lmadi:",e)}
+    if(seq!==availSeq)return;
+    teacherTests=map;
+    [1,2,3,4].forEach(n=>{const t=map[n];if(t)setCard(n,true,t.count,t.title);else setCard(n,n===1,25)});
+  })();
+}
+async function loadExtraGroups(){
+  try{
+    const r=await api("pubGroups",{});
+    if(!r||!r.ok||!Array.isArray(r.groups))return;
+    const chosen=groupEl.value;
+    const all=new Set([...groupEl.options].map(o=>o.value).filter(Boolean));
+    r.groups.forEach(g=>all.add(String(g)));
+    const list=[...all].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    groupEl.innerHTML='<option value="">Guruhni tanlang</option>'+list.map(g=>'<option>'+g.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+'</option>').join("");
+    groupEl.value=chosen;
+  }catch(e){console.warn("Qo‘shimcha guruhlarni olib bo‘lmadi:",e)}
+}
+
+function key(){return "jn"+currentJn+"_"+subjectEl.value+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
 function valid(){
   const name=studentEl.value.trim();
+  if(!regionEl.value){msg.textContent="Avval viloyatni tanlang.";regionEl.focus();return false}
+  if(!districtEl.value){msg.textContent="Avval tuman yoki shaharni tanlang.";districtEl.focus();return false}
+  if(districtEl.value===OTHER_OPT&&districtOtherEl.value.trim().length<3){msg.textContent="Tuman yoki shahar nomini yozing.";districtOtherEl.focus();return false}
+  if(!schoolEl.value){msg.textContent="Avval ta’lim muassasasini tanlang.";schoolEl.focus();return false}
+  if(schoolEl.value===OTHER_OPT&&schoolOtherEl.value.trim().length<3){msg.textContent="Ta’lim muassasasi nomini yozing.";schoolOtherEl.focus();return false}
   if(!groupEl.value){msg.textContent="Avval guruhni tanlang.";groupEl.focus();return false}
   if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
-  if(localStorage.getItem(key())){msg.textContent="Bu o‘quvchi 1-JN nazoratini allaqachon topshirgan.";return false}
+  if(localStorage.getItem(key())){msg.textContent="Bu o‘quvchi "+currentJn+"-JN nazoratini allaqachon topshirgan.";return false}
   msg.textContent="";return true;
 }
 function seededRandom(seed){
@@ -272,6 +395,11 @@ function prepareExam(){
     const q=activeQuestions[originalIndex];
     return {text:q[0],correct:q[1],options:shuffle(q[2],rng),originalIndex};
   });
+  answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
+}
+// Ustoz yuklagan test: savollar va javoblar serverda aralashtirilgan, c — to‘g‘ri javob indeksi
+function prepareRemoteExam(list){
+  examQuestions=list.map((q,i)=>({text:q.q,correct:q.o[q.c],options:q.o,originalIndex:i}));
   answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
 }
 function buildGrid(){
@@ -299,9 +427,30 @@ function renderQuestion(){
   finishBtn.classList.toggle("hidden",!isLastQuestion);
   markBtn.textContent=marked[current]?"★ Belgilangan":"♧ Belgilash";
 }
-function start(){
+async function start(n){
+  if(starting||started)return;
+  currentJn=n;
   if(!valid())return;
-  started=true;prepareExam();document.getElementById("examTitle").textContent=subjectEl.value+" — 1-JORIY NAZORAT";exam.classList.remove("hidden");document.getElementById("startCard").style.pointerEvents="none";
+  starting=true;
+  try{
+    await availReq;
+    const remote=teacherTests[n]||null;
+    if(remote){
+      msg.textContent="Test yuklanmoqda...";
+      const r=await api("pubTest",{id:remote.id,group:groupEl.value});
+      if(!r||!r.ok||!Array.isArray(r.questions)||!r.questions.length){const err=new Error("load");err.userMessage=(r&&r.error)||"Testni yuklab bo‘lmadi.";throw err}
+      prepareRemoteExam(r.questions);
+      msg.textContent="";
+    }else if(n===1){
+      prepareExam();
+    }else{
+      msg.textContent=n+"-joriy nazorat hali ochilmagan.";starting=false;return;
+    }
+  }catch(e){
+    msg.textContent=(e&&e.userMessage)||"Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.";
+    starting=false;return;
+  }
+  started=true;starting=false;document.getElementById("examTitle").textContent=subjectEl.value+" — "+n+"-JORIY NAZORAT";exam.classList.remove("hidden");cards.forEach(c=>{c.style.pointerEvents="none"});
   buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
   timerId=setInterval(()=>{seconds--;const m=Math.floor(seconds/60),s=seconds%60;timer.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(timerId);finish()}},1000);
 }
@@ -342,7 +491,7 @@ function finish(){
   clearInterval(timerId);
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
   const grade=getGrade(score,examQuestions.length);
-  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:"1-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,finishedAt:new Date().toISOString()};
+  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentJn+"-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString()};
   localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
   const sent = sendResultToTelegram(data);
   console.log("Telegram natijasi yuborish holati:", sent);
@@ -351,7 +500,7 @@ function finish(){
   document.getElementById("resultText").textContent=`${studentEl.value.trim()} — ${groupEl.value}-guruh. Nazorat muvaffaqiyatli yakunlandi. Natija o‘qituvchiga yuborildi.`;
   window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
 }
-document.getElementById("startCard").onclick=start;
+cards.forEach((c,i)=>{c.onclick=()=>{if(c.classList.contains("available"))start(i+1)}});
 prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
 nextBtn.onclick=()=>{
   if(current<examQuestions.length-1){
@@ -361,7 +510,8 @@ nextBtn.onclick=()=>{
 };
 finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()};
 markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
-groupEl.onchange=()=>{msg.textContent=""};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent=""};
+groupEl.onchange=()=>{msg.textContent="";refreshAvailability()};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent="";refreshAvailability()};
+loadExtraGroups();
 </script>
 </body>
 </html>
