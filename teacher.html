@@ -3,53 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>O‘quvchi nazorat platformasi</title>
+<meta name="robots" content="noindex,nofollow">
+<title>Ustoz paneli — GulDU akademik litseyi</title>
 <style>
-:root{--blue:#0758c9;--dark:#0d2a5b;--green:#2fa85f;--shadow:0 8px 28px rgba(13,42,91,.10)}
+:root{--blue:#0758c9;--dark:#0d2a5b;--line:#e3eaf3;--shadow:0 8px 28px rgba(13,42,91,.10)}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);color:#12203b}
-.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff;min-height:142px;position:relative;overflow:hidden}
-.header:after{content:"";position:absolute;right:-80px;top:-110px;width:430px;height:300px;border-radius:50%;border:45px solid rgba(255,255,255,.05)}
-.header-inner{max-width:1180px;margin:auto;min-height:142px;display:flex;align-items:center;gap:24px;padding:22px 28px}
-.logo{width:88px;height:88px;border-radius:50%;border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-size:35px;font-weight:800;background:rgba(255,255,255,.08);flex:none}
-.header h1{margin:0;font-size:30px;line-height:1.12;letter-spacing:-.4px}.header p{margin:12px 0 0;font-size:16px}
-.container{max-width:1180px;margin:0 auto;padding:22px 24px 40px}.card{background:#fff;border:1px solid #e3eaf3;border-radius:15px;box-shadow:var(--shadow)}
-.top-card{padding:28px;display:grid;grid-template-columns:42% 58%;gap:30px}
-.section-title{display:flex;align-items:center;gap:12px;color:var(--dark);font-size:22px;font-weight:800;margin:4px 0 24px}
-.icon{width:34px;height:34px;border-radius:10px;background:#eaf3ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
-label{display:block;font-size:16px;font-weight:600;margin:0 0 9px}
-select,input{width:100%;height:54px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 15px;font-size:16px;color:#172744;outline:none}
-select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
-.field{margin-bottom:22px}
-.notice{margin-top:10px;padding:17px 18px;border-radius:10px;border:1px solid #cce0ff;background:#eef6ff;color:#153b78;line-height:1.65;font-size:14px}
-.notice strong{display:block;font-size:16px;margin-bottom:4px}
-.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.test-card{border:1px solid #d5deea;border-radius:12px;padding:18px;min-height:168px;position:relative;background:#fff;transition:.2s}
-.test-card.available{border-color:#1268df;box-shadow:0 4px 14px rgba(7,88,201,.10);cursor:pointer}.test-card.available:hover{transform:translateY(-2px)}
-.test-card.disabled{cursor:not-allowed}
-.test-head{display:flex;justify-content:space-between;align-items:center}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:34px;padding:0 11px;border-radius:8px;font-weight:800;background:#0d64d6;color:#fff}
-.lock{width:42px;height:42px;border-radius:50%;background:#f1f3f6;color:#58677d;display:grid;place-items:center;font-size:20px}
-.test-card h3{font-size:17px;margin:17px 0 12px;color:#1354aa}.test-card.locked h3{color:#6b7484}
-.status{display:inline-block;padding:5px 12px;border-radius:7px;background:#e7edf4;color:#26354e;font-size:13px}.status.ok{background:#31a961;color:#fff}
-.test-card small{display:block;margin-top:10px;color:#4d5d75;font-size:13px}
-.info-strip{margin-top:22px;padding:15px 20px;display:grid;grid-template-columns:1fr 1fr 1.15fr;border:1px solid #e2e9f2;border-radius:11px;background:#f9fbfe}
-.info-item{display:flex;align-items:center;gap:14px;padding:3px 22px;border-right:1px solid #dfe6ef}.info-item:last-child{border-right:0}
-.info-icon{width:43px;height:43px;border-radius:50%;background:#e9f3ff;color:var(--blue);display:grid;place-items:center;font-size:20px;flex:none}.info-item b{display:block;font-size:14px;margin-bottom:5px}.info-item span{font-size:13px;color:#526178}
-.exam{margin-top:18px;overflow:hidden}.exam-head{background:linear-gradient(100deg,#08429b,#075bc7);color:#fff;padding:19px 28px;display:flex;align-items:center;justify-content:space-between}
-.exam-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800}.exam-title .circle{width:38px;height:38px;border-radius:50%;background:#1d72dc;display:grid;place-items:center}
-.timer{font-size:16px;display:flex;align-items:center;gap:12px}.timer strong{font-size:30px}
-.exam-body{display:grid;grid-template-columns:280px 1fr;min-height:410px}.sidebar{border-right:1px solid #e0e6ef;padding:25px 28px;background:#fbfcfe}.sidebar h4{margin:0 0 18px;font-size:16px}
-.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.qbtn{height:34px;border:1px solid #ccd7e6;border-radius:6px;background:#fff;color:#15233e;font-weight:600;cursor:pointer}.qbtn.active{background:#0a65d5;color:#fff;border-color:#0a65d5}.qbtn.answered{background:#0a65d5;color:#fff;border-color:#0a65d5}
-.legend{margin-top:28px;font-size:12px;color:#3f4e64;line-height:2.4}.dot{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:-3px;margin-right:7px;border:1px solid #ccd7e6}.dot.blue{background:#0a65d5;border-color:#0a65d5}.dot.yellow{background:#ffb53c;border-color:#ffb53c}
-.exam-content{padding:30px}.question-no{color:#0b5dca;font-weight:800;font-size:17px;margin-bottom:22px}.question{font-size:18px;font-weight:700;line-height:1.5;margin-bottom:22px}
-.answer{display:block;border:1px solid #ccd7e6;border-radius:9px;padding:14px 16px;margin:10px 0;font-size:15px;cursor:pointer;background:#fff}.answer:hover{border-color:#8db7ed;background:#f7fbff}.answer.selected{border-color:#0a65d5;background:#eef6ff}.answer input{width:auto;height:auto;margin-right:10px;vertical-align:middle}
-.exam-actions{display:flex;justify-content:space-between;align-items:center;margin-top:25px;gap:10px}.btn{height:48px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 20px;font-size:15px;font-weight:700;color:#162641;cursor:pointer}.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}.btn:disabled{opacity:.45;cursor:not-allowed}
-.result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:50%;background:#2fa85f;color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
-.footer{margin-top:18px;background:#08489e;color:#fff;padding:18px;text-align:center;font-size:13px}
-.hidden{display:none!important}.login-message{margin-top:12px;color:#c0392b;font-size:14px;font-weight:600;min-height:18px}
-select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input{margin-top:10px}
-@media(max-width:900px){.top-card{grid-template-columns:1fr}.exam-body{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid #e0e6ef}}
-@media(max-width:600px){.header-inner{padding:18px 16px;gap:13px}.logo{width:60px;height:60px;font-size:24px}.header h1{font-size:21px}.header p{font-size:13px;margin-top:7px}.container{padding:12px 10px 25px}.top-card{padding:18px;gap:20px}.controls-grid{gap:10px}.test-card{padding:13px;min-height:150px}.info-strip{grid-template-columns:1fr;gap:8px}.info-item{border-right:0;border-bottom:1px solid #e1e7ef;padding:10px 8px}.info-item:last-child{border-bottom:0}.exam-head{padding:15px}.exam-body{min-height:0}.exam-content{padding:20px 16px}.sidebar{padding:18px 16px}.result{padding:20px;align-items:flex-start;flex-direction:column}.exam-actions{flex-wrap:wrap}}
+.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff}
+.header-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:18px;padding:20px 24px}
+.logo{width:64px;height:64px;border-radius:50%;border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-size:26px;font-weight:800;background:rgba(255,255,255,.08);flex:none}
+.header h1{margin:0;font-size:24px;line-height:1.15}
+.header p{margin:6px 0 0;font-size:14px;opacity:.9}
+.container{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.hidden{display:none!important}
+.muted{color:#6b7484}
+
+/* Login */
+.login-card{max-width:440px;margin:30px auto;padding:28px}
+.section-title{color:var(--dark);font-size:20px;font-weight:800;margin:0 0 22px}
+label{display:block;font-size:15px;font-weight:600;margin:0 0 8px}
+input[type=text],input[type=password],input[type=date],select{width:100%;height:46px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 13px;font-size:15px;color:#172744;outline:none}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.field{margin-bottom:18px}
+.btn{height:44px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 18px;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.btn:hover{border-color:#8db7ed}
+.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.msg{margin-top:12px;font-size:14px;font-weight:600;min-height:18px}
+.msg.error{color:#c0392b}
+.msg.info{color:#153b78}
+
+/* Panel */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;margin-bottom:16px;flex-wrap:wrap}
+.bar-title{font-size:18px;font-weight:800;color:var(--dark)}
+.bar-sub{font-size:14px;color:#526178;margin-top:4px}
+.bar-actions{display:flex;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat span{display:block;font-size:13px;color:#526178;margin-bottom:8px}
+.stat b{font-size:26px;color:var(--dark)}
+.gline{display:flex;gap:6px;flex-wrap:wrap}
+.filters{padding:18px 20px;margin-bottom:16px}
+.filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.filters label{font-size:13px;margin-bottom:6px}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;height:46px}
+.check input{width:18px;height:18px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{height:42px;padding:0 18px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.tab.active{background:#075fc9;color:#fff;border-color:#075fc9}
+.table-card{overflow:hidden}
+.table-info{padding:12px 18px;font-size:13px;color:#526178;border-bottom:1px solid var(--line)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
+th{background:#f7f9fc;color:#26354e;font-size:13px}
+td.name{white-space:normal;min-width:180px;font-weight:600}
+td .sub{display:block;font-size:12px;color:#6b7484;margin-top:2px}
+tr:hover td{background:#fbfcfe}
+.badge{display:inline-block;min-width:34px;text-align:center;padding:4px 9px;border-radius:7px;font-weight:800;font-size:13px;color:#fff;background:#8a94a6}
+.g5{background:#2fa85f}.g4{background:#0d64d6}.g3{background:#e08a1e}.g2{background:#c0392b}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:700;margin-left:6px}
+.empty{padding:34px 20px;text-align:center;color:#526178;font-size:15px}
+.note{padding:12px 18px;font-size:13px;color:#526178}
+
+/* Parol ko'zchasi */
+.pw{position:relative}
+.pw input{padding-right:48px}
+.eye{position:absolute;right:2px;top:0;width:44px;height:46px;border:0;background:none;color:#526178;cursor:pointer;display:grid;place-items:center;border-radius:9px}
+.eye:hover{color:var(--blue)}
+.eye:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+
+.tabs{flex-wrap:wrap}
+
+/* Tugmalar / umumiy */
+.btn.small{height:34px;padding:0 12px;font-size:13px}
+.btn.danger{color:#c0392b;border-color:#e6b9b3}
+.btn.danger:hover{border-color:#c0392b;background:#fdf3f2}
+textarea{width:100%;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:11px 13px;font:inherit;font-size:15px;color:#172744;outline:none;resize:vertical;min-height:64px}
+textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.pane-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.chip{display:inline-block;padding:3px 9px;border-radius:999px;background:#eaf2fd;color:#0b4fae;font-size:12px;font-weight:700;margin:2px 4px 2px 0}
+
+/* Natijalarni o'chirish */
+.bulk{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 18px;background:#fff6f5;border-bottom:1px solid #f0d3cf;font-size:14px;font-weight:700;color:#8c2b20}
+th.chk,td.chk{width:38px;padding-right:0}
+td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
+
+/* Testlar */
+.pad{padding:16px 20px}
+.editor{padding-bottom:22px}
+.editor .pane-head{margin-bottom:18px}
+.editor>.ed-body{padding:0 20px}
+.ed-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.chk-list{display:flex;flex-wrap:wrap;gap:8px}
+.chk-list label{display:flex;align-items:center;gap:7px;margin:0;padding:7px 12px;border:1px solid #cbd6e5;border-radius:8px;font-size:14px;cursor:pointer;background:#fff}
+.chk-list input{width:17px;height:17px}
+.hint{background:#f3f7fc;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;color:#33445f;line-height:1.5;margin-bottom:16px}
+.hint pre{margin:8px 0 0;padding:10px 12px;background:#fff;border:1px dashed #b9c9df;border-radius:8px;font:13px/1.55 Consolas,Menlo,monospace;color:#12203b;white-space:pre-wrap}
+.ed-tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.file-btn{display:inline-flex;align-items:center;margin:0;font-size:14px}
+.qcard{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fbfcfe}
+.qcard.bad{border-color:#d9534f;background:#fff7f6}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:var(--dark)}
+.orow{display:flex;align-items:center;gap:8px;margin-top:8px}
+.olab{flex:none;width:30px;height:30px;border-radius:50%;background:#e3eaf3;color:#26354e;display:grid;place-items:center;font-weight:800;font-size:13px}
+.orow.ok .olab{background:#2fa85f;color:#fff}
+.orow.ok input{border-color:#9bd3b1;background:#f5fcf8}
+.orow input{height:42px}
+.ed-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.prev-q{padding:12px 0;border-bottom:1px solid var(--line)}
+.prev-q:last-child{border-bottom:0}
+.prev-o{padding:3px 0 3px 8px;font-size:14px}
+.prev-o.ok{color:#1f7a44;font-weight:700}
+.keyline{margin-top:12px;padding:10px 12px;background:#f3f7fc;border-radius:8px;font-weight:700;font-size:14px;color:var(--dark);line-height:1.6}
+
+/* Guruhlarni boshqarish */
+.grp-add{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.grp-add .field{margin:0;min-width:200px}
+.grp-list{display:flex;flex-wrap:wrap;gap:10px}
+.grp-item{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border:1px solid #cbd6e5;border-radius:10px;background:#fff;font-weight:700;color:var(--dark)}
+
+/* Modal */
+.modal-back{position:fixed;inset:0;background:rgba(9,20,45,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:22px}
+.modal h3{margin:0 0 14px;color:var(--dark);font-size:18px}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+@media(max-width:700px){
+  .ed-grid{grid-template-columns:1fr}
+  .pane-head{padding:14px}
+  .editor>.ed-body{padding:0 14px}
+  .container{padding:14px 12px 30px}
+  .header-inner{padding:16px}
+  .logo{width:52px;height:52px;font-size:22px}
+  .header h1{font-size:20px}
+  .stats{grid-template-columns:1fr 1fr}
+  .bar{padding:14px}
+}
 </style>
 </head>
 <body>
@@ -57,461 +148,1032 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <header class="header">
 <div class="header-inner">
 <div class="logo">G</div>
-<div><h1>Guliston davlat<br>Universiteti akademik litseyi</h1><p>Dasturchi: <b>Husenov Jahongir</b></p></div>
+<div><h1>Ustoz paneli</h1><p>Guliston davlat universiteti akademik litseyi</p></div>
 </div>
 </header>
 
 <main class="container">
-<section class="card top-card">
-<div>
-<div class="section-title"><span class="icon">▣</span> O‘QUVCHI MA’LUMOTLARI</div>
-<div class="field"><label>Viloyatni tanlang</label><select id="region"></select></div>
-<div class="field"><label>Tuman yoki shaharni tanlang</label><select id="district" disabled></select><input id="districtOther" class="other-input hidden" type="text" placeholder="Tuman yoki shahar nomini yozing" autocomplete="off"></div>
-<div class="field"><label>Ta’lim muassasasini tanlang</label><select id="school" disabled></select><input id="schoolOther" class="other-input hidden" type="text" placeholder="Ta’lim muassasasi nomini yozing" autocomplete="off"></div>
-<div class="field"><label>Guruhni tanlang</label><select id="group"><option value="">Guruhni tanlang</option><option>101</option><option>102</option><option>103</option><option>104</option><option>105</option><option>106</option></select></div>
-<div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div><div class="field"><label>Fanni tanlang</label><select id="subject"><option value="">Fanni tanlang</option><option>Geografiya</option><option>Matematika</option><option>Ingliz tili</option><option>Ona tili</option><option>Fizika</option><option>Kimyo</option></select></div>
-<div class="notice"><strong>ⓘ Eslatma</strong>Joriy nazoratlar bosqichma-bosqich ochiladi.<br>Avval guruh va ism-familiyangizni kiriting, so‘ng 1-joriy nazoratni boshlang.</div>
-<div id="loginMessage" class="login-message"></div>
-</div>
 
-<div>
-<div class="section-title"><span class="icon">⚯</span> JORIY NAZORATLAR</div>
-<div class="controls-grid">
-<div class="test-card available" id="startCard">
-<div class="test-head"><span class="badge">1-JN</span><span class="lock">▤</span></div>
-<h3>1-JORIY NAZORAT</h3><span class="status ok">Mavjud</span><small>25 ta test</small>
+<!-- ================= LOGIN ================= -->
+<section id="loginView" class="card login-card">
+<div class="section-title">Ustoz kirishi</div>
+<form id="loginForm" autocomplete="on">
+<div class="field"><label for="username">Login</label><input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+<div class="field"><label for="password">Parol</label>
+<div class="pw">
+<input id="password" name="password" type="password" autocomplete="current-password" required>
+<button class="eye" id="pwToggle" type="button" aria-label="Parolni ko‘rsatish" aria-pressed="false" title="Parolni ko‘rsatish / yashirish">
+<svg id="eyeOn" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+<svg id="eyeOff" class="hidden" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+</button>
 </div>
-<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">2-JN</span><span class="lock">♙</span></div><h3>2-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
-<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">3-JN</span><span class="lock">♙</span></div><h3>3-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
-<div class="test-card disabled locked"><div class="test-head"><span class="badge" style="background:#c6ced8;color:#26354b">4-JN</span><span class="lock">♙</span></div><h3>4-JORIY NAZORAT</h3><span class="status">Mavjud emas</span><small>25 ta test</small></div>
 </div>
-</div>
-
-<div class="info-strip" style="grid-column:1/-1">
-<div class="info-item"><div class="info-icon">♙</div><div><b>Har bir nazorat</b><span>25 ta testdan iborat</span></div></div>
-<div class="info-item"><div class="info-icon">◷</div><div><b>Vaqt</b><span>45 daqiqa</span></div></div>
-<div class="info-item"><div class="info-icon">✓</div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
-</div>
+<button class="btn primary" id="loginBtn" type="submit">Kirish</button>
+<div id="loginMsg" class="msg error" role="alert"></div>
+</form>
 </section>
 
-<section class="card exam hidden" id="exam">
-<div class="exam-head"><div class="exam-title"><span class="circle">▤</span><span id="examTitle">1-JORIY NAZORAT</span></div><div class="timer">◷ <span>Qolgan vaqt</span> <strong id="timer">45:00</strong></div></div>
-<div class="exam-body">
-<aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
-<div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
-<div class="exam-content">
-<div class="question-no" id="questionNo"></div><div class="question" id="question"></div><div id="answers"></div>
-<div class="exam-actions"><button class="btn" id="prevBtn">← Oldingi</button><button class="btn" id="markBtn">♧ Belgilash</button><button class="btn primary" id="nextBtn">Keyingi →</button><button class="btn primary hidden" id="finishBtn">Nazoratni yakunlash</button></div>
-</div></div>
-</section>
+<!-- ================= PANEL ================= -->
+<section id="panelView" class="hidden">
 
-<section class="result hidden" id="result">
-<div class="result-left"><div class="check">✓</div><div><h2>Nazorat yakunlandi</h2><p id="resultText"></p></div></div>
-<button class="btn" onclick="window.location.reload()">⌂ &nbsp; Bosh sahifaga qaytish</button>
+<div class="card bar">
+<div><div class="bar-title" id="teacherName"></div><div class="bar-sub">Fan: <b id="teacherSubject"></b></div></div>
+<div class="bar-actions"><button class="btn" id="refreshBtn" type="button">Yangilash</button><button class="btn" id="logoutBtn" type="button">Chiqish</button></div>
+</div>
+
+<div id="panelMsg" class="msg info"></div>
+
+<div id="resultsTop">
+<div class="stats" id="stats"></div>
+
+<div class="card filters">
+<div class="filters-grid">
+<div><label for="fGroup">Guruh</label><select id="fGroup"></select></div>
+<div><label for="fJn">Nazorat</label><select id="fJn"></select></div>
+<div><label for="fSearch">O‘quvchi (ism/familiya)</label><input id="fSearch" type="text" placeholder="Qidirish..." autocomplete="off"></div>
+<div><label for="fFrom">Sanadan</label><input id="fFrom" type="date"></div>
+<div><label for="fTo">Sanagacha</label><input id="fTo" type="date"></div>
+<div class="check"><input id="fDup" type="checkbox"><label for="fDup" style="margin:0">Takroriy urinishlar</label></div>
+<div><button class="btn" id="clearBtn" type="button" style="width:100%">Filtrlarni tozalash</button></div>
+</div>
+</div>
+</div>
+
+<div class="tabs">
+<button class="tab active" type="button" data-tab="results">Natijalar</button>
+<button class="tab" type="button" data-tab="groups">Guruhlar bo‘yicha</button>
+<button class="tab" type="button" data-tab="tests">Testlar</button>
+<button class="tab" type="button" data-tab="manage">Guruhlarni boshqarish</button>
+</div>
+
+<!-- Natijalar jadvali -->
+<div class="card table-card" id="tabResults">
+<div class="table-info" id="resultsInfo"></div>
+<div class="bulk hidden" id="bulkBar"><span id="bulkCount"></span><button class="btn small danger" id="bulkDelete" type="button">Tanlanganlarni o‘chirish</button><button class="btn small" id="bulkClear" type="button">Tanlovni bekor qilish</button></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="chk"><input type="checkbox" id="chkAll" aria-label="Hammasini tanlash"></th><th>№</th><th>Sana (Toshkent)</th><th>Guruh</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th><th></th></tr></thead>
+<tbody id="resultsBody"></tbody>
+</table>
+</div>
+<div class="empty hidden" id="emptyMsg"></div>
+</div>
+
+<!-- Guruhlar bo'yicha -->
+<div class="card table-card hidden" id="tabGroups">
+<div class="table-info">Har bir guruhning nazoratlar bo‘yicha o‘rtacha foizi. Bu jadvalga guruh va nazorat filtrlari ta’sir qilmaydi, sana, qidiruv va takroriy urinishlar filtri ta’sir qiladi.</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Guruh</th><th>1-JN</th><th>2-JN</th><th>3-JN</th><th>4-JN</th><th>Jami</th></tr></thead>
+<tbody id="groupsBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- Testlar -->
+<div id="tabTests" class="hidden">
+<div id="testsMsg" class="msg info"></div>
+
+<div id="testsListView" class="card table-card">
+<div class="pane-head">
+<div><div class="bar-title">Mening testlarim</div><div class="bar-sub">Testni guruhlarga biriktiring — o‘quvchilar faqat o‘z guruhiga biriktirilgan testni ko‘radi.</div></div>
+<button class="btn primary" id="newTestBtn" type="button">＋ Yangi test</button>
+</div>
+<div id="testsList"></div>
+</div>
+
+<div id="testEditor" class="card editor hidden">
+<div class="pane-head">
+<div class="bar-title" id="edHeading">Yangi test</div>
+<button class="btn" id="edBack" type="button">← Testlar ro‘yxati</button>
+</div>
+<div class="ed-body">
+<div class="ed-grid">
+<div><label for="edTitle">Test nomi</label><input id="edTitle" type="text" maxlength="120" placeholder="Masalan: Mexanika, 1-nazorat" autocomplete="off"></div>
+<div><label for="edNazorat">Nazorat</label><select id="edNazorat"></select></div>
+</div>
+<div class="field"><label>Qaysi guruhlarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
+
+<div class="hint">
+<b>Savollarni kiritish.</b> Word (.docx) faylda har bir savol shunday yozilsin: avval savol, undan keyin 4 ta javob (A, B, C, D). <b>To‘g‘ri javob doim A bo‘lsin</b> — tizim savollar va javoblar tartibini har bir o‘quvchi uchun o‘zi aralashtiradi. Qo‘lda kiritganda ham xuddi shunday: A maydoniga to‘g‘ri javobni yozing.
+<pre>1. Erkin tushish tezlanishi qancha?
+A) 9,8 m/s²
+B) 8,9 m/s²
+C) 10,8 m/s²
+D) 6,7 m/s²</pre>
+Rasmlar Word’dan ko‘chmaydi; formulalar oddiy matn ko‘rinishida o‘tadi. Word’dan o‘qilgan savollarni saqlashdan oldin tekshirib chiqing.
+</div>
+
+<div class="ed-tools">
+<label class="btn file-btn">Word (.docx) fayldan qo‘shish<input id="docxInput" type="file" accept=".docx" hidden></label>
+<button class="btn" id="addQBtn" type="button">＋ Savol qo‘shish</button>
+<button class="btn" id="previewBtn" type="button">Aralashtirib ko‘rish</button>
+<button class="btn danger" id="clearQBtn" type="button">Hammasini tozalash</button>
+</div>
+
+<div id="edQuestions"></div>
+
+<div class="ed-foot">
+<button class="btn primary" id="saveTestBtn" type="button">Testni saqlash</button>
+<button class="btn" id="cancelTestBtn" type="button">Bekor qilish</button>
+<span id="edCount" class="muted"></span>
+</div>
+<div id="edMsg" class="msg" role="status"></div>
+</div>
+</div>
+</div>
+
+<!-- Guruhlarni boshqarish -->
+<div class="card table-card hidden" id="tabManage">
+<div class="pane-head"><div><div class="bar-title">Guruhlarim</div><div class="bar-sub">Bu yerda qo‘shilgan guruhlarga test biriktirish mumkin. Guruh o‘chirilsa, u testlardan ham olib tashlanadi; eski natijalar saqlanib qoladi.</div></div></div>
+<div class="pad">
+<form class="grp-add" id="groupAddForm" autocomplete="off">
+<div class="field"><label for="groupName">Yangi guruh</label><input id="groupName" type="text" maxlength="30" placeholder="Masalan: 107"></div>
+<button class="btn primary" id="groupAddBtn" type="submit">Qo‘shish</button>
+</form>
+<div id="manageMsg" class="msg info"></div>
+<div id="groupsManage" class="grp-list"></div>
+</div>
+</div>
+
 </section>
 </main>
-<footer class="footer">© 2026 Guliston davlat universiteti akademik litseyi. Barcha huquqlar himoyalangan.</footer>
+
+<!-- Modal -->
+<div id="modalBack" class="modal-back hidden"><div class="modal card" role="dialog" aria-modal="true"><div id="modalBody"></div></div></div>
 
 <script>
-const QUESTION_BANKS={
-"Geografiya":[
-["Geografiya fanlari tizimining asosiy o‘rganish obyekti qaysi?","Tabiat va jamiyatning hududiy tashkil topishi",["Faqat tog‘ jinslari","Faqat davlatlar tarixi","Faqat iqlim","Tabiat va jamiyatning hududiy tashkil topishi"]],
-["Geografiya fanining eng muhim xususiyatlaridan biri nima?","Hududiylik va o‘zaro aloqadorlikni o‘rganish",["Faqat xarita chizish","Hududiylik va o‘zaro aloqadorlikni o‘rganish","Faqat matematik hisoblash","Faqat tarixiy sanalarni yodlash"]],
-["Qadimgi geografik bilimlarning rivojiga katta hissa qo‘shgan alloma kim?","Muhammad al-Xorazmiy",["Alisher Navoiy","Abu Ali ibn Sino","Muhammad al-Xorazmiy","Amir Temur"]],
-["Geografik kashfiyotlar tarixida Yerning shar shaklda ekanini amaliy jihatdan tasdiqlagan sayohat qaysi?","Magellan ekspeditsiyasi",["Kolumb sayohati","Magellan ekspeditsiyasi","Beruniy sayohati","Cook ekspeditsiyasi"]],
-["Hozirgi zamon geografiyasida GIS texnologiyalarining asosiy vazifalaridan biri nima?","Geografik ma’lumotlarni yig‘ish, saqlash va tahlil qilish",["Faqat matn terish","Geografik ma’lumotlarni yig‘ish, saqlash va tahlil qilish","Faqat rasm chizish","Faqat video montaj qilish"]],
-["Yer yuzasi tabiatining shakllanishida Quyosh energiyasining asosiy roli nimada?","Yer yuzasidagi ko‘plab tabiiy jarayonlarni energiya bilan ta’minlaydi",["Faqat zilzilalarni yuzaga keltiradi","Yer yuzasidagi ko‘plab tabiiy jarayonlarni energiya bilan ta’minlaydi","Faqat tog‘larni hosil qiladi","Faqat okeanlarni hosil qiladi"]],
-["Yerning o‘z o‘qi atrofida aylanishi qanday hodisaga sabab bo‘ladi?","Kun va tun almashinishiga",["Fasllar almashinishiga","Kun va tun almashinishiga","Materiklar siljishiga","Oy fazalariga"]],
-["Yerning Quyosh atrofida aylanishi va o‘qining qiyaligi nimaga sabab bo‘ladi?","Fasllar almashinishiga",["Kun va tun almashinishiga","Fasllar almashinishiga","Zilzilalarga","Suv toshqinlariga"]],
-["Yerning shakli qanday?","Geoidga yaqin sharsimon",["Tekis disk","Kub shaklida","Geoidga yaqin sharsimon","Mukammal silindr"]],
-["Litosfera asosan nimadan tashkil topgan?","Yer po‘sti va yuqori mantiyaning qattiq qismidan",["Faqat yadrodan","Yer po‘sti va yuqori mantiyaning qattiq qismidan","Faqat okean suvidan","Faqat atmosferadan"]],
-["Yerning ichki tuzilishidagi asosiy qatlamlar qaysilar?","Yer po‘sti, mantiya va yadro",["Atmosfera, gidrosfera va biosfera","Yer po‘sti, mantiya va yadro","Faqat mantiya","Faqat yadro"]],
-["Yer po‘stining materik va okean qismlari o‘rtasidagi asosiy farq nima?","Qalinligi va tarkibi bilan farqlanadi",["Faqat rangi bilan","Qalinligi va tarkibi bilan farqlanadi","Harorati mutlaqo bir xil","Farqi yo‘q"]],
-["Tektonik plitalarning harakati ko‘proq qaysi hodisalar bilan bog‘liq?","Zilzila va vulqonizm bilan",["Yomg‘ir va qor bilan","Zilzila va vulqonizm bilan","Shamol va tuman bilan","Daryo oqimi bilan"]],
-["Mantiyadagi konvektiv harakatlar nimaga ta’sir ko‘rsatadi?","Litosfera plitalarining harakatiga",["Faqat bulutlarga","Litosfera plitalarining harakatiga","Faqat okean sho‘rligiga","Faqat o‘simliklarga"]],
-["Yer yuzasi tabiatining uzoq tarixiy rivojlanishida qaysi omil muhim?","Geologik va tabiiy jarayonlarning davomiy ta’siri",["Faqat inson faoliyati","Geologik va tabiiy jarayonlarning davomiy ta’siri","Faqat shamol","Faqat yog‘in"]],
-["Materiklarning qadimgi davrlarda birlashgan ulkan quruqlik massasi qanday atalgan?","Pangeya",["Lavrasiya","Pangeya","Gondvana","Tetis"]],
-["Pangeyaning parchalanishi nimaga olib kelgan?","Hozirgi materiklarning shakllanish jarayoniga",["Oyning paydo bo‘lishiga","Hozirgi materiklarning shakllanish jarayoniga","Atmosferaning yo‘qolishiga","Daryolarning qurishiga"]],
-["Geologik vaqt davomida tog‘larning shakllanishida qaysi jarayon muhim?","Tektonik harakatlar",["Faqat yog‘in","Tektonik harakatlar","Faqat shamol","Faqat muzlash"]],
-["Vulqon otilishi Yerning qaysi jarayonlari bilan bog‘liq?","Ichki geologik jarayonlar bilan",["Tashqi biologik jarayonlar bilan","Ichki geologik jarayonlar bilan","Faqat atmosfera jarayonlari bilan","Faqat gidrologik jarayonlar bilan"]],
-["Yer yuzasi tabiatining rivojlanishiga tashqi kuchlar qanday ta’sir ko‘rsatadi?","Relyefni yemiradi va qayta shakllantiradi",["Faqat tog‘larni balandlashtiradi","Relyefni yemiradi va qayta shakllantiradi","Faqat vulqonlarni uyg‘otadi","Faqat zilzila hosil qiladi"]],
-["Quyoshdan keladigan energiyaning Yer yuzasida notekis taqsimlanishining asosiy sababi nima?","Yerning sharsimonligi va o‘qining qiyaligi",["Faqat okeanlar mavjudligi","Yerning sharsimonligi va o‘qining qiyaligi","Faqat shamollar","Faqat vulqonlar"]],
-["Tektonik plitalar bir-biridan uzoqlashganda qanday hodisa yuz berishi mumkin?","Yangi okean tubi hosil bo‘lishi",["Materiklar butunlay yo‘qolishi","Yangi okean tubi hosil bo‘lishi","Atmosfera yo‘qolishi","Quyosh sovishi"]],
-["Yerning ichki issiqligi qanday jarayonlarning muhim manbalaridan biridir?","Tektonik jarayonlarning",["Fotosintezning","Tektonik jarayonlarning","Yog‘inlarning","Shamolning"]],
-["Geografik qobiq rivojlanishining tarixiy xususiyati qaysi javobda to‘g‘ri?","Tabiat komponentlari o‘zaro ta’sirda doimiy o‘zgarib boradi",["Tabiat umuman o‘zgarmaydi","Tabiat komponentlari o‘zaro ta’sirda doimiy o‘zgarib boradi","Faqat iqlim o‘zgaradi","Faqat relyef o‘zgaradi"]],
-["Quyidagi jarayonlardan qaysi biri Yer yuzi tabiatining shakllanishida ichki kuchlarga tegishli?","Tektonik harakat",["Daryo eroziyasi","Shamol eroziyasi","Tektonik harakat","Muzlik faoliyati"]]
-],
-"Matematika":[
-["12+8×2 ning qiymati nechaga teng?","28",["40","28","32","24"]],["x+7=15 bo‘lsa, x nechaga teng?","8",["6","7","8","9"]],
-["3x=21 bo‘lsa, x nechaga teng?","7",["6","7","8","9"]],["2x+5=17 tenglamaning yechimi?","6",["5","6","7","8"]],
-["1/2 + 1/4 nechaga teng?","3/4",["1/4","1/2","3/4","1"]],["0,6 × 5 nechaga teng?","3",["2","2,5","3","3,5"]],
-["25 ning 20 foizi nechaga teng?","5",["4","5","6","10"]],["Kvadratning tomoni 6 sm. Yuzi qancha?","36 sm²",["12 sm²","24 sm²","36 sm²","48 sm²"]],
-["To‘g‘ri to‘rtburchakning tomonlari 5 va 8 sm. Perimetri?","26 sm",["13 sm","26 sm","40 sm","20 sm"]],
-["x²=49 bo‘lsa, x ning musbat qiymati?","7",["5","6","7","8"]],["√81 nechaga teng?","9",["7","8","9","10"]],
-["2³ nechaga teng?","8",["6","8","9","12"]],["5, 10, 15, 20, ... ketma-ketlikdagi keyingi son?","25",["22","24","25","30"]],
-["1000 ning 15 foizi?","150",["100","120","150","200"]],["a=3, b=4 bo‘lsa, a²+b² nechaga teng?","25",["7","12","25","49"]],
-["Uchburchak ichki burchaklari yig‘indisi?","180°",["90°","180°","270°","360°"]],
-["Parallel to‘g‘ri chiziqlar qanday bo‘ladi?","Bir tekislikda kesishmaydi",["Har doim kesishadi","Bir tekislikda kesishmaydi","Faqat bir nuqtada kesishadi","Perpendikulyar bo‘ladi"]],
-["2/3 ning 6 ga ko‘paytmasi?","4",["2","3","4","6"]],["4x−3=13 bo‘lsa, x?","4",["3","4","5","6"]],
-["10²−6² nechaga teng?","64",["36","64","76","100"]],["Aylananing diametri 10 sm bo‘lsa, radiusi?","5 sm",["2 sm","5 sm","10 sm","20 sm"]],
-["3,5+2,7 nechaga teng?","6,2",["5,2","6,0","6,2","6,7"]],["7/8−3/8 nechaga teng?","1/2",["1/4","1/2","3/8","5/8"]],
-["Agar 5 ta daftar 25 000 so‘m bo‘lsa, 1 tasi qancha?","5 000 so‘m",["4 000 so‘m","5 000 so‘m","6 000 so‘m","7 000 so‘m"]],
-["To‘g‘ri burchak necha gradus?","90°",["45°","90°","120°","180°"]]],
-"Ingliz tili":[
-["Choose the correct form: She ___ a student.","is",["am","is","are","be"]],["What is the past form of “go”?","went",["goed","gone","went","goes"]],
-["Choose the correct article: ___ apple","an",["a","an","the","—"]],["“Book” so‘zining ko‘plik shakli?","books",["bookes","books","bookies","book"]],
-["Choose: They ___ football every Sunday.","play",["plays","play","playing","played"]],["What is the opposite of “big”?","small",["long","small","high","fast"]],
-["“Beautiful” so‘zining o‘zbekcha ma’nosi?","chiroyli",["tez","chiroyli","kichik","qiziqarli"]],
-["Choose: I ___ breakfast at 7 o’clock every day.","have",["has","have","having","had"]],
-["What is the plural of “child”?","children",["childs","childes","children","child"]],
-["Choose the correct sentence.","He can swim.",["He cans swim.","He can swims.","He can swim.","He swimming can."]],
-["“Yesterday” qaysi zamonni ko‘rsatadi?","Past Simple",["Present Simple","Past Simple","Future Simple","Present Continuous"]],
-["Choose: There ___ two books on the table.","are",["is","are","am","be"]],["What is the comparative form of “good”?","better",["gooder","best","better","more good"]],
-["“Teacher” so‘zining ma’nosi?","o‘qituvchi",["shifokor","o‘qituvchi","muhandis","haydovchi"]],
-["Choose: We ___ studying now.","are",["is","am","are","be"]],["What is the opposite of “early”?","late",["fast","late","near","easy"]],
-["Choose the correct pronoun: ___ am a pupil.","I",["He","She","I","They"]],
-["“How old are you?” savoliga mos javob?","I am 16 years old.",["I am from Tashkent.","I am 16 years old.","My name is Ali.","I like football."]],
-["Choose: My brother ___ English very well.","speaks",["speak","speaks","speaking","spoken"]],
-["What does “weather” mean?","ob-havo",["tabiat","ob-havo","sayohat","maktab"]],
-["Choose the correct past form: They ___ at home yesterday.","were",["was","were","are","is"]],
-["“Fast” so‘zining antonimi?","slow",["quick","slow","strong","high"]],
-["Choose: If it rains, we ___ at home.","will stay",["stay","stayed","will stay","staying"]],
-["What is the superlative form of “small”?","the smallest",["smaller","smallest","the smallest","more small"]],
-["Choose: I have ___ my homework.","finished",["finish","finishing","finished","finishes"]]],
-"Ona tili":[
-["Ot so‘z turkumi nimani bildiradi?","Shaxs, narsa, joy nomini",["Harakatni","Belgini","Shaxs, narsa, joy nomini","Miqdorni"]],
-["Sifat nimani bildiradi?","Predmetning belgisini",["Predmetning belgisini","Harakatni","Miqdorni","Shaxsni"]],
-["Fe’l nimani bildiradi?","Harakat va holatni",["Predmetni","Harakat va holatni","Belgini","Sonni"]],
-["“Kitoblar” so‘zidagi -lar qo‘shimchasi nimani bildiradi?","Ko‘plikni",["Egalikni","Ko‘plikni","Kelishikni","Zamonni"]],
-["O‘zbek tilida nechta unli tovush bor?","6 ta",["5 ta","6 ta","7 ta","8 ta"]],
-["“Men maktabga bordim” gapida kesim qaysi?","bordim",["Men","maktabga","bordim","gapda kesim yo‘q"]],
-["Gapning bosh bo‘laklari qaysilar?","Ega va kesim",["Aniqlovchi va to‘ldiruvchi","Ega va kesim","Hol va aniqlovchi","Faqat kesim"]],
-["“Chiroyli” so‘zi qaysi so‘z turkumiga mansub?","Sifat",["Ot","Sifat","Fe’l","Ravish"]],
-["“Tez yugurdi” birikmasida “tez” qaysi turkum?","Ravish",["Ot","Sifat","Ravish","Olmosh"]],
-["Olmoshning vazifasi nima?","Ot, sifat, son kabi so‘zlar o‘rnida kelish",["Faqat harakatni bildirish","Ot, sifat, son kabi so‘zlar o‘rnida kelish","Faqat belgini bildirish","Gapni tugatish"]],
-["“Men” qaysi so‘z turkumi?","Olmosh",["Ot","Olmosh","Fe’l","Sifat"]],["“Besh” qaysi so‘z turkumiga mansub?","Son",["Ot","Son","Sifat","Ravish"]],
-["So‘zning ma’noli eng kichik qismi nima?","Morfema",["Gap","Morfema","Bo‘g‘in","Matn"]],
-["“Do‘stlik” so‘zida yasovchi qo‘shimcha qaysi?","-lik",["do‘st","-lik","d","st"]],
-["Sinonim so‘zlar qanday so‘zlar?","Ma’nodosh so‘zlar",["Qarama-qarshi ma’noli","Ma’nodosh so‘zlar","Shakldosh so‘zlar","Faqat qisqa so‘zlar"]],
-["Antonim so‘zlar qanday so‘zlar?","Qarama-qarshi ma’noli so‘zlar",["Ma’nodosh","Qarama-qarshi ma’noli so‘zlar","Shakldosh","Bir xil yoziladigan"]],
-["“Katta” so‘zining antonimi?","kichik",["uzun","kichik","baland","chiroyli"]],["“Go‘zal” so‘zining sinonimi?","chiroyli",["xunuk","chiroyli","kichik","tez"]],
-["Undalma nima?","Murojaatni bildiruvchi so‘z",["Harakatni bildiradi","Murojaatni bildiruvchi so‘z","Predmet belgisini bildiradi","Miqdorni bildiradi"]],
-["Nuqta odatda qachon qo‘yiladi?","Darak gap oxirida",["So‘roq gap boshida","Darak gap oxirida","Har bir so‘zdan keyin","Faqat undalmadan keyin"]],
-["So‘roq gap oxiriga qaysi belgi qo‘yiladi?","?",[".","!","?",":"]],["Undov gap oxiriga qaysi belgi qo‘yiladi?","!",[".","!","?",","]],
-["“Bugun havo iliq.” qanday gap?","Darak gap",["So‘roq gap","Buyruq gap","Darak gap","Undov gap"]],
-["“Sen kitob o‘qidingmi?” qanday gap?","So‘roq gap",["Darak gap","So‘roq gap","Undov gap","Buyruq gap"]]],
-"Fizika":[
-["Tezlikning formulasi qaysi?","v=s/t",["v=t/s","v=s/t","v=s×t","v=t−s"]],["Kuchning SI dagi birligi?","Nyuton",["Joul","Vatt","Nyuton","Paskal"]],
-["Ishning SI dagi birligi?","Joul",["Nyuton","Joul","Vatt","Om"]],["Quvvatning birligi?","Vatt",["Joul","Vatt","Nyuton","Amper"]],
-["Tok kuchining birligi?","Amper",["Volt","Amper","Om","Kulon"]],["Kuchlanishning birligi?","Volt",["Amper","Volt","Om","Vatt"]],
-["Elektr qarshilik birligi?","Om",["Volt","Om","Amper","Joul"]],["Zichlik formulasi?","ρ=m/V",["ρ=V/m","ρ=m/V","ρ=mV","ρ=V−m"]],
-["Yerda erkin tushish tezlanishi taxminan?","9,8 m/s²",["4,9 m/s²","9,8 m/s²","15 m/s²","20 m/s²"]],
-["Nyutonning ikkinchi qonuni?","F=ma",["F=m/a","F=ma","F=a/m","F=m+a"]],
-["Bosim formulasi?","p=F/S",["p=FS","p=F/S","p=S/F","p=F+S"]],
-["Issiqlik miqdori formulasi?","Q=cmΔT",["Q=c/m","Q=cmΔT","Q=m/c","Q=c+ΔT"]],
-["Yorug‘lik vakuumda taxminan qanday tezlikda tarqaladi?","3×10⁸ m/s",["3×10⁶ m/s","3×10⁷ m/s","3×10⁸ m/s","3×10⁹ m/s"]],
-["Mexanik energiyaning birligi?","Joul",["Vatt","Joul","Nyuton","Paskal"]],
-["Magnit maydonning mavjudligini nimadan bilish mumkin?","Magnit kuch ta’siridan",["Faqat tovushdan","Magnit kuch ta’siridan","Haroratdan","Bosimdan"]],
-["Ampermetr nimani o‘lchaydi?","Tok kuchini",["Kuchlanishni","Tok kuchini","Qarshilikni","Quvvatni"]],
-["Voltmetr nimani o‘lchaydi?","Kuchlanishni",["Tok kuchini","Kuchlanishni","Massani","Zichlikni"]],
-["Om qonuni qaysi?","I=U/R",["I=UR","I=U/R","I=R/U","I=U+R"]],["Jismning massasi 2 kg, tezlanishi 3 m/s². Kuch?","6 N",["5 N","6 N","9 N","12 N"]],
-["10 N kuch 2 m masofada ish bajarsa, ish qancha?","20 J",["5 J","10 J","20 J","40 J"]],
-["100 J ish 20 s da bajarildi. Quvvat?","5 W",["2 W","5 W","20 W","200 W"]],
-["Temperatura SI tizimida qaysi birlikda o‘lchanadi?","Kelvin",["Selsiy","Kelvin","Farengeyt","Joul"]],
-["Tovush vakuumda tarqaladimi?","Yo‘q",["Ha","Yo‘q","Faqat kechasi","Faqat sovuqda"]],
-["Jismga tashqi kuch ta’sir qilmasa, u o‘z holatini saqlash xususiyati nima?","Inersiya",["Diffuziya","Inersiya","Rezonans","Konveksiya"]]],
-"Kimyo":[
-["Suvning kimyoviy formulasi?","H₂O",["CO₂","H₂O","O₂","NaCl"]],["Kislorodning kimyoviy belgisi?","O",["C","O","N","H"]],
-["Vodorodning kimyoviy belgisi?","H",["He","H","Hg","Ho"]],["Osh tuzining formulasi?","NaCl",["KCl","NaCl","NaOH","HCl"]],
-["Karbonat angidrid formulasi?","CO₂",["CO","CO₂","CaCO₃","CH₄"]],["Atom yadrosida qanday zarralar mavjud?","Proton va neytron",["Faqat elektron","Proton va neytron","Faqat proton","Faqat neytron"]],
-["Elektronning zaryadi qanday?","Manfiy",["Musbat","Manfiy","Neytral","O‘zgaruvchan"]],["Protonning zaryadi qanday?","Musbat",["Musbat","Manfiy","Neytral","Zaryadsiz"]],
-["pH=7 bo‘lgan eritma qanday muhit?","Neytral",["Kislotali","Ishqoriy","Neytral","Juda kislotali"]],
-["Kislotalar tarkibida odatda qaysi ion bo‘ladi?","H⁺",["Na⁺","H⁺","Cl⁻","O²⁻"]],["Ishqorlar tarkibida qaysi ion bo‘ladi?","OH⁻",["H⁺","OH⁻","Na⁺","Cl⁻"]],
-["NaOH qanday modda?","Ishqor",["Kislota","Ishqor","Tuz","Oksid"]],["HCl qanday modda?","Kislota",["Tuz","Oksid","Kislota","Ishqor"]],
-["CaCO₃ qaysi modda?","Kalsiy karbonat",["Kalsiy xlorid","Kalsiy karbonat","Natriy karbonat","Kalsiy oksid"]],
-["Oksidlar tarkibida kislorod bilan birga nima bo‘ladi?","Bitta boshqa element",["Faqat vodorod","Bitta boshqa element","Faqat metall","Faqat uglerod"]],
-["Yonish jarayonida ko‘pincha qaysi gaz ishtirok etadi?","Kislorod",["Azot","Kislorod","Vodorod","Karbonat angidrid"]],
-["Atom raqami nimani bildiradi?","Protonlar sonini",["Neytronlar sonini","Protonlar sonini","Elektron qavatlar sonini","Molekulalar sonini"]],
-["Molekula nima?","Moddaning kimyoviy xossalarini saqlovchi eng kichik zarracha",["Faqat atom yadrosi","Moddaning kimyoviy xossalarini saqlovchi eng kichik zarracha","Faqat elektron","Faqat ion"]],
-["Avogadro doimiysi taxminan nechaga teng?","6,02×10²³",["6,02×10²⁰","6,02×10²²","6,02×10²³","6,02×10²⁴"]],
-["Suvning qaynash temperaturasi normal bosimda?","100°C",["0°C","50°C","100°C","212°C"]],["Suvning muzlash temperaturasi normal bosimda?","0°C",["−10°C","0°C","10°C","100°C"]],
-["CH₄ qanday modda?","Metan",["Etan","Metan","Propan","Butan"]],["O₂ molekulasida nechta kislorod atomi bor?","2 ta",["1 ta","2 ta","3 ta","4 ta"]],
-["NaCl qanday bog‘lanishga ega?","Ion bog‘lanish",["Kovalent","Ion bog‘lanish","Metall","Vodorod"]],
-["Kimyoviy reaksiya belgilaridan biri?","Yangi modda hosil bo‘lishi",["Faqat rang o‘zgarishi shart","Yangi modda hosil bo‘lishi","Faqat erish","Faqat bug‘lanish"]]
-]};
-const questions=QUESTION_BANKS["Geografiya"];
+// index.html ichidagi RESULT_API_URL bilan BIR XIL manzilni shu yerga qo'ying
+const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
-let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false;
-let currentJn=1, starting=false;
-const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
-const regionEl=document.getElementById("region"), districtEl=document.getElementById("district"), schoolEl=document.getElementById("school"), districtOtherEl=document.getElementById("districtOther"), schoolOtherEl=document.getElementById("schoolOther");
-const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
-const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
+const JN_LIST=["1-JN","2-JN","3-JN","4-JN"];
+const DEFAULT_GROUPS=["101","102","103","104","105","106"];
+const TZ="Asia/Tashkent";
 
-// Telegram/backend sozlamasi. Bot tokenini BU YERGA yozmang.
-// Backend manzilini keyin shu o'zgaruvchiga qo'yish mumkin.
-const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+let token=sessionStorage.getItem("gt_token")||"";
+let allRows=[];
+let serverGroups=null;      // ustozning guruhlari (serverdan)
+let viewRows=[];            // jadvalda ko‘rinib turgan natijalar
+const selected=new Set();   // o‘chirish uchun tanlangan natijalar
 
-/* ================= Hudud: viloyat → tuman/shahar → ta’lim muassasasi =================
-   Ro‘yxatlarni shu yerda tahrirlash mumkin. Ro‘yxatda yo‘q bo‘lsa, o‘quvchi
-   “Boshqa” ni tanlab nomini o‘zi yozadi.
-   Ta’lim muassasalari INSTITUTIONS ga "Viloyat|Tuman" kaliti bilan qo‘shiladi. */
-const OTHER_OPT="Boshqa (ro‘yxatda yo‘q)";
-const REGIONS={
-"Qoraqalpog‘iston Respublikasi":["Nukus shahri","Taxiatosh shahri","Amudaryo tumani","Beruniy tumani","Bo‘zatov tumani","Chimboy tumani","Ellikqal‘a tumani","Kegeyli tumani","Mo‘ynoq tumani","Nukus tumani","Qanliko‘l tumani","Qo‘ng‘irot tumani","Qorao‘zak tumani","Shumanay tumani","Taxtako‘pir tumani","To‘rtko‘l tumani","Xo‘jayli tumani"],
-"Andijon viloyati":["Andijon shahri","Xonobod shahri","Andijon tumani","Asaka tumani","Baliqchi tumani","Bo‘ston tumani","Buloqboshi tumani","Izboskan tumani","Jalaquduq tumani","Marhamat tumani","Oltinko‘l tumani","Paxtaobod tumani","Qo‘rg‘ontepa tumani","Shahrixon tumani","Ulug‘nor tumani","Xo‘jaobod tumani"],
-"Buxoro viloyati":["Buxoro shahri","Kogon shahri","Buxoro tumani","G‘ijduvon tumani","Jondor tumani","Kogon tumani","Olot tumani","Peshku tumani","Qorako‘l tumani","Qorovulbozor tumani","Romitan tumani","Shofirkon tumani","Vobkent tumani"],
-"Farg‘ona viloyati":["Farg‘ona shahri","Marg‘ilon shahri","Qo‘qon shahri","Quvasoy shahri","Bag‘dod tumani","Beshariq tumani","Buvayda tumani","Dang‘ara tumani","Farg‘ona tumani","Furqat tumani","Oltiariq tumani","O‘zbekiston tumani","Qo‘shtepa tumani","Quva tumani","Rishton tumani","So‘x tumani","Toshloq tumani","Uchko‘prik tumani","Yozyovon tumani"],
-"Jizzax viloyati":["Jizzax shahri","Arnasoy tumani","Baxmal tumani","Do‘stlik tumani","Forish tumani","G‘allaorol tumani","Mirzacho‘l tumani","Paxtakor tumani","Sharof Rashidov tumani","Yangiobod tumani","Zafarobod tumani","Zarbdor tumani","Zomin tumani"],
-"Namangan viloyati":["Namangan shahri","Chortoq tumani","Chust tumani","Davlatobod tumani","Kosonsoy tumani","Mingbuloq tumani","Namangan tumani","Norin tumani","Pop tumani","To‘raqo‘rg‘on tumani","Uchqo‘rg‘on tumani","Uychi tumani","Yangiqo‘rg‘on tumani"],
-"Navoiy viloyati":["Navoiy shahri","Zarafshon shahri","Karmana tumani","Konimex tumani","Navbahor tumani","Nurota tumani","Qiziltepa tumani","Tomdi tumani","Uchquduq tumani","Xatirchi tumani"],
-"Qashqadaryo viloyati":["Qarshi shahri","Shahrisabz shahri","Chiroqchi tumani","Dehqonobod tumani","G‘uzor tumani","Kasbi tumani","Kitob tumani","Koson tumani","Ko‘kdala tumani","Mirishkor tumani","Muborak tumani","Nishon tumani","Qamashi tumani","Qarshi tumani","Shahrisabz tumani","Yakkabog‘ tumani"],
-"Samarqand viloyati":["Samarqand shahri","Kattaqo‘rg‘on shahri","Bulung‘ur tumani","Ishtixon tumani","Jomboy tumani","Kattaqo‘rg‘on tumani","Narpay tumani","Nurobod tumani","Oqdaryo tumani","Pastdarg‘om tumani","Paxtachi tumani","Payariq tumani","Qo‘shrabot tumani","Samarqand tumani","Toyloq tumani","Urgut tumani"],
-"Sirdaryo viloyati":["Guliston shahri","Shirin shahri","Yangiyer shahri","Boyovut tumani","Guliston tumani","Mirzaobod tumani","Oqoltin tumani","Sardoba tumani","Sayxunobod tumani","Sirdaryo tumani","Xovos tumani"],
-"Surxondaryo viloyati":["Termiz shahri","Angor tumani","Bandixon tumani","Boysun tumani","Denov tumani","Jarqo‘rg‘on tumani","Muzrabot tumani","Oltinsoy tumani","Qiziriq tumani","Qumqo‘rg‘on tumani","Sariosiyo tumani","Sherobod tumani","Sho‘rchi tumani","Termiz tumani","Uzun tumani"],
-"Toshkent viloyati":["Nurafshon shahri","Angren shahri","Bekobod shahri","Chirchiq shahri","Ohangaron shahri","Olmaliq shahri","Yangiyo‘l shahri","Bekobod tumani","Bo‘ka tumani","Bo‘stonliq tumani","Chinoz tumani","Ohangaron tumani","Oqqo‘rg‘on tumani","O‘rta Chirchiq tumani","Parkent tumani","Piskent tumani","Quyi Chirchiq tumani","Qibray tumani","Toshkent tumani","Yangiyo‘l tumani","Yuqori Chirchiq tumani","Zangiota tumani"],
-"Toshkent shahri":["Bektemir tumani","Chilonzor tumani","Mirobod tumani","Mirzo Ulug‘bek tumani","Olmazor tumani","Sergeli tumani","Shayxontohur tumani","Uchtepa tumani","Yakkasaroy tumani","Yangihayot tumani","Yashnobod tumani","Yunusobod tumani"],
-"Xorazm viloyati":["Urganch shahri","Xiva shahri","Bog‘ot tumani","Gurlan tumani","Hazorasp tumani","Qo‘shko‘pir tumani","Shovot tumani","Tuproqqal‘a tumani","Urganch tumani","Xiva tumani","Xonqa tumani","Yangiariq tumani","Yangibozor tumani"]
-};
-const INSTITUTIONS={
-"Sirdaryo viloyati|Guliston shahri":["Guliston davlat universiteti akademik litseyi"]
-};
-function fillSelect(sel,placeholder,items,withOther){
-  sel.innerHTML="";
-  const first=document.createElement("option");first.value="";first.textContent=placeholder;sel.appendChild(first);
-  items.forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=t;sel.appendChild(o)});
-  if(withOther){const o=document.createElement("option");o.value=OTHER_OPT;o.textContent=OTHER_OPT;sel.appendChild(o)}
+const $=id=>document.getElementById(id);
+
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function pick(sel,other){return sel.value===OTHER_OPT?other.value.trim():sel.value}
-function initRegions(){
-  fillSelect(regionEl,"Viloyatni tanlang",Object.keys(REGIONS),false);
-  fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true;
-  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
-}
-regionEl.onchange=()=>{
-  msg.textContent="";
-  districtOtherEl.classList.add("hidden");districtOtherEl.value="";
-  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
-  if(!regionEl.value){fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true}
-  else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",REGIONS[regionEl.value]||[],true);districtEl.disabled=false}
-  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
-};
-districtEl.onchange=()=>{
-  msg.textContent="";
-  const other=districtEl.value===OTHER_OPT;
-  districtOtherEl.classList.toggle("hidden",!other);if(!other)districtOtherEl.value="";
-  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
-  if(!districtEl.value){fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;return}
-  fillSelect(schoolEl,"Ta’lim muassasasini tanlang",other?[]:(INSTITUTIONS[regionEl.value+"|"+districtEl.value]||[]),true);
-  schoolEl.disabled=false;
-  if(other){schoolEl.value=OTHER_OPT;schoolOtherEl.classList.remove("hidden")}
-};
-schoolEl.onchange=()=>{
-  msg.textContent="";
-  const other=schoolEl.value===OTHER_OPT;
-  schoolOtherEl.classList.toggle("hidden",!other);if(!other)schoolOtherEl.value="";
-};
-districtOtherEl.oninput=()=>{msg.textContent=""};schoolOtherEl.oninput=()=>{msg.textContent=""};
-initRegions();
 
-/* ================= Ustoz paneli bilan aloqa (testlar, guruhlar) =================
-   Server javob bermasa yoki ustoz test biriktirmagan bo‘lsa, 1-JN oldingidek
-   yuqoridagi tayyor savollar bankidan o‘tadi. */
+/* ---------- Sana (Toshkent vaqti) ---------- */
+const dtf=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false});
+function tk(iso){
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return {date:"",full:String(iso||"")};
+  const p={};
+  dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
+  const hh=p.hour==="24"?"00":p.hour;
+  return {date:p.year+"-"+p.month+"-"+p.day, full:p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute};
+}
+
+/* ---------- Serverga so'rov ---------- */
 async function api(action,payload){
-  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
+  if(!API_URL||API_URL.indexOf("BU_YERGA")===0){
+    throw new Error("teacher.html ichida API_URL kiritilmagan. index.html dagi RESULT_API_URL manzilini qo‘ying.");
+  }
+  let res;
   try{
-    const res=await fetch(RESULT_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action:action},payload||{})),signal:ctl.signal});
-    const data=JSON.parse(await res.text());
-    if(data&&data.source==="doPost")throw new Error("Server yangi so‘rovlarni qabul qilmayapti.");
-    return data;
-  }finally{clearTimeout(tm)}
-}
-const cards=[...document.querySelectorAll(".test-card")];
-let teacherTests={}, availSeq=0, availReq=Promise.resolve();
-function setCard(n,on,count,title){
-  const c=cards[n-1];if(!c)return;
-  c.classList.toggle("available",on);c.classList.toggle("disabled",!on);c.classList.toggle("locked",!on);
-  const b=c.querySelector(".badge");b.style.background=on?"":"#c6ced8";b.style.color=on?"":"#26354b";
-  c.querySelector(".lock").textContent=on?"▤":"♙";
-  const st=c.querySelector(".status");st.textContent=on?"Mavjud":"Mavjud emas";st.classList.toggle("ok",on);
-  c.querySelector("small").textContent=(title?title+" — ":"")+(count||25)+" ta test";
-}
-function resetCards(){setCard(1,true,25);[2,3,4].forEach(n=>setCard(n,false,25))}
-function refreshAvailability(){
-  const seq=++availSeq;
-  if(!groupEl.value||!subjectEl.value){teacherTests={};resetCards();availReq=Promise.resolve();return}
-  availReq=(async()=>{
-    const map={};
-    try{
-      const r=await api("pubTests",{subject:subjectEl.value,group:groupEl.value});
-      if(r&&r.ok&&Array.isArray(r.tests))r.tests.forEach(t=>{const n=parseInt(t.nazorat,10);if(n>=1&&n<=4&&!map[n])map[n]=t});
-    }catch(e){console.warn("Testlar ro‘yxatini olib bo‘lmadi:",e)}
-    if(seq!==availSeq)return;
-    teacherTests=map;
-    [1,2,3,4].forEach(n=>{const t=map[n];if(t)setCard(n,true,t.count,t.title);else setCard(n,n===1,25)});
-  })();
-}
-async function loadExtraGroups(){
-  try{
-    const r=await api("pubGroups",{});
-    if(!r||!r.ok||!Array.isArray(r.groups))return;
-    const chosen=groupEl.value;
-    const all=new Set([...groupEl.options].map(o=>o.value).filter(Boolean));
-    r.groups.forEach(g=>all.add(String(g)));
-    const list=[...all].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-    groupEl.innerHTML='<option value="">Guruhni tanlang</option>'+list.map(g=>'<option>'+g.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+'</option>').join("");
-    groupEl.value=chosen;
-  }catch(e){console.warn("Qo‘shimcha guruhlarni olib bo‘lmadi:",e)}
+    res=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(Object.assign({action:action},payload||{}))
+    });
+  }catch(e){
+    throw new Error("Serverga ulanib bo‘lmadi. Internetni va API_URL manzilini tekshiring.");
+  }
+  const text=await res.text();
+  let data;
+  try{ data=JSON.parse(text); }
+  catch(e){ throw new Error("Serverdan kutilmagan javob keldi. Apps Script yangi versiyada deploy qilinganini tekshiring."); }
+  if(data&&data.source==="doPost"){
+    throw new Error("Apps Script'da ustoz paneli qismi ishlamayapti: Code.gs dagi doPost'ga qo‘shimcha kiritilganini va yangi versiya deploy qilinganini tekshiring.");
+  }
+  if(data&&data.ok===false&&data.error==="Noma'lum so'rov."){
+    throw new Error("Serverda yangi funksiyalar yo‘q. Testlar.gs qo‘shilganini, Panel.gs dagi panelRouter ichida default: qatori almashtirilganini tekshiring va yangi versiya deploy qiling.");
+  }
+  return data;
 }
 
-function key(){return "jn"+currentJn+"_"+subjectEl.value+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
-function valid(){
-  const name=studentEl.value.trim();
-  if(!regionEl.value){msg.textContent="Avval viloyatni tanlang.";regionEl.focus();return false}
-  if(!districtEl.value){msg.textContent="Avval tuman yoki shaharni tanlang.";districtEl.focus();return false}
-  if(districtEl.value===OTHER_OPT&&districtOtherEl.value.trim().length<3){msg.textContent="Tuman yoki shahar nomini yozing.";districtOtherEl.focus();return false}
-  if(!schoolEl.value){msg.textContent="Avval ta’lim muassasasini tanlang.";schoolEl.focus();return false}
-  if(schoolEl.value===OTHER_OPT&&schoolOtherEl.value.trim().length<3){msg.textContent="Ta’lim muassasasi nomini yozing.";schoolOtherEl.focus();return false}
-  if(!groupEl.value){msg.textContent="Avval guruhni tanlang.";groupEl.focus();return false}
-  if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
-  if(localStorage.getItem(key())){msg.textContent="Bu o‘quvchi "+currentJn+"-JN nazoratini allaqachon topshirgan.";return false}
-  msg.textContent="";return true;
+/* ---------- Ko'rinishlar ---------- */
+function showLogin(message){
+  token="";
+  sessionStorage.removeItem("gt_token");
+  allRows=[];
+  resetPanelState();
+  $("panelView").classList.add("hidden");
+  $("loginView").classList.remove("hidden");
+  $("loginMsg").textContent=message||"";
+  $("password").value="";
+  resetPwToggle();
 }
-function seededRandom(seed){
-  let t=seed>>>0;
-  return function(){t+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}
+function showPanel(){
+  $("loginView").classList.add("hidden");
+  $("panelView").classList.remove("hidden");
 }
-function hashString(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
-function shuffle(arr,rng){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+
+/* ---------- Login ---------- */
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const btn=$("loginBtn");
+  const username=$("username").value.trim();
+  const password=$("password").value;
+  if(!username||!password){ $("loginMsg").textContent="Login va parolni kiriting."; return; }
+  btn.disabled=true;
+  $("loginMsg").textContent="Tekshirilmoqda...";
+  try{
+    const r=await api("login",{username:username,password:password});
+    if(!r.ok){ $("loginMsg").textContent=r.error||"Kirish mumkin emas."; return; }
+    token=r.token;
+    sessionStorage.setItem("gt_token",token);
+    $("teacherName").textContent=r.name||"";
+    $("teacherSubject").textContent=r.subject||"";
+    $("loginMsg").textContent="";
+    $("password").value="";
+    showPanel();
+    loadGroups();
+    loadTests();
+    await loadResults();
+  }catch(err){
+    $("loginMsg").textContent=err.message;
+  }finally{
+    btn.disabled=false;
+  }
+});
+
+$("logoutBtn").addEventListener("click",async ()=>{
+  const t=token;
+  showLogin("");
+  try{ await api("logout",{token:t}); }catch(e){}
+});
+
+$("refreshBtn").addEventListener("click",()=>loadResults());
+
+/* ---------- Natijalarni yuklash ---------- */
+async function loadResults(){
+  const msg=$("panelMsg");
+  msg.className="msg info";
+  msg.textContent="Yuklanmoqda...";
+  $("refreshBtn").disabled=true;
+  try{
+    const r=await api("results",{token:token});
+    if(r.code==="AUTH"){ showLogin("Sessiya tugagan. Qayta kiring."); return; }
+    if(!r.ok){ msg.className="msg error"; msg.textContent=r.error||"Natijalarni olib bo‘lmadi."; return; }
+    $("teacherName").textContent=r.name||"";
+    $("teacherSubject").textContent=r.subject||"";
+    allRows=(r.rows||[]).map(x=>Object.assign({},x,{d:tk(x.t)}));
+    msg.textContent="";
+    buildGroupFilter();
+    render();
+  }catch(err){
+    msg.className="msg error";
+    msg.textContent=err.message;
+  }finally{
+    $("refreshBtn").disabled=false;
+  }
+}
+
+/* ---------- Filtrlar ---------- */
+function groupList(){
+  const set=new Set(serverGroups||DEFAULT_GROUPS);
+  allRows.forEach(r=>{ if(r.group) set.add(r.group); });
+  return Array.from(set).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+}
+function buildGroupFilter(){
+  const sel=$("fGroup");
+  const old=sel.value;
+  sel.innerHTML='<option value="">Barcha guruhlar</option>'+groupList().map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join("");
+  if(old&&groupList().indexOf(old)!==-1) sel.value=old;
+}
+function buildJnFilter(){
+  $("fJn").innerHTML='<option value="">Barcha nazoratlar</option>'+JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
+}
+function baseFiltered(){
+  const q=$("fSearch").value.trim().toLowerCase();
+  const from=$("fFrom").value, to=$("fTo").value;
+  const showDup=$("fDup").checked;
+  return allRows.filter(r=>{
+    if(!showDup&&r.status==="takror") return false;
+    if(from&&r.d.date<from) return false;
+    if(to&&r.d.date>to) return false;
+    if(q&&r.student.toLowerCase().indexOf(q)===-1) return false;
+    return true;
+  });
+}
+function tableFiltered(base){
+  const g=$("fGroup").value, jn=$("fJn").value;
+  return base.filter(r=>(!g||r.group===g)&&(!jn||r.jn===jn));
+}
+
+/* ---------- Chizish ---------- */
+function gradeBadge(g){
+  return g>=2&&g<=5?'<span class="badge g'+g+'">'+g+'</span>':'<span class="badge">—</span>';
+}
+function avgPercent(rows){
+  return rows.length?Math.round(rows.reduce((s,r)=>s+r.percent,0)/rows.length):0;
+}
+function renderStats(rows){
+  const n=rows.length;
+  const uniq=new Set(rows.map(r=>r.group+"|"+r.student.toLowerCase())).size;
+  const gc={5:0,4:0,3:0,2:0};
+  rows.forEach(r=>{ if(gc[r.grade]!==undefined) gc[r.grade]++; });
+  $("stats").innerHTML=
+    '<div class="stat"><span>Natijalar</span><b>'+n+'</b></div>'+
+    '<div class="stat"><span>O‘quvchilar</span><b>'+uniq+'</b></div>'+
+    '<div class="stat"><span>O‘rtacha foiz</span><b>'+(n?avgPercent(rows)+'%':'—')+'</b></div>'+
+    '<div class="stat"><span>Baholar</span><div class="gline">'+
+      [5,4,3,2].map(g=>'<span class="badge g'+g+'">'+g+': '+gc[g]+'</span>').join("")+
+    '</div></div>';
+}
+function renderTable(rows){
+  viewRows=rows;
+  const vs=new Set(rows);
+  selected.forEach(r=>{ if(!vs.has(r)) selected.delete(r); });
+  $("resultsBody").innerHTML=rows.map((r,i)=>
+    '<tr><td class="chk"><input type="checkbox" class="rowchk" data-i="'+i+'"'+(selected.has(r)?' checked':'')+' aria-label="Tanlash"></td>'+
+    '<td>'+(i+1)+'</td>'+
+    '<td>'+esc(r.d.full)+'</td>'+
+    '<td>'+esc(r.group)+'</td>'+
+    '<td class="name">'+esc(r.student)+(r.status==="takror"?'<span class="tag">takror</span>':'')+(r.school||r.district||r.region?'<span class="sub">'+esc([r.school,r.district,r.region].filter(Boolean).join(", "))+'</span>':'')+'</td>'+
+    '<td>'+esc(r.jn)+'</td>'+
+    '<td>'+esc(r.correct)+'/'+esc(r.total)+'</td>'+
+    '<td>'+esc(r.percent)+'%</td>'+
+    '<td>'+gradeBadge(r.grade)+'</td>'+
+    '<td><button class="btn small danger" type="button" data-del="'+i+'">O‘chirish</button></td></tr>'
+  ).join("");
+  $("resultsInfo").textContent="Ko‘rsatilgan natijalar: "+rows.length+" ta";
+  const empty=$("emptyMsg");
+  if(!rows.length){
+    empty.textContent=allRows.length?"Filtrga mos natija topilmadi.":"Hozircha natija yo‘q. O‘quvchilar nazorat topshirgach, natijalar shu yerda paydo bo‘ladi.";
+    empty.classList.remove("hidden");
+  }else{
+    empty.classList.add("hidden");
+  }
+  updateBulk();
+}
+function renderGroups(base){
+  $("groupsBody").innerHTML=groupList().map(g=>{
+    const gr=base.filter(r=>r.group===g);
+    const cells=JN_LIST.map(jn=>{
+      const x=gr.filter(r=>r.jn===jn);
+      return x.length?'<td><b>'+avgPercent(x)+'%</b><span class="sub">'+x.length+' ta</span></td>':'<td class="muted">—</td>';
+    }).join("");
+    const total=gr.length?'<td><b>'+avgPercent(gr)+'%</b><span class="sub">'+gr.length+' ta</span></td>':'<td class="muted">—</td>';
+    return '<tr><td><b>'+esc(g)+'</b></td>'+cells+total+'</tr>';
+  }).join("");
+}
+function render(){
+  const base=baseFiltered();
+  const rows=tableFiltered(base);
+  renderStats(rows);
+  renderTable(rows);
+  renderGroups(base);
+}
+
+/* ---------- Hodisalar ---------- */
+["fGroup","fJn","fFrom","fTo","fDup"].forEach(id=>$(id).addEventListener("change",render));
+$("fSearch").addEventListener("input",render);
+$("clearBtn").addEventListener("click",()=>{
+  $("fGroup").value="";$("fJn").value="";$("fSearch").value="";
+  $("fFrom").value="";$("fTo").value="";$("fDup").checked=false;
+  render();
+});
+const PANES={results:"tabResults",groups:"tabGroups",tests:"tabTests",manage:"tabManage"};
+function setTab(name){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
+  Object.keys(PANES).forEach(k=>$(PANES[k]).classList.toggle("hidden",k!==name));
+  $("resultsTop").classList.toggle("hidden",name!=="results"&&name!=="groups");
+  const pm=$("panelMsg");
+  if(pm.className.indexOf("error")===-1) pm.textContent="";
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+
+/* =====================================================
+   YANGI QISMLAR: parol ko‘zchasi, natijalarni o‘chirish,
+   testlar (qo‘lda / Word), guruhlarni boshqarish
+   ===================================================== */
+
+/* ---------- Sessiya bilan so‘rov ---------- */
+async function call(action,payload){
+  const r=await api(action,Object.assign({token:token},payload||{}));
+  if(r&&r.code==="AUTH"){
+    showLogin("Sessiya tugagan. Qayta kiring.");
+    const e=new Error("AUTH"); e.auth=true; throw e;
+  }
+  return r;
+}
+
+/* ---------- Modal oyna ---------- */
+function openModal(html){ $("modalBody").innerHTML=html; $("modalBack").classList.remove("hidden"); }
+function closeModal(){ $("modalBack").classList.add("hidden"); $("modalBody").innerHTML=""; }
+$("modalBack").addEventListener("mousedown",e=>{ if(e.target===$("modalBack")) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("modalBack").classList.contains("hidden")) closeModal(); });
+$("modalBody").addEventListener("click",e=>{
+  const b=e.target.closest("[data-m]"); if(!b) return;
+  const a=b.dataset.m;
+  if(a==="close") closeModal();
+  else if(a==="assign") saveAssign(b.dataset.id,b);
+  else if(a==="reshuffle") previewShuffle();
+});
+
+/* ---------- Parol ko‘zchasi ---------- */
+function resetPwToggle(){
+  $("password").type="password";
+  $("pwToggle").setAttribute("aria-pressed","false");
+  $("pwToggle").setAttribute("aria-label","Parolni ko‘rsatish");
+  $("eyeOn").classList.remove("hidden");
+  $("eyeOff").classList.add("hidden");
+}
+$("pwToggle").addEventListener("click",()=>{
+  const inp=$("password");
+  const show=inp.type==="password";
+  inp.type=show?"text":"password";
+  $("pwToggle").setAttribute("aria-pressed",show?"true":"false");
+  $("pwToggle").setAttribute("aria-label",show?"Parolni yashirish":"Parolni ko‘rsatish");
+  $("eyeOn").classList.toggle("hidden",show);
+  $("eyeOff").classList.toggle("hidden",!show);
+  inp.focus();
+});
+
+/* ---------- Natijalarni o‘chirish ---------- */
+function updateBulk(){
+  const n=selected.size;
+  $("bulkBar").classList.toggle("hidden",n===0);
+  $("bulkCount").textContent="Tanlangan: "+n+" ta";
+  const all=$("chkAll");
+  all.checked=viewRows.length>0&&n===viewRows.length;
+  all.indeterminate=n>0&&n<viewRows.length;
+}
+function syncChecks(){
+  document.querySelectorAll(".rowchk").forEach(c=>{ c.checked=selected.has(viewRows[Number(c.dataset.i)]); });
+  updateBulk();
+}
+$("resultsBody").addEventListener("change",e=>{
+  const c=e.target.closest(".rowchk"); if(!c) return;
+  const r=viewRows[Number(c.dataset.i)]; if(!r) return;
+  if(c.checked) selected.add(r); else selected.delete(r);
+  updateBulk();
+});
+$("resultsBody").addEventListener("click",e=>{
+  const b=e.target.closest("[data-del]"); if(!b) return;
+  deleteResults([viewRows[Number(b.dataset.del)]]);
+});
+$("chkAll").addEventListener("change",e=>{
+  if(e.target.checked) viewRows.forEach(r=>selected.add(r)); else selected.clear();
+  syncChecks();
+});
+$("bulkClear").addEventListener("click",()=>{ selected.clear(); syncChecks(); });
+$("bulkDelete").addEventListener("click",()=>deleteResults(Array.from(selected)));
+
+async function deleteResults(list){
+  list=list.filter(Boolean);
+  if(!list.length) return;
+  const text=list.length===1
+    ? "Bu natijani o‘chirmoqchimisiz?\n\n"+list[0].student+" — "+list[0].jn+" ("+list[0].d.full+")\n\nBu amalni qaytarib bo‘lmaydi."
+    : list.length+" ta natijani o‘chirmoqchimisiz?\n\nBu amalni qaytarib bo‘lmaydi.";
+  if(!confirm(text)) return;
+  const pm=$("panelMsg");
+  pm.className="msg info"; pm.textContent="O‘chirilmoqda...";
+  try{
+    let deleted=0;
+    for(let i=0;i<list.length;i+=200){
+      const part=list.slice(i,i+200).map(r=>({t:r.t,group:r.group,student:r.student,jn:r.jn}));
+      const r=await call("resultsDelete",{items:part});
+      if(!r.ok) throw new Error(r.error||"O‘chirib bo‘lmadi.");
+      deleted+=r.deleted||0;
+    }
+    selected.clear();
+    await loadResults();
+    pm.className="msg info"; pm.textContent=deleted+" ta natija o‘chirildi.";
+  }catch(err){
+    if(err.auth) return;
+    pm.className="msg error"; pm.textContent=err.message;
+  }
+}
+
+/* ---------- Word fayl o‘qish (.docx) ---------- */
+async function readDocxXml(file){
+  const buf=new Uint8Array(await file.arrayBuffer());
+  const dv=new DataView(buf.buffer,buf.byteOffset,buf.byteLength);
+  let eocd=-1;
+  for(let i=buf.length-22;i>=Math.max(0,buf.length-65557);i--){
+    if(dv.getUint32(i,true)===0x06054b50){ eocd=i; break; }
+  }
+  if(eocd<0) throw new Error("Bu .docx fayl emas yoki buzilgan. Word’da “Boshqacha saqlash → Word hujjati (.docx)” qilib qayta saqlang.");
+  const count=dv.getUint16(eocd+10,true);
+  let p=dv.getUint32(eocd+16,true);
+  const td=new TextDecoder("utf-8");
+  for(let n=0;n<count;n++){
+    if(dv.getUint32(p,true)!==0x02014b50) break;
+    const method=dv.getUint16(p+10,true);
+    const csize=dv.getUint32(p+20,true);
+    const nlen=dv.getUint16(p+28,true), xlen=dv.getUint16(p+30,true), clen=dv.getUint16(p+32,true);
+    const lho=dv.getUint32(p+42,true);
+    const name=td.decode(buf.subarray(p+46,p+46+nlen));
+    if(name==="word/document.xml"){
+      const start=lho+30+dv.getUint16(lho+26,true)+dv.getUint16(lho+28,true);
+      const data=buf.subarray(start,start+csize);
+      if(method===0) return td.decode(data);
+      if(method===8){
+        if(typeof DecompressionStream==="undefined") throw new Error("Brauzeringiz .docx faylni o‘qiy olmaydi. Chrome yoki Edge’ning yangi versiyasidan foydalaning.");
+        const stream=new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+        return td.decode(await new Response(stream).arrayBuffer());
+      }
+      throw new Error("Word faylning siqish usuli qo‘llab-quvvatlanmaydi.");
+    }
+    p+=46+nlen+xlen+clen;
+  }
+  throw new Error("Word fayl ichidan matn topilmadi.");
+}
+function decodeXml(s){
+  const cp=n=>{ try{ return String.fromCodePoint(n); }catch(e){ return ""; } };
+  return s.replace(/&#x([0-9a-fA-F]+);/g,(m,h)=>cp(parseInt(h,16)))
+          .replace(/&#(\d+);/g,(m,d)=>cp(parseInt(d,10)))
+          .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,"&");
+}
+function xmlToLines(xml){
+  // Word formulalari: kasr, daraja, indeks, ildiz oddiy matnga aylantiriladi
+  xml=xml.replace(/<\/m:num>/g,"<m:t>/</m:t>")
+         .replace(/<m:sup>/g,"<m:t>^</m:t>")
+         .replace(/<m:sub>/g,"<m:t>_</m:t>")
+         .replace(/<m:rad>/g,"<m:t>√</m:t>");
+  const lines=[];
+  xml.split("</w:p>").forEach(chunk=>{
+    let text="",m;
+    const re=/<w:t(?:\s[^>\/]*)?>([\s\S]*?)<\/w:t>|<m:t(?:\s[^>\/]*)?>([\s\S]*?)<\/m:t>|<w:tab\s*\/>|<w:(?:br|cr)(?:\s[^>]*)?\/>/g;
+    while((m=re.exec(chunk))){
+      if(m[1]!==undefined) text+=m[1];
+      else if(m[2]!==undefined) text+=m[2];
+      else if(m[0].indexOf("<w:tab")===0) text+=" ";
+      else text+="\n";
+    }
+    decodeXml(text).split("\n").forEach(l=>{
+      l=l.replace(/\u00a0/g," ").replace(/\s+/g," ").trim();
+      if(l) lines.push(l);
+    });
+  });
+  return lines;
+}
+const OPT_RE=/^\(?\s*([A-DАВС])\s*[.)]\s*(.*)$/i;
+const NUM_RE=/^\s*(?:№\s*)?\d+\s*[.)](?!\d)\s*/;
+function optIdx(ch){
+  const c=ch.toUpperCase();
+  return "ABCD".indexOf(({"А":"A","В":"B","С":"C"})[c]||c);
+}
+// Bitta qatorda "A) .. B) .. C) .. D) .." bo‘lsa, ajratib beradi
+function splitInline(line){
+  const re=/(?:^|\s)\(?([A-DАВС])\s*[.)]\s*/gi;
+  const marks=[]; let m;
+  while((m=re.exec(line))) marks.push({i:optIdx(m[1]),start:m.index,end:re.lastIndex});
+  const seq=[]; let want=0;
+  for(const k of marks){ if(k.i===want){ seq.push(k); want++; if(want===4) break; } }
+  if(seq.length<4) return null;
+  return {
+    pre:line.slice(0,seq[0].start).trim(),
+    o:seq.map((k,j)=>line.slice(k.end,seq[j+1]?seq[j+1].start:line.length).trim())
+  };
+}
+// Qatorlar → savollar. Har bir savol: {q, o:[A,B,C,D]}, A — to‘g‘ri javob
+function parseQuestions(lines){
+  lines=lines.map(l=>l.trim()).filter(Boolean);
+  const strip=t=>t.replace(NUM_RE,"").trim();
+  const hasLabel=k=>lines.some(l=>{ const m=OPT_RE.exec(l); return m&&optIdx(m[1])===k; });
+  const labeled=(hasLabel(0)&&hasLabel(1))||lines.some(l=>splitInline(l));
+  const out=[];
+  let leftover=0;
+  if(!labeled){
+    // Belgisiz format: har 5 ta qator = savol + 4 ta javob
+    let L=lines;
+    if(L.length%5===1) L=L.slice(1);   // yagona ortiqcha qator — odatda sarlavha
+    for(let i=0;i<L.length;i+=5){
+      const ch=L.slice(i,i+5);
+      out.push({q:strip(ch[0]),o:[ch[1]||"",ch[2]||"",ch[3]||"",ch[4]||""]});
+    }
+    leftover=L.length%5;
+  }else{
+    let cur=null;
+    const flush=()=>{ if(cur&&cur.n>0) out.push({q:cur.q.trim(),o:cur.o}); cur=null; };
+    const begin=q=>{ flush(); cur={q:q||"",o:["","","",""],n:0}; };
+    lines.forEach(line=>{
+      const inl=splitInline(line);
+      if(inl){
+        if(inl.pre||!cur||cur.n>0) begin(strip(inl.pre));
+        inl.o.forEach((t,i)=>{ cur.o[i]=t; });
+        cur.n=4;
+        return;
+      }
+      const m=OPT_RE.exec(line);
+      if(m){
+        const idx=optIdx(m[1]);
+        if(cur&&idx===cur.n){ cur.o[idx]=m[2].trim(); cur.n++; return; }
+        if(idx===0){ begin(""); cur.o[0]=m[2].trim(); cur.n=1; return; }
+      }
+      if(!cur){ begin(strip(line)); return; }
+      if(cur.n===0){
+        if(NUM_RE.test(line)&&cur.q) begin(strip(line));
+        else cur.q+=(cur.q?" ":"")+line;
+        return;
+      }
+      if(cur.n>=4||NUM_RE.test(line)){ begin(strip(line)); return; }
+      cur.o[cur.n-1]+=" "+line;   // javob matni keyingi abzatsga o‘tib ketgan
+    });
+    flush();
+  }
+  return {questions:out,incomplete:out.filter(x=>!x.q||x.o.some(v=>!v)).length,leftover:leftover};
+}
+/* ---------- /Word ---------- */
+
+/* ---------- Testlar: holat ---------- */
+let tests=[];
+let editing=null;
+let edDirty=false;
+const LETTERS=["A","B","C","D"];
+const MAX_Q=200;
+const blankQ=()=>({q:"",o:["","","",""]});
+const isEmptyQ=x=>!x.q.trim()&&!x.o.some(v=>v.trim());
+const isBadQ=x=>!x.q.trim()||x.o.some(v=>!v.trim());
+
+function resetPanelState(){
+  tests=[]; editing=null; edDirty=false; serverGroups=null; viewRows=[]; selected.clear();
+  $("testEditor").classList.add("hidden");
+  $("testsListView").classList.remove("hidden");
+  $("testsList").innerHTML="";
+  $("groupsManage").innerHTML="";
+  $("testsMsg").textContent="";
+  $("manageMsg").textContent="";
+  $("panelMsg").textContent="";
+  closeModal();
+  setTab("results");
+}
+
+/* ---------- Guruhlarni boshqarish ---------- */
+async function loadGroups(){
+  const m=$("manageMsg");
+  try{
+    const r=await call("groups");
+    if(!r.ok) throw new Error(r.error||"Guruhlarni olib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    m.textContent="";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+  buildGroupFilter();
+  renderManage();
+  render();
+}
+function renderManage(){
+  const box=$("groupsManage");
+  if(serverGroups===null){ box.innerHTML=""; return; }
+  if(!serverGroups.length){ box.innerHTML='<div class="muted">Hozircha guruh yo‘q. Yuqoridan qo‘shing.</div>'; return; }
+  box.innerHTML=serverGroups.map(g=>'<div class="grp-item">'+esc(g)+'<button class="btn small danger" type="button" data-gdel="'+esc(g)+'">O‘chirish</button></div>').join("");
+}
+$("groupAddForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("groupName").value.trim();
+  const m=$("manageMsg");
+  if(!name) return;
+  $("groupAddBtn").disabled=true;
+  try{
+    const r=await call("groupAdd",{name:name});
+    if(!r.ok) throw new Error(r.error||"Guruh qo‘shib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    $("groupName").value="";
+    m.className="msg info"; m.textContent="Guruh qo‘shildi.";
+    buildGroupFilter(); renderManage(); render();
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }finally{
+    $("groupAddBtn").disabled=false;
+  }
+});
+$("groupsManage").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-gdel]"); if(!b) return;
+  const name=b.dataset.gdel;
+  if(!confirm("“"+name+"” guruhini o‘chirmoqchimisiz?\n\nGuruh testlardan ham olib tashlanadi. Eski natijalar saqlanib qoladi.")) return;
+  const m=$("manageMsg");
+  b.disabled=true;
+  try{
+    const r=await call("groupDelete",{name:name});
+    if(!r.ok) throw new Error(r.error||"Guruhni o‘chirib bo‘lmadi.");
+    serverGroups=r.groups||[];
+    m.className="msg info"; m.textContent="Guruh o‘chirildi.";
+    buildGroupFilter(); renderManage(); render();
+    loadTests();
+  }catch(err){
+    if(err.auth) return;
+    b.disabled=false;
+    m.className="msg error"; m.textContent=err.message;
+  }
+});
+
+/* ---------- Testlar ro‘yxati ---------- */
+async function loadTests(){
+  const m=$("testsMsg");
+  try{
+    const r=await call("tests");
+    if(!r.ok) throw new Error(r.error||"Testlarni olib bo‘lmadi.");
+    tests=r.tests||[];
+    if(r.groups&&serverGroups===null){ serverGroups=r.groups; buildGroupFilter(); renderManage(); }
+    m.textContent="";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+  renderTests();
+}
+function renderTests(){
+  const box=$("testsList");
+  if(!tests.length){
+    box.innerHTML='<div class="empty">Hozircha test yo‘q. “＋ Yangi test” tugmasini bosing.</div>';
+    return;
+  }
+  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Savollar</th><th>Guruhlar</th><th>O‘zgartirilgan</th><th></th></tr></thead><tbody>'+
+    tests.map(t=>{
+      const id=esc(t.id);
+      const chips=(t.groups||[]).length?t.groups.map(g=>'<span class="chip">'+esc(g)+'</span>').join(""):'<span class="muted">biriktirilmagan</span>';
+      return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat)+'</td><td>'+esc(t.count)+' ta</td>'+
+        '<td class="name">'+chips+'</td><td>'+esc(tk(t.updated).full)+'</td>'+
+        '<td><div class="bar-actions">'+
+        '<button class="btn small" type="button" data-act="edit" data-id="'+id+'">Tahrirlash</button>'+
+        '<button class="btn small" type="button" data-act="assign" data-id="'+id+'">Guruhlar</button>'+
+        '<button class="btn small danger" type="button" data-act="del" data-id="'+id+'">O‘chirish</button>'+
+        '</div></td></tr>';
+    }).join("")+'</tbody></table></div>';
+}
+$("testsList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const id=b.dataset.id, a=b.dataset.act;
+  if(a==="edit") openEditor(id);
+  else if(a==="assign") openAssign(id);
+  else if(a==="del") deleteTest(id);
+});
+async function deleteTest(id){
+  const t=tests.find(x=>x.id===id); if(!t) return;
+  if(!confirm("“"+t.title+"” testini o‘chirmoqchimisiz?\n\nTestning barcha savollari o‘chadi. Bu amalni qaytarib bo‘lmaydi.")) return;
+  const m=$("testsMsg");
+  m.className="msg info"; m.textContent="O‘chirilmoqda...";
+  try{
+    const r=await call("testDelete",{id:id});
+    if(!r.ok) throw new Error(r.error||"Testni o‘chirib bo‘lmadi.");
+    await loadTests();
+    m.className="msg info"; m.textContent="Test o‘chirildi.";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }
+}
+
+/* ---------- Testni guruhlarga biriktirish ---------- */
+function openAssign(id){
+  const t=tests.find(x=>x.id===id); if(!t) return;
+  const gl=serverGroups||[];
+  if(!gl.length){
+    openModal('<h3>Guruhlarga biriktirish</h3><p>Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</p><div class="modal-actions"><button class="btn" type="button" data-m="close">Yopish</button></div>');
+    return;
+  }
+  openModal('<h3>“'+esc(t.title)+'” — guruhlarga biriktirish</h3>'+
+    '<div class="chk-list" id="asGroups">'+gl.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+((t.groups||[]).indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("")+'</div>'+
+    '<div id="asMsg" class="msg"></div>'+
+    '<div class="modal-actions"><button class="btn primary" type="button" data-m="assign" data-id="'+esc(id)+'">Saqlash</button><button class="btn" type="button" data-m="close">Bekor qilish</button></div>');
+}
+async function saveAssign(id,btn){
+  const groups=Array.from(document.querySelectorAll("#asGroups input:checked")).map(i=>i.value);
+  const m=$("asMsg");
+  btn.disabled=true;
+  m.className="msg info"; m.textContent="Saqlanmoqda...";
+  try{
+    const r=await call("testAssign",{id:id,groups:groups});
+    if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
+    closeModal();
+    await loadTests();
+  }catch(err){
+    if(err.auth) return;
+    btn.disabled=false;
+    m.className="msg error"; m.textContent=err.message;
+  }
+}
+
+/* ---------- Test muharriri ---------- */
+$("newTestBtn").addEventListener("click",()=>openEditor(""));
+async function openEditor(id){
+  const m=$("testsMsg");
+  m.className="msg info"; m.textContent="";
+  if(id){
+    m.textContent="Yuklanmoqda...";
+    try{
+      const r=await call("testGet",{id:id});
+      if(!r.ok) throw new Error(r.error||"Testni olib bo‘lmadi.");
+      const t=r.test;
+      editing={id:t.id,title:t.title,nazorat:t.nazorat,groups:t.groups||[],questions:(t.questions||[]).map(x=>({q:x.q,o:x.o.slice(0,4)}))};
+      m.textContent="";
+    }catch(err){
+      if(err.auth) return;
+      m.className="msg error"; m.textContent=err.message;
+      return;
+    }
+  }else{
+    editing={id:"",title:"",nazorat:JN_LIST[0],groups:[],questions:[blankQ()]};
+  }
+  if(!editing.questions.length) editing.questions=[blankQ()];
+  edDirty=false;
+  $("testsListView").classList.add("hidden");
+  $("testEditor").classList.remove("hidden");
+  $("edHeading").textContent=editing.id?"Testni tahrirlash":"Yangi test";
+  $("edTitle").value=editing.title;
+  $("edNazorat").value=editing.nazorat;
+  renderEdGroups();
+  renderQuestions();
+  $("edMsg").textContent="";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function closeEditor(force){
+  if(!force&&edDirty&&!confirm("Saqlanmagan o‘zgarishlar yo‘qoladi. Chiqasizmi?")) return;
+  editing=null; edDirty=false;
+  $("testEditor").classList.add("hidden");
+  $("testsListView").classList.remove("hidden");
+}
+$("edBack").addEventListener("click",()=>closeEditor());
+$("cancelTestBtn").addEventListener("click",()=>closeEditor());
+
+function renderEdGroups(){
+  const box=$("edGroups");
+  if(serverGroups===null){ box.innerHTML='<span class="muted">Guruhlar yuklanmadi. “Guruhlarni boshqarish” bo‘limini tekshiring.</span>'; return; }
+  if(!serverGroups.length){ box.innerHTML='<span class="muted">Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</span>'; return; }
+  box.innerHTML=serverGroups.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+(editing.groups.indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("");
+}
+function renderQuestions(){
+  $("edQuestions").innerHTML=editing.questions.map((x,i)=>
+    '<div class="qcard" data-qi="'+i+'"><div class="qhead"><b>'+(i+1)+'-savol</b><button class="btn small danger" type="button" data-qdel="'+i+'">O‘chirish</button></div>'+
+    '<textarea data-f="q" rows="2" placeholder="Savol matni">'+esc(x.q)+'</textarea>'+
+    LETTERS.map((L,j)=>'<div class="orow'+(j===0?' ok':'')+'"><span class="olab">'+L+'</span><input type="text" data-f="o'+j+'" value="'+esc(x.o[j])+'" placeholder="'+(j===0?'To‘g‘ri javob':'Noto‘g‘ri javob')+'" autocomplete="off"></div>').join("")+
+    '</div>'
+  ).join("");
+  updateEdCount();
+}
+function updateEdCount(){
+  $("edCount").textContent=editing?editing.questions.filter(x=>!isEmptyQ(x)).length+" ta savol":"";
+}
+function markBad(){
+  document.querySelectorAll("#edQuestions .qcard").forEach((c,i)=>{
+    const x=editing.questions[i];
+    c.classList.toggle("bad",!!x&&!isEmptyQ(x)&&isBadQ(x));
+  });
+}
+$("edQuestions").addEventListener("input",e=>{
+  const card=e.target.closest(".qcard"); const f=e.target.dataset.f;
+  if(!card||!editing||!f) return;
+  const x=editing.questions[Number(card.dataset.qi)]; if(!x) return;
+  if(f==="q") x.q=e.target.value; else x.o[Number(f.slice(1))]=e.target.value;
+  card.classList.remove("bad");
+  updateEdCount();
+});
+$("edQuestions").addEventListener("click",e=>{
+  const b=e.target.closest("[data-qdel]"); if(!b||!editing) return;
+  editing.questions.splice(Number(b.dataset.qdel),1);
+  if(!editing.questions.length) editing.questions.push(blankQ());
+  edDirty=true;
+  renderQuestions();
+});
+$("testEditor").addEventListener("input",()=>{ edDirty=true; });
+$("testEditor").addEventListener("change",()=>{ edDirty=true; });
+$("addQBtn").addEventListener("click",()=>{
+  if(!editing) return;
+  editing.questions.push(blankQ());
+  edDirty=true;
+  renderQuestions();
+  const cards=document.querySelectorAll("#edQuestions .qcard");
+  const last=cards[cards.length-1];
+  last.scrollIntoView({behavior:"smooth",block:"center"});
+  last.querySelector("textarea").focus({preventScroll:true});
+});
+$("clearQBtn").addEventListener("click",()=>{
+  if(!editing||!confirm("Barcha savollar tozalansinmi?")) return;
+  editing.questions=[blankQ()];
+  edDirty=true;
+  renderQuestions();
+});
+
+/* ---------- Word fayldan savollar qo‘shish ---------- */
+$("docxInput").addEventListener("change",async ev=>{
+  const f=ev.target.files&&ev.target.files[0];
+  ev.target.value="";
+  if(!f||!editing) return;
+  const m=$("edMsg");
+  m.className="msg error";
+  if(/\.doc$/i.test(f.name)){ m.textContent="Eski .doc format qo‘llab-quvvatlanmaydi. Word’da “Boshqacha saqlash” orqali .docx qilib saqlang."; return; }
+  if(!/\.docx$/i.test(f.name)){ m.textContent="Faqat Word (.docx) fayl yuklash mumkin."; return; }
+  if(f.size>8*1024*1024){ m.textContent="Fayl juda katta (8 MB dan oshmasin)."; return; }
+  m.className="msg info"; m.textContent="Word fayl o‘qilmoqda...";
+  try{
+    const xml=await readDocxXml(f);
+    const res=parseQuestions(xmlToLines(xml));
+    if(!res.questions.length){ m.className="msg error"; m.textContent="Fayldan savol topilmadi. Yuqoridagi namunadagi formatni tekshiring."; return; }
+    editing.questions=editing.questions.filter(x=>!isEmptyQ(x)).concat(res.questions);
+    edDirty=true;
+    renderQuestions();
+    markBad();
+    let t=res.questions.length+" ta savol qo‘shildi.";
+    let warn=false;
+    if(res.incomplete){ t+=" "+res.incomplete+" tasida javoblar to‘liq emas — qizil belgilangan savollarni tekshirib to‘ldiring."; warn=true; }
+    else if(res.leftover){ t+=" Diqqat: qatorlar soni 5 ga karrali emas, oxirgi savollarni tekshiring."; warn=true; }
+    else t+=" Saqlashdan oldin tekshirib chiqing.";
+    if(editing.questions.length>MAX_Q){ t+=" Diqqat: bir testda ko‘pi bilan "+MAX_Q+" ta savol bo‘lishi mumkin."; warn=true; }
+    m.className=warn?"msg error":"msg info";
+    m.textContent=t;
+  }catch(err){
+    m.className="msg error"; m.textContent=err.message;
+  }
+});
+
+/* ---------- Aralashtirib ko‘rish (namuna) ---------- */
+function shuffleArr(a){
+  a=a.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
   return a;
 }
-function prepareExam(){
-  const seed=hashString(subjectEl.value+"|"+groupEl.value+"|"+studentEl.value.trim().toLowerCase()+"|1-JN");
-  const rng=seededRandom(seed);
-  const activeQuestions=QUESTION_BANKS[subjectEl.value]||QUESTION_BANKS["Geografiya"];const qOrder=shuffle(activeQuestions.map((_,i)=>i),rng);
-  examQuestions=qOrder.map(originalIndex=>{
-    const q=activeQuestions[originalIndex];
-    return {text:q[0],correct:q[1],options:shuffle(q[2],rng),originalIndex};
+function previewShuffle(){
+  if(!editing) return;
+  const ok=editing.questions.filter(x=>!isEmptyQ(x)&&!isBadQ(x));
+  if(!ok.length){
+    $("edMsg").className="msg error"; $("edMsg").textContent="Ko‘rish uchun kamida bitta to‘liq savol kerak.";
+    return;
+  }
+  const sh=shuffleArr(ok).map(x=>{
+    const order=shuffleArr([0,1,2,3]);
+    return {q:x.q,o:order.map(k=>x.o[k]),c:order.indexOf(0)};
   });
-  answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
+  openModal('<h3>Namuna: o‘quvchi shunday ko‘radi</h3>'+
+    '<div class="muted" style="font-size:13px;margin-bottom:6px">Har bir o‘quvchiga savollar va javoblar tartibi alohida aralashtiriladi, kalit ham shunga mos o‘zgaradi.</div>'+
+    sh.map((x,i)=>'<div class="prev-q"><b>'+(i+1)+'. '+esc(x.q)+'</b>'+
+      x.o.map((t,j)=>'<div class="prev-o'+(j===x.c?' ok':'')+'">'+LETTERS[j]+') '+esc(t)+(j===x.c?' ✓':'')+'</div>').join("")+'</div>').join("")+
+    '<div class="keyline">Kalit: '+sh.map((x,i)=>(i+1)+"-"+LETTERS[x.c]).join(", ")+'</div>'+
+    '<div class="modal-actions"><button class="btn primary" type="button" data-m="reshuffle">Yana aralashtirish</button><button class="btn" type="button" data-m="close">Yopish</button></div>');
 }
-// Ustoz yuklagan test: savollar va javoblar serverda aralashtirilgan, c — to‘g‘ri javob indeksi
-function prepareRemoteExam(list){
-  examQuestions=list.map((q,i)=>({text:q.q,correct:q.o[q.c],options:q.o,originalIndex:i}));
-  answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
-}
-function buildGrid(){
-  qgrid.innerHTML="";
-  examQuestions.forEach((_,i)=>{
-    const b=document.createElement("button");b.className="qbtn";b.textContent=i+1;
-    b.onclick=()=>{current=i;renderQuestion()};qgrid.appendChild(b);
-  });
-}
-function renderQuestion(){
-  const q=examQuestions[current];
-  questionNo.textContent=(current+1)+"-savol / "+examQuestions.length;
-  question.textContent=q.text;
-  answersBox.innerHTML="";
-  q.options.forEach((opt,i)=>{
-    const label=document.createElement("label");label.className="answer"+(answers[current]===opt?" selected":"");
-    const radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.value=opt;radio.checked=answers[current]===opt;
-    radio.onchange=()=>{answers[current]=opt;renderQuestion()};
-    label.append(radio,document.createTextNode(String.fromCharCode(65+i)+") "+opt));answersBox.appendChild(label);
-  });
-  [...qgrid.children].forEach((b,i)=>{b.classList.toggle("active",i===current);b.classList.toggle("answered",answers[i]!==null)});
-  prevBtn.disabled=current===0;
-  const isLastQuestion=current===examQuestions.length-1;
-  nextBtn.classList.toggle("hidden",isLastQuestion);
-  finishBtn.classList.toggle("hidden",!isLastQuestion);
-  markBtn.textContent=marked[current]?"★ Belgilangan":"♧ Belgilash";
-}
-async function start(n){
-  if(starting||started)return;
-  currentJn=n;
-  if(!valid())return;
-  starting=true;
+$("previewBtn").addEventListener("click",previewShuffle);
+
+/* ---------- Testni saqlash ---------- */
+$("saveTestBtn").addEventListener("click",saveTest);
+async function saveTest(){
+  if(!editing) return;
+  const msg=$("edMsg");
+  msg.className="msg error";
+  editing.title=$("edTitle").value.trim();
+  editing.nazorat=$("edNazorat").value;
+  editing.groups=Array.from(document.querySelectorAll("#edGroups input:checked")).map(i=>i.value);
+  if(!editing.title){ msg.textContent="Test nomini kiriting."; $("edTitle").focus(); return; }
+  editing.questions=editing.questions.filter(x=>!isEmptyQ(x));
+  if(!editing.questions.length){
+    editing.questions=[blankQ()]; renderQuestions();
+    msg.textContent="Kamida bitta savol kiriting.";
+    return;
+  }
+  if(editing.questions.length>MAX_Q){ msg.textContent="Bir testda ko‘pi bilan "+MAX_Q+" ta savol bo‘lishi mumkin."; return; }
+  renderQuestions(); markBad();
+  const bad=editing.questions.findIndex(isBadQ);
+  if(bad!==-1){
+    msg.textContent=(bad+1)+"-savolda savol matni yoki A, B, C, D javoblaridan biri bo‘sh.";
+    document.querySelectorAll("#edQuestions .qcard")[bad].scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  const btn=$("saveTestBtn");
+  btn.disabled=true;
+  msg.className="msg info"; msg.textContent="Saqlanmoqda...";
   try{
-    await availReq;
-    const remote=teacherTests[n]||null;
-    if(remote){
-      msg.textContent="Test yuklanmoqda...";
-      const r=await api("pubTest",{id:remote.id,group:groupEl.value});
-      if(!r||!r.ok||!Array.isArray(r.questions)||!r.questions.length){const err=new Error("load");err.userMessage=(r&&r.error)||"Testni yuklab bo‘lmadi.";throw err}
-      prepareRemoteExam(r.questions);
-      msg.textContent="";
-    }else if(n===1){
-      prepareExam();
-    }else{
-      msg.textContent=n+"-joriy nazorat hali ochilmagan.";starting=false;return;
-    }
-  }catch(e){
-    msg.textContent=(e&&e.userMessage)||"Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.";
-    starting=false;return;
-  }
-  started=true;starting=false;document.getElementById("examTitle").textContent=subjectEl.value+" — "+n+"-JORIY NAZORAT";exam.classList.remove("hidden");cards.forEach(c=>{c.style.pointerEvents="none"});
-  buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
-  timerId=setInterval(()=>{seconds--;const m=Math.floor(seconds/60),s=seconds%60;timer.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(timerId);finish()}},1000);
-}
-function getGrade(score,total){
-  const pct = total ? (score/total*100) : 0;
-  if(pct>=86)return 5;
-  if(pct>=71)return 4;
-  if(pct>=55)return 3;
-  return 2;
-}
-
-function sendResultToTelegram(data){
-  if(!RESULT_API_URL){
-    console.error("RESULT_API_URL mavjud emas");
-    return false;
-  }
-
-  try{
-    const url = RESULT_API_URL + "?payload=" + encodeURIComponent(JSON.stringify(data));
-
-    console.log("Telegram backendga GET natija yuborilmoqda:", data);
-
-    fetch(url, { method: "GET", mode: "no-cors", keepalive: true })
-      .then(() => console.log("So'rov yuborildi"))
-      .catch(err => console.error("So'rov xatosi:", err));
-
-    return true;
-
-  }catch(e){
-    console.error("Telegramga natija yuborishda xato:", e);
-    return false;
+    const r=await call("testSave",{
+      id:editing.id,title:editing.title,nazorat:editing.nazorat,groups:editing.groups,
+      questions:editing.questions.map(x=>({q:x.q.trim(),o:x.o.map(v=>v.trim())}))
+    });
+    if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
+    closeEditor(true);
+    await loadTests();
+    const m=$("testsMsg"); m.className="msg info"; m.textContent="Test saqlandi.";
+  }catch(err){
+    if(err.auth) return;
+    msg.className="msg error"; msg.textContent=err.message;
+  }finally{
+    btn.disabled=false;
   }
 }
 
-function finish(){
-  if(!started)return;
-  started=false;
-  clearInterval(timerId);
-  let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
-  const grade=getGrade(score,examQuestions.length);
-  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentJn+"-JN",correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString()};
-  localStorage.setItem(key(),JSON.stringify({score,grade,finishedAt:data.finishedAt}));
-  const sent = sendResultToTelegram(data);
-  console.log("Telegram natijasi yuborish holati:", sent);
-  exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
-  // O'quvchiga baho va to'g'ri javoblar ko'rsatilmaydi.
-  document.getElementById("resultText").textContent=`${studentEl.value.trim()} — ${groupEl.value}-guruh. Nazorat muvaffaqiyatli yakunlandi. Natija o‘qituvchiga yuborildi.`;
-  window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
+/* ---------- Ishga tushirish ---------- */
+buildJnFilter();
+$("edNazorat").innerHTML=JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
+buildGroupFilter();
+if(token){
+  showPanel();
+  $("teacherName").textContent=sessionStorage.getItem("gt_name")||"";
+  loadResults();
+  loadGroups();
+  loadTests();
 }
-cards.forEach((c,i)=>{c.onclick=()=>{if(c.classList.contains("available"))start(i+1)}});
-prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
-nextBtn.onclick=()=>{
-  if(current<examQuestions.length-1){
-    current++;
-    renderQuestion();
-  }
-};
-finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()};
-markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
-groupEl.onchange=()=>{msg.textContent="";refreshAvailability()};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent="";refreshAvailability()};
-loadExtraGroups();
 </script>
 </body>
 </html>
