@@ -500,7 +500,7 @@ function renderTable(rows){
     '<td>'+(i+1)+'</td>'+
     '<td>'+esc(r.d.full)+'</td>'+
     '<td>'+esc(r.group)+'</td>'+
-    '<td class="name">'+esc(r.student)+(r.status==="takror"?'<span class="tag">takror</span>':'')+'</td>'+
+    '<td class="name">'+esc(r.student)+(r.status==="takror"?'<span class="tag">takror</span>':'')+(r.school||r.district||r.region?'<span class="sub">'+esc([r.school,r.district,r.region].filter(Boolean).join(", "))+'</span>':'')+'</td>'+
     '<td>'+esc(r.jn)+'</td>'+
     '<td>'+esc(r.correct)+'/'+esc(r.total)+'</td>'+
     '<td>'+esc(r.percent)+'%</td>'+
