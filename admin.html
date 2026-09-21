@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin Panel</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f172a; --card: #1e293b; --card2: #273045;
+  --border: rgba(255,255,255,0.08); --accent: #6366f1; --accent2: #818cf8;
+  --danger: #ef4444; --success: #22c55e; --warning: #f59e0b;
+  --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b; --radius: 10px;
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* LOGIN */
+.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.login-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 400px; }
+.login-logo { text-align: center; margin-bottom: 2rem; }
+.login-logo .icon { width: 56px; height: 56px; background: var(--accent); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: .75rem; }
+.login-logo h1 { font-size: 20px; font-weight: 700; }
+.login-logo p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+.inp { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; color: var(--text); font-size: 14px; outline: none; transition: border .2s; }
+.inp:focus { border-color: var(--accent); }
+.inp-wrap { position: relative; }
+.inp-wrap .inp { padding-right: 40px; }
+.eye-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text3); font-size: 18px; }
+.eye-btn:hover { color: var(--text); }
+.fg { margin-bottom: 1rem; }
+.forgot-link { display: block; text-align: right; font-size: 12px; color: var(--accent2); cursor: pointer; margin-top: 4px; }
+.forgot-link:hover { text-decoration: underline; }
+.btn { padding: 9px 18px; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
+.btn:hover { opacity: .88; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: #fff; width: 100%; padding: 11px; font-size: 15px; margin-top: .5rem; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-sec { background: var(--card2); color: var(--text); border: 1px solid var(--border) !important; }
+.btn-warn { background: var(--warning); color: #1a1a00; }
+.err-msg { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; border-radius: var(--radius); padding: 8px 12px; font-size: 13px; margin-bottom: 1rem; display: none; }
+.err-msg.show { display: block; }
+.ok-msg { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: #86efac; border-radius: var(--radius); padding: 8px 12px; font-size: 13px; margin-bottom: 1rem; display: none; }
+.ok-msg.show { display: block; }
+
+/* MODAL */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; z-index: 999; padding: 1rem; }
+.overlay.show { display: flex; }
+.modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+.modal.wide { max-width: 580px; }
+.modal h3 { font-size: 17px; font-weight: 700; margin-bottom: .4rem; }
+.modal > p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
+.modal-actions { display: flex; gap: 10px; margin-top: 1.25rem; }
+.modal-actions .btn { flex: 1; }
+
+/* TOPBAR */
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 1.5rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.topbar h2 { font-size: 16px; font-weight: 700; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.user-badge { display: flex; align-items: center; gap: 8px; background: var(--card2); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 13px; }
+.udot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; }
+.logout-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+.logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+/* TABS */
+.tabs { display: flex; gap: 4px; background: var(--card2); padding: 4px; border-radius: 10px; margin-bottom: 1.5rem; }
+.tab { flex: 1; padding: 8px; text-align: center; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; color: var(--text2); border: none; background: none; transition: all .15s; }
+.tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+
+/* MAIN */
+.main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 1.75rem; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }
+.stat-label { font-size: 11px; color: var(--text2); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+.stat-val { font-size: 26px; font-weight: 700; }
+.c-blue { color: var(--accent2); } .c-green { color: var(--success); } .c-amber { color: var(--warning); } .c-red { color: #f87171; }
+
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+.section-header h3 { font-size: 15px; font-weight: 700; }
+.btn-add { display: flex; align-items: center; gap: 6px; background: var(--accent); border: none; color: #fff; padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-add:hover { opacity: .88; }
+
+.search-row { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+.search-wrap { position: relative; flex: 1; min-width: 200px; }
+.search-wrap .inp { padding-left: 36px; }
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
+select.inp { cursor: pointer; }
+
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+thead th { background: var(--card2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(255,255,255,.03); }
+tbody td { padding: 11px 14px; font-size: 13px; }
+.badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.bg-green { background: rgba(34,197,94,.15); color: #86efac; }
+.bg-red { background: rgba(239,68,68,.15); color: #fca5a5; }
+.bg-amber { background: rgba(245,158,11,.15); color: #fcd34d; }
+.bg-blue { background: rgba(99,102,241,.15); color: #a5b4fc; }
+.bg-purple { background: rgba(168,85,247,.15); color: #d8b4fe; }
+.act-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 4px 9px; border-radius: 6px; font-size: 11px; cursor: pointer; margin: 2px; white-space: nowrap; transition: all .15s; }
+.act-btn:hover { background: var(--card2); }
+.act-btn:disabled { opacity: .5; cursor: not-allowed; }
+.act-btn.edit:hover { border-color: var(--accent); color: var(--accent2); }
+.act-btn.del:hover { border-color: var(--danger); color: #f87171; }
+.act-btn.pass:hover { border-color: var(--warning); color: var(--warning); }
+.act-btn.ok:hover { border-color: var(--success); color: var(--success); }
+.avatar { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text3); }
+.empty-icon { font-size: 36px; margin-bottom: .75rem; }
+
+/* FORM GRID */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid .full { grid-column: 1/-1; }
+@media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .form-grid .full { grid-column: 1; } }
+
+/* PERM */
+.perm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.perm-item { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.perm-item input { accent-color: var(--accent); }
+.perm-item label { font-size: 12px; cursor: pointer; color: var(--text2); }
+.perm-item:has(input:checked) { border-color: var(--accent); background: rgba(99,102,241,.08); }
+.perm-item:has(input:checked) label { color: var(--accent2); }
+
+/* LOG */
+.log-item { display: flex; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: flex-start; }
+.log-item:last-child { border-bottom: none; }
+.log-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.log-time { color: var(--text3); font-size: 11px; min-width: 80px; text-align: right; }
+
+/* OTP INPUT */
+.otp-row { display: flex; gap: 10px; justify-content: center; margin: 1rem 0; }
+.otp-row input { width: 48px; height: 52px; text-align: center; font-size: 22px; font-weight: 700; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); outline: none; transition: border .2s; }
+.otp-row input:focus { border-color: var(--accent); }
+
+/* DETAIL PANEL */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem; }
+.detail-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.detail-key { font-size: 11px; color: var(--text3); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+.detail-val { font-size: 14px; font-weight: 500; }
+
+/* REGION FILTER BADGES */
+.filter-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.filter-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); color: var(--text2); background: var(--card2); }
+.filter-badge.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.hint { font-size: 12px; color: var(--text3); margin-top: 4px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="pgLogin" class="page active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="icon">🛡️</div>
+        <h1>Super Admin</h1>
+        <p>Ta'lim platformasi boshqaruv tizimi</p>
+      </div>
+      <div id="loginErr" class="err-msg"></div>
+      <div class="fg">
+        <label>Login yoki Email</label>
+        <input class="inp" type="text" id="loginInput" placeholder="superadmin" />
+      </div>
+      <div class="fg">
+        <label>Parol</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" id="passInput" placeholder="••••••••" />
+          <button class="eye-btn" onclick="togglePass('passInput','ei1')" aria-label="Ko'rsat"><span id="ei1">👁️</span></button>
+        </div>
+        <span class="forgot-link" onclick="openForgot()">Parolni unutdim →</span>
+      </div>
+      <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">Kirish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORGOT STEP 1: Email ===== -->
+<div id="pgForgot1" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="icon" style="background:#f59e0b">📧</div>
+        <h1>Parolni tiklash</h1>
+        <p>Email manzilingizga tasdiqlash kodi yuboriladi</p>
+      </div>
+      <div id="f1Err" class="err-msg"></div>
+      <div id="f1Ok" class="ok-msg"></div>
+      <div class="fg">
+        <label>Elektron pochta (Email)</label>
+        <input class="inp" type="email" id="forgotEmail" placeholder="email@example.com" />
+        <p class="hint">Super admin email manzilingizni kiriting</p>
+      </div>
+      <button class="btn btn-primary" onclick="sendOTP()" id="sendOtpBtn">Kod yuborish</button>
+      <br><br>
+      <button class="btn btn-sec" style="width:100%" onclick="showPage('pgLogin')">← Orqaga</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORGOT STEP 2: OTP ===== -->
+<div id="pgForgot2" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="icon" style="background:#22c55e">🔢</div>
+        <h1>Kodni kiriting</h1>
+        <p id="otpSentTo">Email manzilingizga 6 xonali kod yuborildi</p>
+      </div>
+      <div id="f2Err" class="err-msg"></div>
+      <div class="otp-row">
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,0)" id="otp0" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,1)" id="otp1" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,2)" id="otp2" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,3)" id="otp3" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,4)" id="otp4" inputmode="numeric" />
+        <input type="text" maxlength="1" class="otp-input" oninput="otpMove(this,5)" id="otp5" inputmode="numeric" />
+      </div>
+      <p style="text-align:center;font-size:13px;color:var(--text3);" id="otpTimer">Kod amal qilish muddati: <b id="timerVal">05:00</b></p>
+      <br>
+      <button class="btn btn-primary" onclick="verifyOTP()">Tasdiqlash</button>
+      <br><br>
+      <button class="btn btn-sec" style="width:100%;margin-top:8px" onclick="showPage('pgForgot1')">← Orqaga</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORGOT STEP 3: New pass ===== -->
+<div id="pgForgot3" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="icon" style="background:#6366f1">🔐</div>
+        <h1>Yangi ma'lumotlar</h1>
+        <p>Yangi login va parolni o'rnating</p>
+      </div>
+      <div id="f3Err" class="err-msg"></div>
+      <div class="fg">
+        <label>Yangi login</label>
+        <input class="inp" type="text" id="newLogin" placeholder="superadmin" />
+      </div>
+      <div class="fg">
+        <label>Yangi parol</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" id="newPass1" placeholder="Kamida 8 belgi" />
+          <button class="eye-btn" onclick="togglePass('newPass1','ei2')"><span id="ei2">👁️</span></button>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Parolni tasdiqlang</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" id="newPass2" placeholder="Qayta kiriting" />
+          <button class="eye-btn" onclick="togglePass('newPass2','ei3')"><span id="ei3">👁️</span></button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveNewCreds()">Saqlash va kirish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="pgDash" class="page">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon">🛡️</div>
+      <h2>Super Admin Panel</h2>
+    </div>
+    <div class="topbar-right">
+      <div class="user-badge"><div class="udot"></div><span id="topUser">Super Admin</span></div>
+      <button class="btn btn-sec" style="padding:6px 12px;font-size:12px" onclick="openChangePass()">🔑 Parol</button>
+      <button class="logout-btn" onclick="doLogout()">Chiqish</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('tabAdmins',this)">👤 Adminlar</button>
+      <button class="tab" onclick="switchTab('tabLogs',this)">📋 Faoliyat</button>
+      <button class="tab" onclick="switchTab('tabSettings',this)">⚙️ Sozlamalar</button>
+    </div>
+
+    <!-- TAB: ADMINS -->
+    <div id="tabAdmins">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Jami Adminlar</div><div class="stat-val c-blue" id="stTotal">0</div></div>
+        <div class="stat-card"><div class="stat-label">Faol</div><div class="stat-val c-green" id="stActive">0</div></div>
+        <div class="stat-card"><div class="stat-label">Bloklangan</div><div class="stat-val c-red" id="stBlocked">0</div></div>
+        <div class="stat-card"><div class="stat-label">Bu oy qo'shilgan</div><div class="stat-val c-amber" id="stNew">0</div></div>
+        <div class="stat-card"><div class="stat-label">Viloyatlar</div><div class="stat-val c-blue" id="stRegions">0</div></div>
+      </div>
+
+      <div class="section-header">
+        <h3>👤 Adminlar ro'yxati</h3>
+        <button class="btn-add" onclick="openAddModal()">+ Admin qo'shish</button>
+      </div>
+
+      <div class="search-row">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="inp" type="text" id="searchInput" placeholder="Ism, login, email, telefon..." oninput="renderTable()" />
+        </div>
+        <select class="inp" id="filterRegion" style="width:160px" onchange="renderTable()">
+          <option value="">Barcha viloyat</option>
+        </select>
+        <select class="inp" id="filterStatus" style="width:140px" onchange="renderTable()">
+          <option value="">Barcha holat</option>
+          <option value="active">Faol</option>
+          <option value="blocked">Bloklangan</option>
+        </select>
+      </div>
+
+      <div id="adminsMsg" class="msg" style="font-size:13px;color:var(--text2);margin-bottom:10px"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Admin</th>
+              <th>Email / Login</th>
+              <th>Telefon</th>
+              <th>Viloyat / Tuman</th>
+              <th>Holat</th>
+              <th>Qo'shilgan</th>
+              <th>Amallar</th>
+            </tr>
+          </thead>
+          <tbody id="adminTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: LOGS -->
+    <div id="tabLogs" style="display:none">
+      <div class="section-header">
+        <h3>📋 Faoliyat tarixi</h3>
+        <button class="btn btn-sec" style="font-size:13px" onclick="clearLogs()">🗑️ Tozalash</button>
+      </div>
+      <div class="table-wrap" id="logWrap"></div>
+    </div>
+
+    <!-- TAB: SETTINGS -->
+    <div id="tabSettings" style="display:none">
+      <div style="max-width:500px">
+        <h3 style="margin-bottom:1.25rem">⚙️ Tizim sozlamalari</h3>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;">
+          <h4 style="font-size:14px;margin-bottom:1rem;color:var(--text2)">Super Admin hisob ma'lumotlari</h4>
+          <div class="fg"><label>Email manzil</label><input class="inp" type="email" id="settEmail" /></div>
+          <div class="fg"><label>Login</label><input class="inp" type="text" id="settLogin" /></div>
+          <button class="btn btn-primary" style="width:auto;padding:9px 24px" onclick="saveSettings()">Saqlash</button>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem;">
+          <h4 style="font-size:14px;margin-bottom:1rem;color:var(--text2)">📍 Viloyatlar boshqaruvi</h4>
+          <div style="display:flex;gap:8px;margin-bottom:1rem">
+            <input class="inp" type="text" id="newRegionName" placeholder="Yangi viloyat nomi" />
+            <button class="btn btn-success" style="white-space:nowrap" onclick="addRegion()">+ Qo'sh</button>
+          </div>
+          <div id="regionList"></div>
+        </div>
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:1.5rem;">
+          <h4 style="font-size:14px;margin-bottom:.5rem;color:#f87171">⚠️ Xavfli zona</h4>
+          <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Barcha adminlar log tarixi o'chiriladi</p>
+          <button class="btn btn-danger" onclick="clearLogs()">Loglarni tozalash</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Change superadmin pass -->
+<div class="overlay" id="mChangePass">
+  <div class="modal">
+    <h3>🔑 Parol o'zgartirish</h3>
+    <p>Yangi parolni kiriting</p>
+    <div class="fg"><label>Joriy parol</label><div class="inp-wrap"><input class="inp" type="password" id="cpOld" /><button class="eye-btn" onclick="togglePass('cpOld','eiC1')"><span id="eiC1">👁️</span></button></div></div>
+    <div class="fg"><label>Yangi parol</label><div class="inp-wrap"><input class="inp" type="password" id="cpNew" /><button class="eye-btn" onclick="togglePass('cpNew','eiC2')"><span id="eiC2">👁️</span></button></div></div>
+    <div class="fg"><label>Tasdiqlang</label><input class="inp" type="password" id="cpConf" /></div>
+    <div id="cpErr" class="err-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sec" onclick="closeModal('mChangePass')">Bekor</button>
+      <button class="btn btn-success" onclick="doChangePass()">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div class="overlay" id="mDelete">
+  <div class="modal">
+    <h3>🗑️ Adminni o'chirish</h3>
+    <p id="delMsg">Bu amalni qaytarib bo'lmaydi.</p>
+    <div class="modal-actions">
+      <button class="btn btn-sec" onclick="closeModal('mDelete')">Bekor</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">O'chirish</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset admin pass -->
+<div class="overlay" id="mResetAdminPass">
+  <div class="modal">
+    <h3>🔐 Admin paroli</h3>
+    <p id="rapName">Admin uchun yangi parol</p>
+    <div class="fg"><label>Yangi parol</label><div class="inp-wrap"><input class="inp" type="password" id="rapNew" /><button class="eye-btn" onclick="togglePass('rapNew','eiR')"><span id="eiR">👁️</span></button></div></div>
+    <div id="rapErr" class="err-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sec" onclick="closeModal('mResetAdminPass')">Bekor</button>
+      <button class="btn btn-success" onclick="confirmResetPass()">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit admin -->
+<div class="overlay" id="mAdmin">
+  <div class="modal wide">
+    <h3 id="mAdminTitle">➕ Yangi admin</h3>
+    <p>Ma'lumotlarni to'ldiring</p>
+    <div class="form-grid">
+      <div class="fg"><label>Ism *</label><input class="inp" type="text" id="aName" placeholder="Ism" /></div>
+      <div class="fg"><label>Familiya</label><input class="inp" type="text" id="aSurname" placeholder="Familiya" /></div>
+      <div class="fg full"><label>Email *</label><input class="inp" type="email" id="aEmail" placeholder="admin@email.com" /><p class="hint">Admin faqat shu email orqali tizimdan foydalana oladi</p></div>
+      <div class="fg"><label>Login *</label><input class="inp" type="text" id="aLogin" placeholder="admin_login" /></div>
+      <div class="fg" id="aPassGroup"><label>Parol *</label><div class="inp-wrap"><input class="inp" type="password" id="aPass" placeholder="Kamida 8 belgi" /><button class="eye-btn" onclick="togglePass('aPass','eiA')"><span id="eiA">👁️</span></button></div></div>
+      <div class="fg"><label>Telefon</label><input class="inp" type="text" id="aPhone" placeholder="+998 90 123 45 67" /></div>
+      <div class="fg"><label>Viloyat *</label><select class="inp" id="aRegion" onchange="populateDistricts()"><option value="">— Tanlang —</option></select></div>
+      <div class="fg"><label>Tuman *</label><select class="inp" id="aDistrict"><option value="">— Viloyat tanlang —</option></select></div>
+      <div class="fg full"><label>Lavozim</label><input class="inp" type="text" id="aRole" placeholder="Masalan: Tuman ta'lim bo'limi boshlig'i" /></div>
+    </div>
+    <hr class="divider">
+    <div class="fg"><label>Ruxsatlar</label>
+      <div class="perm-grid">
+        <div class="perm-item"><input type="checkbox" id="pAdmin" /><label for="pAdmin">🏫 Adminlar</label></div>
+        <div class="perm-item"><input type="checkbox" id="pReports" /><label for="pReports">📊 Hisobotlar</label></div>
+        <div class="perm-item"><input type="checkbox" id="pSettings" /><label for="pSettings">⚙️ Sozlamalar</label></div>
+        <div class="perm-item"><input type="checkbox" id="pFull" /><label for="pFull">🔓 To'liq kirish</label></div>
+      </div>
+    </div>
+    <div id="aErr" class="err-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sec" onclick="closeModal('mAdmin')">Bekor</button>
+      <button class="btn btn-success" id="aSaveBtn" onclick="saveAdmin()">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin detail -->
+<div class="overlay" id="mDetail">
+  <div class="modal wide">
+    <h3 id="dtTitle">Admin ma'lumotlari</h3>
+    <div id="dtBody"></div>
+    <div class="modal-actions" style="margin-top:1.5rem">
+      <button class="btn btn-sec" onclick="closeModal('mDetail')">Yopish</button>
+      <button class="btn btn-warn" id="dtEditBtn">✏️ Tahrirlash</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ======================================================
+// Backend bilan aloqa
+// index.html / teacher.html dagi bilan BIR XIL API manzili
+// (bu ham o'sha Apps Script loyihasiga ulanadi).
+// ======================================================
+const API_URL = "https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+
+let token = sessionStorage.getItem("sa_token") || "";
+let admins = [];
+let logs = [];
+let customRegions = [];
+let deleteTarget = null, editTarget = null, resetTarget = null;
+let resetToken = "";          // parolni tiklashda vaqtinchalik token
+let otpEmailPending = "";
+let otpTimer = null;
+
+const UZBEKISTAN = {
+  "Toshkent shahri": ["Bektemir","Chilonzor","Hamza","Mirobod","Mirzo Ulug'bek","Olmazar","Sergeli","Shayxontohur","Uchtepa","Yunusobod","Yakkasaroy","Yashnobod"],
+  "Toshkent viloyati": ["Angren","Bekobod","Bo'stonliq","Chinoz","Ohangaron","Oqqo'rg'on","Parkent","Piskent","Quyichirchiq","Yuqorichirchiq","Zangiota","Nurafshon"],
+  "Samarqand": ["Samarqand shahri","Bulungur","Jomboy","Kattaqo'rg'on","Narpay","Pastdarg'om","Payariq","Paxtachi","Toyloq","Urgut","Ishtiхon","Qo'shrabot"],
+  "Buxoro": ["Buxoro shahri","Romitan","G'ijduvon","Jondor","Kogon","Qorako'l","Peshku","Shofirkon","Vobkent"],
+  "Namangan": ["Namangan shahri","Chust","Kosonsoy","Mingbuloq","Namangan tumani","Norin","Pop","To'raqo'rg'on","Uychi","Yangiqo'rg'on"],
+  "Andijon": ["Andijon shahri","Asaka","Baliqchi","Bo'ston","Buloqboshi","Jalolquduq","Izboskan","Marhamat","Oltinko'l","Pakhtaobod","Qo'rg'ontepa","Shahrixon","Ulug'nor"],
+  "Farg'ona": ["Farg'ona shahri","Bag'dod","Beshariq","Buvayda","Dangara","Furqat","Qo'qon","Marg'ilon","Oltiariq","Quva","Rishton","So'x","Toshloq","Uchko'prik","O'zbekiston","Yozyovon"],
+  "Qashqadaryo": ["Qarshi shahri","Chiroqchi","Dehqonobod","G'uzor","Kasbi","Kitob","Koson","Mirishkor","Muborak","Nishon","Qamashi","Shahrisabz","Yakkabog'"],
+  "Surхondaryo": ["Termiz shahri","Angor","Bandixon","Boysun","Denov","Jarqo'rg'on","Muzrabot","Oltinsoy","Qiziriq","Qumqo'rg'on","Sariosiyo","Sherobod","Sho'rchi","Uzun"],
+  "Xorazm": ["Urganch shahri","Bog'ot","Gurlan","Hazorasp","Хiva","Хonqa","Qo'shko'pir","Shovot","Tuproqqal'a","Yang'ariq","Yangibozor"],
+  "Navoiy": ["Navoiy shahri","Karmana","Konimex","Navbahor","Nurota","Qiziltepa","Tomdi","Uchquduq","Xatirchi"],
+  "Jizzax": ["Jizzax shahri","Arnasoy","Baxmal","Do'stlik","Forish","G'allaorol","Mirzacho'l","Paxtakor","Yangiobod","Zafar","Zomin","Zarbdor"],
+  "Sirdaryo": ["Guliston shahri","Baxt","Boyovut","Mirzaobod","Oqoltin","Sardoba","Sayxunobod","Xavast"],
+  "Qoraqalpog'iston": ["Nukus shahri","Amudaryo","Beruniy","Chimboy","Ellikkala","Qanliko'l","Qo'ng'irot","Mo'ynoq","Nukus tumani","Taxtako'pir","To'rtko'l","Xo'jayli"]
+};
+
+// ===== BACKENDGA SO'ROV =====
+async function api(action, payload) {
+  let res;
+  try {
+    res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({ action: action }, payload || {}))
+    });
+  } catch (e) {
+    throw new Error("Serverga ulanib bo'lmadi. Internetni tekshiring.");
+  }
+  const text = await res.text();
+  let data;
+  try { data = JSON.parse(text); }
+  catch (e) { throw new Error("Serverdan noto'g'ri javob keldi. Backend to'g'ri deploy qilinganini tekshiring."); }
+  return data;
+}
+async function call(action, payload) {
+  const r = await api(action, Object.assign({ token: token }, payload || {}));
+  if (r && r.code === "AUTH") {
+    sessionStorage.removeItem("sa_token");
+    token = "";
+    showPage("pgLogin");
+    const e = new Error("Sessiya tugagan. Qayta kiring.");
+    e.auth = true;
+    throw e;
+  }
+  return r;
+}
+
+// ===== PAGES =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== AUTH =====
+async function doLogin() {
+  const l = v('loginInput'), p = v('passInput');
+  hide('loginErr');
+  if (!l || !p) { showErr('loginErr', "Login va parolni kiriting."); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  try {
+    const r = await api('saLogin', { login: l, password: p });
+    if (!r.ok) { showErr('loginErr', r.error || "Login yoki parol noto'g'ri"); return; }
+    token = r.token;
+    sessionStorage.setItem('sa_token', token);
+    document.getElementById('topUser').textContent = r.login;
+    document.getElementById('passInput').value = '';
+    showPage('pgDash');
+    await afterLogin();
+  } catch (e) {
+    showErr('loginErr', e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Enter') { if (document.getElementById('pgLogin').classList.contains('active')) doLogin(); } });
+
+async function afterLogin() {
+  await Promise.all([loadAdmins(), loadRegions(), loadSettings()]);
+  populateRegionSelect();
+  renderRegionFilter();
+  renderRegionList();
+  renderTable();
+}
+
+function doLogout() {
+  const t = token;
+  sessionStorage.removeItem('sa_token');
+  token = "";
+  showPage('pgLogin');
+  document.getElementById('loginInput').value = '';
+  document.getElementById('passInput').value = '';
+  api('saLogout', { token: t }).catch(function(){});
+}
+
+// ===== FORGOT PASSWORD (haqiqiy OTP, kod ekranda ko'rsatilmaydi) =====
+function openForgot() {
+  document.getElementById('forgotEmail').value = '';
+  hide('f1Err'); hide('f1Ok');
+  showPage('pgForgot1');
+}
+
+async function sendOTP() {
+  const email = v('forgotEmail');
+  if (!email || !email.includes('@')) { showErr('f1Err', "To'g'ri email kiriting"); return; }
+  hide('f1Err');
+  const btn = document.getElementById('sendOtpBtn');
+  btn.disabled = true;
+  try {
+    const r = await api('saForgotSendOtp', { email: email });
+    if (!r.ok) { showErr('f1Err', r.error || "Kod yuborib bo'lmadi"); return; }
+    otpEmailPending = email;
+    document.getElementById('f1Ok').textContent = "✅ Agar bu email tizimda ro'yxatdan o'tgan bo'lsa, unga tasdiqlash kodi yuborildi.";
+    document.getElementById('f1Ok').classList.add('show');
+    document.getElementById('otpSentTo').textContent = email + " manziliga yuborilgan kodni kiriting";
+    for (let i = 0; i < 6; i++) document.getElementById('otp' + i).value = '';
+    startOtpTimer();
+    setTimeout(() => showPage('pgForgot2'), 1200);
+  } catch (e) {
+    showErr('f1Err', e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function startOtpTimer() {
+  if (otpTimer) clearInterval(otpTimer);
+  let sec = 300;
+  document.getElementById('timerVal').textContent = "05:00";
+  otpTimer = setInterval(() => {
+    sec--;
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    document.getElementById('timerVal').textContent = `${m}:${s}`;
+    if (sec <= 0) { clearInterval(otpTimer); document.getElementById('timerVal').textContent = "Muddati o'tdi"; }
+  }, 1000);
+}
+
+function otpMove(el, idx) {
+  el.value = el.value.replace(/\D/, '');
+  if (el.value && idx < 5) document.getElementById('otp' + (idx + 1)).focus();
+}
+
+async function verifyOTP() {
+  const entered = [0,1,2,3,4,5].map(i => v('otp' + i)).join('');
+  if (entered.length < 6) { showErr('f2Err', "Barcha raqamlarni kiriting"); return; }
+  hide('f2Err');
+  try {
+    const r = await api('saForgotVerify', { email: otpEmailPending, otp: entered });
+    if (!r.ok) { showErr('f2Err', r.error || "Kod noto'g'ri"); return; }
+    resetToken = r.resetToken;
+    clearInterval(otpTimer);
+    document.getElementById('newLogin').value = '';
+    document.getElementById('newPass1').value = '';
+    document.getElementById('newPass2').value = '';
+    hide('f3Err');
+    showPage('pgForgot3');
+  } catch (e) {
+    showErr('f2Err', e.message);
+  }
+}
+
+async function saveNewCreds() {
+  const nl = v('newLogin'), np1 = v('newPass1'), np2 = v('newPass2');
+  if (!nl) { showErr('f3Err', "Login kiritilmadi"); return; }
+  if (np1.length < 8) { showErr('f3Err', "Parol kamida 8 belgi bo'lsin"); return; }
+  if (np1 !== np2) { showErr('f3Err', "Parollar mos emas"); return; }
+  try {
+    const r = await api('saForgotReset', { resetToken: resetToken, newLogin: nl, newPassword: np1 });
+    if (!r.ok) { showErr('f3Err', r.error || "Saqlab bo'lmadi"); return; }
+    alert("✅ Ma'lumotlar yangilandi! Endi yangi login va parol bilan kiring.");
+    showPage('pgLogin');
+  } catch (e) {
+    showErr('f3Err', e.message);
+  }
+}
+
+// ===== CHANGE PASS (dashboarddan) =====
+function openChangePass() {
+  ['cpOld','cpNew','cpConf'].forEach(id => document.getElementById(id).value = '');
+  hide('cpErr');
+  showModal('mChangePass');
+}
+async function doChangePass() {
+  const old = v('cpOld'), nw = v('cpNew'), cf = v('cpConf');
+  if (nw.length < 8) { showErr('cpErr', "Kamida 8 belgi"); return; }
+  if (nw !== cf) { showErr('cpErr', "Parollar mos emas"); return; }
+  try {
+    const r = await call('saChangePass', { oldPassword: old, newPassword: nw });
+    if (!r.ok) { showErr('cpErr', r.error || "Saqlab bo'lmadi"); return; }
+    closeModal('mChangePass');
+    alert("✅ Parol o'zgartirildi!");
+  } catch (e) {
+    if (e.auth) return;
+    showErr('cpErr', e.message);
+  }
+}
+
+// ===== SETTINGS =====
+async function loadSettings() {
+  try {
+    const r = await call('saSettingsGet');
+    if (r.ok) {
+      document.getElementById('settEmail').value = r.email;
+      document.getElementById('settLogin').value = r.login;
+      document.getElementById('topUser').textContent = r.login;
+    }
+  } catch (e) { /* AUTH bo'lsa call() o'zi login sahifasiga qaytaradi */ }
+}
+async function saveSettings() {
+  const e = v('settEmail'), l = v('settLogin');
+  if (!e || !e.includes('@')) { alert("To'g'ri email kiriting"); return; }
+  if (!l) { alert("Login bo'sh bo'lishi mumkin emas"); return; }
+  try {
+    const r = await call('saSettingsUpdate', { email: e, login: l });
+    if (!r.ok) { alert(r.error || "Saqlab bo'lmadi"); return; }
+    document.getElementById('topUser').textContent = l;
+    alert("✅ Saqlandi!");
+  } catch (err) {
+    if (err.auth) return;
+    alert(err.message);
+  }
+}
+
+// ===== REGIONS =====
+function allRegions() { return [...Object.keys(UZBEKISTAN), ...customRegions]; }
+async function loadRegions() {
+  try {
+    const r = await call('saRegionsList');
+    if (r.ok) customRegions = r.regions || [];
+  } catch (e) { /* AUTH bo'lsa call() o'zi hal qiladi */ }
+}
+async function addRegion() {
+  const n = v('newRegionName').trim();
+  if (!n) return;
+  try {
+    const r = await call('saRegionAdd', { name: n });
+    if (!r.ok) { alert(r.error || "Qo'shib bo'lmadi"); return; }
+    customRegions = r.regions || [];
+    if (!UZBEKISTAN[n]) UZBEKISTAN[n] = [];
+    document.getElementById('newRegionName').value = '';
+    renderRegionList(); renderRegionFilter(); populateRegionSelect();
+  } catch (e) {
+    if (e.auth) return;
+    alert(e.message);
+  }
+}
+async function removeRegion(name) {
+  try {
+    const r = await call('saRegionDelete', { name: name });
+    if (!r.ok) { alert(r.error || "O'chirib bo'lmadi"); return; }
+    customRegions = r.regions || [];
+    delete UZBEKISTAN[name];
+    renderRegionList(); renderRegionFilter(); populateRegionSelect();
+  } catch (e) {
+    if (e.auth) return;
+    alert(e.message);
+  }
+}
+function renderRegionList() {
+  const el = document.getElementById('regionList');
+  el.innerHTML = allRegions().map(r => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px">📍 ${esc(r)}</span>
+      ${customRegions.includes(r) ? `<button class="act-btn del" onclick="removeRegion('${escAttr(r)}')">O'chirish</button>` : '<span style="font-size:11px;color:var(--text3)">Standart</span>'}
+    </div>
+  `).join('');
+}
+function renderRegionFilter() {
+  const sel = document.getElementById('filterRegion');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Barcha viloyat</option>' + allRegions().map(r => `<option value="${escAttr(r)}">${esc(r)}</option>`).join('');
+  sel.value = cur;
+}
+function populateRegionSelect() {
+  const sel = document.getElementById('aRegion');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Tanlang —</option>' + allRegions().map(r => `<option value="${escAttr(r)}">${esc(r)}</option>`).join('');
+  sel.value = cur;
+  populateDistricts();
+}
+function populateDistricts() {
+  const reg = v('aRegion');
+  const sel = document.getElementById('aDistrict');
+  if (!reg || !UZBEKISTAN[reg]) { sel.innerHTML = '<option value="">— Viloyat tanlang —</option>'; return; }
+  sel.innerHTML = '<option value="">— Tanlang —</option>' + (UZBEKISTAN[reg] || []).map(d => `<option>${esc(d)}</option>`).join('');
+}
+
+// ===== ADMINLAR =====
+async function loadAdmins() {
+  const m = document.getElementById('adminsMsg');
+  try {
+    const r = await call('saAdminsList');
+    if (r.ok) { admins = r.admins || []; m.textContent = ''; }
+    else { m.textContent = r.error || "Adminlarni olib bo'lmadi."; }
+  } catch (e) {
+    if (!e.auth) m.textContent = e.message;
+  }
+}
+
+function avatarColor(name) {
+  const c = ['#6366f1','#22c55e','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#14b8a6'];
+  let h = 0; for (let ch of name) h += ch.charCodeAt(0); return c[h % c.length];
+}
+function initials(a) { return (a.name[0]||'')+(a.surname[0]||''); }
+function formatPerms(p) {
+  const m = {admin:'Adminlar',reports:'Hisobot',settings:'Sozlama',full:'To\'liq'};
+  if (!p||!p.length) return '—';
+  return p.map(x=>m[x]||x).map(x=>`<span class="badge bg-blue">${esc(x)}</span>`).join(' ');
+}
+function dateOnly(iso) { return String(iso||'').slice(0,10); }
+
+function renderTable() {
+  const q = (v('searchInput')||'').toLowerCase();
+  const fr = v('filterRegion');
+  const fs = v('filterStatus');
+  const tbody = document.getElementById('adminTable');
+  let filtered = admins.filter(a =>
+    (!q || (a.name+' '+a.surname+' '+a.login+' '+(a.email||'')+' '+(a.phone||'')).toLowerCase().includes(q)) &&
+    (!fr || a.region === fr) &&
+    (!fs || (fs==='active' ? a.active : !a.active))
+  );
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🔍</div>${admins.length?"Hech narsa topilmadi":"Hozircha admin yo'q"}</div></td></tr>`;
+    updateStats();
+    return;
+  }
+  tbody.innerHTML = filtered.map(a => `
+    <tr>
+      <td style="white-space:nowrap">
+        <span class="avatar" style="background:${avatarColor(a.name)};color:#fff">${esc(initials(a))}</span>
+        <strong>${esc(a.name)} ${esc(a.surname)}</strong>
+        ${a.role?`<br><span style="font-size:11px;color:var(--text3);margin-left:38px">${esc(a.role)}</span>`:''}
+      </td>
+      <td>
+        <span style="color:var(--accent2);font-size:12px">${esc(a.email||'—')}</span><br>
+        <span style="color:var(--text3);font-family:monospace;font-size:11px">${esc(a.login)}</span>
+      </td>
+      <td style="color:var(--text2);font-size:12px">${esc(a.phone||'—')}</td>
+      <td style="font-size:12px">
+        <span style="color:var(--text)">📍 ${esc(a.region||'—')}</span><br>
+        <span style="color:var(--text3)">${esc(a.district||'')}</span>
+      </td>
+      <td><span class="badge ${a.active?'bg-green':'bg-red'}">${a.active?'Faol':'Bloklangan'}</span></td>
+      <td style="color:var(--text3);font-size:12px">${esc(dateOnly(a.date))}</td>
+      <td>
+        <button class="act-btn edit" onclick="openDetail('${escAttr(a.id)}')">👁 Ko'rish</button>
+        <button class="act-btn edit" onclick="openEdit('${escAttr(a.id)}')">✏️</button>
+        <button class="act-btn pass" onclick="openResetPass('${escAttr(a.id)}')">🔐</button>
+        <button class="act-btn ${a.active?'del':'ok'}" onclick="toggleBlock('${escAttr(a.id)}')">${a.active?'🚫':'✅'}</button>
+        <button class="act-btn del" onclick="openDelete('${escAttr(a.id)}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('stTotal').textContent = admins.length;
+  document.getElementById('stActive').textContent = admins.filter(a=>a.active).length;
+  document.getElementById('stBlocked').textContent = admins.filter(a=>!a.active).length;
+  const thisMonth = new Date().toISOString().slice(0,7);
+  document.getElementById('stNew').textContent = admins.filter(a=>String(a.date||'').startsWith(thisMonth)).length;
+  const regs = new Set(admins.map(a=>a.region).filter(Boolean));
+  document.getElementById('stRegions').textContent = regs.size;
+}
+
+// ===== DETAIL =====
+function openDetail(id) {
+  const a = admins.find(x=>x.id===id);
+  if (!a) return;
+  document.getElementById('dtTitle').textContent = `${a.name} ${a.surname}`;
+  document.getElementById('dtBody').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:1rem">
+      <div class="avatar" style="width:50px;height:50px;font-size:18px;background:${avatarColor(a.name)};color:#fff">${esc(initials(a))}</div>
+      <div>
+        <div style="font-size:15px;font-weight:600">${esc(a.name)} ${esc(a.surname)}</div>
+        <div style="font-size:13px;color:var(--text3)">${esc(a.role||"Lavozim ko'rsatilmagan")}</div>
+        <span class="badge ${a.active?'bg-green':'bg-red'}" style="margin-top:4px;display:inline-block">${a.active?'Faol':'Bloklangan'}</span>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-key">Email</div><div class="detail-val" style="color:var(--accent2)">${esc(a.email||'—')}</div></div>
+      <div class="detail-item"><div class="detail-key">Login</div><div class="detail-val" style="font-family:monospace">${esc(a.login)}</div></div>
+      <div class="detail-item"><div class="detail-key">Telefon</div><div class="detail-val">${esc(a.phone||'—')}</div></div>
+      <div class="detail-item"><div class="detail-key">Qo'shilgan sana</div><div class="detail-val">${esc(dateOnly(a.date))}</div></div>
+      <div class="detail-item"><div class="detail-key">Viloyat</div><div class="detail-val">📍 ${esc(a.region||'—')}</div></div>
+      <div class="detail-item"><div class="detail-key">Tuman</div><div class="detail-val">${esc(a.district||'—')}</div></div>
+      <div class="detail-item full" style="grid-column:1/-1"><div class="detail-key">Ruxsatlar</div><div class="detail-val" style="margin-top:6px">${formatPerms(a.perms)}</div></div>
+    </div>
+  `;
+  document.getElementById('dtEditBtn').onclick = () => { closeModal('mDetail'); openEdit(id); };
+  showModal('mDetail');
+}
+
+// ===== ADD/EDIT =====
+function openAddModal() {
+  editTarget = null;
+  document.getElementById('mAdminTitle').textContent = "➕ Yangi admin qo'shish";
+  ['aName','aSurname','aEmail','aLogin','aPass','aPhone','aRole'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('aPassGroup').style.display = '';
+  populateRegionSelect();
+  document.getElementById('aRegion').value = '';
+  document.getElementById('aDistrict').innerHTML = '<option value="">— Viloyat tanlang —</option>';
+  ['pAdmin','pReports','pSettings','pFull'].forEach(id => document.getElementById(id).checked = false);
+  hide('aErr');
+  showModal('mAdmin');
+}
+function openEdit(id) {
+  const a = admins.find(x=>x.id===id);
+  if (!a) return;
+  editTarget = id;
+  document.getElementById('mAdminTitle').textContent = "✏️ Adminni tahrirlash";
+  document.getElementById('aName').value = a.name;
+  document.getElementById('aSurname').value = a.surname;
+  document.getElementById('aEmail').value = a.email||'';
+  document.getElementById('aLogin').value = a.login;
+  document.getElementById('aPhone').value = a.phone||'';
+  document.getElementById('aRole').value = a.role||'';
+  document.getElementById('aPassGroup').style.display = 'none';
+  populateRegionSelect();
+  document.getElementById('aRegion').value = a.region||'';
+  populateDistricts();
+  setTimeout(() => { document.getElementById('aDistrict').value = a.district||''; }, 50);
+  document.getElementById('pAdmin').checked = (a.perms||[]).includes('admin');
+  document.getElementById('pReports').checked = (a.perms||[]).includes('reports');
+  document.getElementById('pSettings').checked = (a.perms||[]).includes('settings');
+  document.getElementById('pFull').checked = (a.perms||[]).includes('full');
+  hide('aErr');
+  showModal('mAdmin');
+}
+async function saveAdmin() {
+  const name = v('aName').trim(), surname = v('aSurname').trim();
+  const email = v('aEmail').trim(), login = v('aLogin').trim();
+  const pass = v('aPass'), phone = v('aPhone').trim();
+  const region = v('aRegion'), district = v('aDistrict');
+  const role = v('aRole').trim();
+  const perms = [];
+  if (document.getElementById('pAdmin').checked) perms.push('admin');
+  if (document.getElementById('pReports').checked) perms.push('reports');
+  if (document.getElementById('pSettings').checked) perms.push('settings');
+  if (document.getElementById('pFull').checked) perms.push('full');
+
+  hide('aErr');
+  if (!name) { showErr('aErr','Ism kiritilmadi'); return; }
+  if (!email||!email.includes('@')) { showErr('aErr','To\'g\'ri email kiriting'); return; }
+  if (!login) { showErr('aErr','Login kiritilmadi'); return; }
+  if (!region) { showErr('aErr','Viloyat tanlanmadi'); return; }
+  if (!district) { showErr('aErr','Tuman tanlanmadi'); return; }
+  if (!editTarget && pass.length < 8) { showErr('aErr','Parol kamida 8 belgi bo\'lsin'); return; }
+
+  const btn = document.getElementById('aSaveBtn');
+  btn.disabled = true;
+  try {
+    let r;
+    if (editTarget) {
+      r = await call('saAdminUpdate', { id: editTarget, name, surname, email, login, phone, region, district, role, perms });
+    } else {
+      r = await call('saAdminAdd', { name, surname, email, login, password: pass, phone, region, district, role, perms });
+    }
+    if (!r.ok) { showErr('aErr', r.error || "Saqlab bo'lmadi"); return; }
+    closeModal('mAdmin');
+    await loadAdmins();
+    renderTable();
+    if (document.getElementById('tabLogs').style.display !== 'none') renderLogsFromServer();
+  } catch (e) {
+    if (e.auth) return;
+    showErr('aErr', e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ===== DELETE =====
+function openDelete(id) {
+  const a = admins.find(x=>x.id===id);
+  if (!a) return;
+  deleteTarget = id;
+  document.getElementById('delMsg').textContent = `"${a.name} ${a.surname}" (${a.email}) o'chirilsinmi? Bu amalni qaytarib bo'lmaydi.`;
+  showModal('mDelete');
+}
+async function confirmDelete() {
+  try {
+    const r = await call('saAdminDelete', { id: deleteTarget });
+    if (!r.ok) { alert(r.error || "O'chirib bo'lmadi"); return; }
+    closeModal('mDelete');
+    await loadAdmins();
+    renderTable();
+  } catch (e) {
+    if (e.auth) return;
+    alert(e.message);
+  }
+}
+
+// ===== BLOCK =====
+async function toggleBlock(id) {
+  try {
+    const r = await call('saAdminToggleBlock', { id: id });
+    if (!r.ok) { alert(r.error || "Bajarib bo'lmadi"); return; }
+    await loadAdmins();
+    renderTable();
+  } catch (e) {
+    if (e.auth) return;
+    alert(e.message);
+  }
+}
+
+// ===== RESET ADMIN PASS =====
+function openResetPass(id) {
+  const a = admins.find(x=>x.id===id);
+  if (!a) return;
+  resetTarget = id;
+  document.getElementById('rapName').textContent = `"${a.name} ${a.surname}" uchun yangi parol`;
+  document.getElementById('rapNew').value = '';
+  hide('rapErr');
+  showModal('mResetAdminPass');
+}
+async function confirmResetPass() {
+  const p = v('rapNew');
+  if (p.length < 8) { showErr('rapErr','Kamida 8 belgi bo\'lsin'); return; }
+  try {
+    const r = await call('saAdminResetPass', { id: resetTarget, password: p });
+    if (!r.ok) { showErr('rapErr', r.error || "Saqlab bo'lmadi"); return; }
+    closeModal('mResetAdminPass');
+    alert('✅ Parol muvaffaqiyatli o\'zgartirildi!');
+  } catch (e) {
+    if (e.auth) return;
+    showErr('rapErr', e.message);
+  }
+}
+
+// ===== LOGS =====
+function tkTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return String(iso||'');
+  try {
+    return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tashkent',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);
+  } catch (e) { return d.toISOString(); }
+}
+async function renderLogsFromServer() {
+  try {
+    const r = await call('saLogsList');
+    logs = r.ok ? (r.logs || []) : [];
+  } catch (e) {
+    if (!e.auth) logs = [];
+  }
+  renderLogs();
+}
+function renderLogs() {
+  document.getElementById('logWrap').innerHTML = logs.map(l=>`
+    <div class="log-item">
+      <div class="log-dot" style="background:#818cf8"></div>
+      <span style="flex:1;font-size:13px">${esc(l.text)}</span>
+      <span class="log-time">${esc(tkTime(l.time))}</span>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="empty-icon">📋</div>Hali faoliyat yo\'q</div>';
+}
+async function clearLogs() {
+  if (!confirm("Barcha loglarni o'chirishni tasdiqlaysizmi?")) return;
+  try {
+    const r = await call('saLogsClear');
+    if (r.ok) await renderLogsFromServer();
+  } catch (e) {
+    if (!e.auth) alert(e.message);
+  }
+}
+
+// ===== TABS =====
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['tabAdmins','tabLogs','tabSettings'].forEach(id => {
+    document.getElementById(id).style.display = id===tabId?'block':'none';
+  });
+  if (tabId==='tabLogs') renderLogsFromServer();
+  if (tabId==='tabSettings') { renderRegionList(); loadSettings(); }
+}
+
+// ===== MODAL HELPERS =====
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) closeModal(o.id); }));
+
+// ===== UTILS =====
+function v(id) { return document.getElementById(id)?.value||''; }
+function showErr(id, msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('show'); }
+function hide(id) { document.getElementById(id)?.classList.remove('show'); }
+function togglePass(id, iconId) {
+  const f=document.getElementById(id); const ic=document.getElementById(iconId);
+  f.type = f.type==='password'?'text':'password';
+  ic.textContent = f.type==='password'?'👁️':'🙈';
+}
+function esc(s) { return String(s==null?'':s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function escAttr(s) { return esc(s).replace(/`/g,'&#96;'); }
+
+// ===== INIT =====
+populateRegionSelect();
+renderRegionFilter();
+
+(async function init(){
+  if (token) {
+    showPage('pgDash');
+    try {
+      await afterLogin();
+    } catch (e) {
+      sessionStorage.removeItem('sa_token');
+      token = '';
+      showPage('pgLogin');
+    }
+  }
+})();
+</script>
+</body>
+</html>
