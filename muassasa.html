@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Ta’lim muassasasi admini — GulDU akademik litseyi</title>
+<style>
+:root{--blue:#0758c9;--dark:#0d2a5b;--line:#e3eaf3;--shadow:0 8px 28px rgba(13,42,91,.10)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);color:#12203b}
+.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff}
+.header-inner{max-width:1100px;margin:auto;display:flex;align-items:center;gap:18px;padding:20px 24px}
+.logo{width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,255,255,.75);display:grid;place-items:center;font-size:24px;font-weight:800;background:rgba(255,255,255,.08);flex:none}
+.header h1{margin:0;font-size:23px;line-height:1.15}
+.header p{margin:6px 0 0;font-size:14px;opacity:.9}
+.container{max-width:1100px;margin:0 auto;padding:22px 24px 40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.pad{padding:20px}
+.hidden{display:none!important}
+label{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
+input[type=text],input[type=password],select{width:100%;height:44px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 12px;font-size:15px;color:#172744;outline:none;font-family:inherit}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+input[readonly]{background:#f3f6fa;color:#526178}
+.field{margin-bottom:14px}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:48px}
+.eye{position:absolute;right:3px;top:2px;width:40px;height:40px;border:0;background:transparent;border-radius:8px;cursor:pointer;color:#526178;display:grid;place-items:center}
+.eye:hover{background:#eef3fa;color:var(--blue)}
+.eye svg{width:22px;height:22px}
+.pw-wrap.shown .eye-open{display:none}
+.pw-wrap:not(.shown) .eye-closed{display:none}
+.btn{height:42px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 16px;font-size:14px;font-weight:700;color:#162641;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:inherit}
+.btn:hover{border-color:#8db7ed}
+.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}
+.btn.danger{color:#b3261e;border-color:#efc5c2}
+.btn.danger:hover{background:#fdf1f0;border-color:#b3261e}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.mini{height:32px;padding:0 11px;font-size:13px;border-radius:7px}
+.msg{margin:0 0 12px;font-size:14px;font-weight:600;min-height:18px}
+.msg.error{color:#c0392b}
+.msg.info{color:#153b78}
+.msg.good{color:#188044}
+.login-card{max-width:420px;margin:30px auto;padding:28px}
+.section-title{color:var(--dark);font-size:20px;font-weight:800;margin:0 0 22px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 22px;margin-bottom:14px;flex-wrap:wrap}
+.bar-title{font-size:18px;font-weight:800;color:var(--dark)}
+.bar-sub{font-size:14px;color:#526178;margin-top:4px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab{height:42px;padding:0 20px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#162641;cursor:pointer;font-family:inherit}
+.tab.active{background:#075fc9;color:#fff;border-color:#075fc9}
+.row-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.row-head h2{margin:0;font-size:18px;color:var(--dark)}
+.hint{font-size:13px;color:#526178;line-height:1.55;margin:4px 0 12px}
+.panel-box{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;background:#fbfcfe}
+.panel-box h3{margin:0 0 12px;font-size:16px;color:var(--dark)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eef2f7;white-space:nowrap}
+th{background:#f7f9fc;color:#26354e;font-size:13px}
+td.name{white-space:normal;min-width:150px;font-weight:600}
+tr:hover td{background:#fbfcfe}
+td .acts{display:flex;gap:8px}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:700}
+.empty{padding:24px 16px;text-align:center;color:#526178;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid #cbd6e5;border-radius:10px;padding:8px 10px 8px 14px;background:#fff;font-weight:700}
+@media(max-width:700px){
+  .container{padding:14px 12px 30px}
+  .grid2{grid-template-columns:1fr}
+  .header h1{font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="header-inner">
+<div class="logo">G</div>
+<div><h1>Ta’lim muassasasi admini</h1><p>Guliston davlat universiteti akademik litseyi</p></div>
+</div>
+</header>
+
+<main class="container">
+
+<!-- ================= LOGIN ================= -->
+<section id="loginView" class="card login-card">
+<div class="section-title">Admin kirishi</div>
+<form id="loginForm" autocomplete="on">
+<div class="field"><label for="login">Login</label><input id="login" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+<div class="field"><label for="password">Parol</label>
+<div class="pw-wrap">
+<input id="password" name="password" type="password" autocomplete="current-password" required>
+<button class="eye" type="button" aria-label="Parolni ko‘rsatish yoki yashirish" title="Parolni ko‘rsatish / yashirish">
+<svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+<svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+</button>
+</div>
+</div>
+<button class="btn primary" id="loginBtn" type="submit">Kirish</button>
+<div id="loginMsg" class="msg error" role="alert" style="margin:12px 0 0"></div>
+</form>
+</section>
+
+<!-- ================= KABINET ================= -->
+<section id="appView" class="hidden">
+
+<div class="card bar">
+<div><div class="bar-title" id="adminName">Admin</div><div class="bar-sub">Fanlar, ustozlar va sinflarni boshqarish</div></div>
+<button class="btn" id="logoutBtn" type="button">Chiqish</button>
+</div>
+
+<div id="msg" class="msg info"></div>
+
+<div class="tabs">
+<button class="tab active" type="button" data-tab="subjects">Fanlar</button>
+<button class="tab" type="button" data-tab="teachers">Ustozlar</button>
+<button class="tab" type="button" data-tab="classes">Sinflar</button>
+</div>
+
+<!-- Fanlar -->
+<div class="card pad" id="tab-subjects">
+<div class="row-head"><h2>Fanlar</h2><button class="btn primary" id="sNew" type="button">+ Fan qo‘shish</button></div>
+<div class="panel-box hidden" id="sForm">
+<h3 id="sFormTitle">Yangi fan</h3>
+<div class="grid2">
+<div class="field"><label for="sName">Fan nomi</label><input id="sName" type="text" autocomplete="off"></div>
+<div class="field"><label for="sChat">Telegram guruh (natijalar shu yerga boradi)</label><input id="sChat" type="text" placeholder="@fizika_guldulitsey yoki -1001234567890" autocapitalize="none" spellcheck="false" autocomplete="off"></div>
+</div>
+<div class="hint">Botni shu Telegram guruhga admin qilib qo‘shing. Guruh ommaviy bo‘lsa <b>@username</b>, yopiq bo‘lsa <b>-100...</b> raqamli ID yoziladi. Fan nomini keyin o‘zgartirib bo‘lmaydi (natijalar eski nom bilan qolib ketadi), faqat Telegram guruhini o‘zgartirish mumkin.</div>
+<div class="btn-row"><button class="btn primary" id="sSave" type="button">Saqlash</button><button class="btn" id="sCancel" type="button">Bekor qilish</button></div>
+<div class="msg" id="sMsg" style="margin:12px 0 0"></div>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Fan</th><th>Telegram guruh</th><th>Ustozlar</th><th></th></tr></thead>
+<tbody id="sBody"></tbody></table></div>
+<div class="empty hidden" id="sEmpty">Hali fan qo‘shilmagan.</div>
+</div>
+
+<!-- Ustozlar -->
+<div class="card pad hidden" id="tab-teachers">
+<div class="row-head"><h2>Ustozlar</h2><button class="btn primary" id="tNew" type="button">+ Ustoz qo‘shish</button></div>
+<div class="panel-box hidden" id="tForm">
+<h3 id="tFormTitle">Yangi ustoz</h3>
+<div class="grid2">
+<div class="field"><label for="tUser">Login (kichik lotin harflari, raqam)</label><input id="tUser" type="text" autocapitalize="none" spellcheck="false" autocomplete="off"></div>
+<div class="field"><label for="tName">Ism-familiya</label><input id="tName" type="text" autocomplete="off"></div>
+<div class="field"><label for="tSubject">Fan</label><select id="tSubject"></select></div>
+<div class="field"><label for="tPass">Parol (kamida 8 belgi)</label>
+<div class="pw-wrap"><input id="tPass" type="password" autocomplete="new-password">
+<button class="eye" type="button" aria-label="Parolni ko‘rsatish yoki yashirish" title="Parolni ko‘rsatish / yashirish">
+<svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+<svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+</button></div></div>
+</div>
+<div class="hint" id="tPassHint"></div>
+<div class="btn-row"><button class="btn primary" id="tSave" type="button">Saqlash</button><button class="btn" id="tCancel" type="button">Bekor qilish</button></div>
+<div class="msg" id="tMsg" style="margin:12px 0 0"></div>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Login</th><th>Ism-familiya</th><th>Fan</th><th></th></tr></thead>
+<tbody id="tBody"></tbody></table></div>
+<div class="empty hidden" id="tEmpty">Hali ustoz qo‘shilmagan.</div>
+</div>
+
+<!-- Sinflar -->
+<div class="card pad hidden" id="tab-classes">
+<div class="row-head"><h2>Sinflar (guruhlar)</h2></div>
+<div class="panel-box">
+<h3>Yangi sinf qo‘shish</h3>
+<div class="grid2">
+<div class="field" style="margin-bottom:0"><input id="cNew" type="text" placeholder="Masalan: 107 yoki 9-A" autocomplete="off"></div>
+<div><button class="btn primary" id="cAdd" type="button">+ Qo‘shish</button></div>
+</div>
+<div class="hint" style="margin-bottom:0">Sinf o‘quvchi sahifasidagi guruhlar ro‘yxatida va ustoz panelida darhol paydo bo‘ladi. Sinfni o‘chirsangiz yoki nomini o‘zgartirsangiz, eski natijalar o‘zgarmaydi.</div>
+</div>
+<div class="chips" id="cList"></div>
+<div class="empty hidden" id="cEmpty">Hali sinf yo‘q.</div>
+</div>
+
+</section>
+</main>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+
+let token=sessionStorage.getItem("ma_token")||"";
+let subjects=[], teachers=[], classes=[];
+let editingSubject=null, editingTeacher=null;
+
+const $=id=>document.getElementById(id);
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ---------- Serverga so'rov ---------- */
+async function api(action,payload){
+  let res;
+  try{
+    res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action:action},payload||{}))});
+  }catch(e){
+    throw new Error("Serverga ulanib bo‘lmadi. Internetni tekshiring.");
+  }
+  const text=await res.text();
+  let data;
+  try{ data=JSON.parse(text); }
+  catch(e){ throw new Error("Serverdan noto‘g‘ri javob keldi. Apps Script yangi versiyada deploy qilinganini tekshiring."); }
+  if(data&&data.ok===false&&data.error==="Noma'lum so'rov."){
+    throw new Error("Server bu panelni hali tanimaydi: Testlar.gs dagi tpRouter_ ga «ma» yo‘naltirish qo‘shilganini va yangi versiya deploy qilinganini tekshiring.");
+  }
+  return data;
+}
+function notify(text,cls){
+  const m=$("msg");
+  m.className="msg "+(cls||"info");
+  m.textContent=text||"";
+}
+// Token bilan so'rov. Xato bo'lsa xabar chiqarib null qaytaradi.
+async function run(action,payload){
+  try{
+    const r=await api(action,Object.assign({token:token},payload||{}));
+    if(r.code==="AUTH"){ showLogin("Sessiya tugagan. Qayta kiring."); return null; }
+    if(!r.ok){ notify(r.error||"Xatolik yuz berdi.","error"); return null; }
+    return r;
+  }catch(e){
+    notify(e.message,"error");
+    return null;
+  }
+}
+
+/* ---------- Ko'rinishlar ---------- */
+function showLogin(message){
+  token="";
+  sessionStorage.removeItem("ma_token");
+  $("appView").classList.add("hidden");
+  $("loginView").classList.remove("hidden");
+  $("loginMsg").textContent=message||"";
+  $("password").value="";
+}
+function showApp(){
+  $("loginView").classList.add("hidden");
+  $("appView").classList.remove("hidden");
+}
+
+/* ---------- Parol ko'zchasi ---------- */
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".eye");
+  if(!b) return;
+  const wrap=b.closest(".pw-wrap");
+  const inp=wrap.querySelector("input");
+  const show=inp.type==="password";
+  inp.type=show?"text":"password";
+  wrap.classList.toggle("shown",show);
+  inp.focus();
+});
+
+/* ---------- Login ---------- */
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const login=$("login").value.trim(), password=$("password").value;
+  if(!login||!password){ $("loginMsg").textContent="Login va parolni kiriting."; return; }
+  $("loginBtn").disabled=true;
+  $("loginMsg").textContent="Tekshirilmoqda...";
+  try{
+    const r=await api("maLogin",{login:login,password:password});
+    if(!r.ok){ $("loginMsg").textContent=r.error||"Kirish mumkin emas."; return; }
+    token=r.token;
+    sessionStorage.setItem("ma_token",token);
+    sessionStorage.setItem("ma_name",r.name||"Admin");
+    $("adminName").textContent=r.name||"Admin";
+    $("loginMsg").textContent="";
+    $("password").value="";
+    showApp();
+    switchTab("subjects");
+  }catch(err){
+    $("loginMsg").textContent=err.message;
+  }finally{
+    $("loginBtn").disabled=false;
+  }
+});
+$("logoutBtn").addEventListener("click",async ()=>{
+  const t=token;
+  showLogin("");
+  try{ await api("maLogout",{token:t}); }catch(e){}
+});
+
+/* ---------- Bo'limlar ---------- */
+const TABS=["subjects","teachers","classes"];
+function switchTab(name){
+  TABS.forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==name));
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  notify("");
+  if(name==="subjects") loadSubjects();
+  if(name==="teachers") loadTeachers();
+  if(name==="classes") loadClasses();
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+
+/* ======================================================
+   FANLAR
+   ====================================================== */
+async function loadSubjects(){
+  const r=await run("maSubjects");
+  if(!r) return;
+  subjects=r.subjects;
+  $("sBody").innerHTML=subjects.map(s=>
+    '<tr><td class="name">'+esc(s.name)+'</td><td>'+esc(s.chat)+'</td><td>'+s.teachers+' ta</td>'+
+    '<td><div class="acts"><button class="btn mini" type="button" data-sedit="'+esc(s.name)+'">Tahrirlash</button>'+
+    '<button class="btn danger mini" type="button" data-sdel="'+esc(s.name)+'">O‘chirish</button></div></td></tr>'
+  ).join("");
+  $("sEmpty").classList.toggle("hidden",subjects.length>0);
+}
+function openSubjectForm(s){
+  editingSubject=s?s.name:null;
+  $("sFormTitle").textContent=s?"Telegram guruhini o‘zgartirish":"Yangi fan";
+  $("sName").value=s?s.name:"";
+  $("sName").readOnly=!!s;
+  $("sChat").value=s?s.chat:"";
+  $("sMsg").textContent="";
+  $("sForm").classList.remove("hidden");
+  (s?$("sChat"):$("sName")).focus();
+}
+$("sNew").addEventListener("click",()=>openSubjectForm(null));
+$("sCancel").addEventListener("click",()=>$("sForm").classList.add("hidden"));
+$("sSave").addEventListener("click",async ()=>{
+  $("sSave").disabled=true;
+  $("sMsg").className="msg info"; $("sMsg").textContent="Saqlanmoqda...";
+  const r=await run("maSubjectSave",{name:$("sName").value,chat:$("sChat").value,create:!editingSubject});
+  $("sSave").disabled=false;
+  if(!r){ $("sMsg").className="msg error"; $("sMsg").textContent=$("msg").textContent; notify(""); return; }
+  $("sForm").classList.add("hidden");
+  await loadSubjects();
+  notify("Fan saqlandi.","good");
+});
+$("sBody").addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-sedit]");
+  if(ed){ const s=subjects.find(x=>x.name===ed.dataset.sedit); if(s) openSubjectForm(s); return; }
+  const del=e.target.closest("[data-sdel]");
+  if(del){
+    if(!confirm("«"+del.dataset.sdel+"» fani ro‘yxatdan olib tashlanadi (natijalar va testlar saqlanib qoladi). Davom etamizmi?")) return;
+    const r=await run("maSubjectDelete",{name:del.dataset.sdel});
+    if(r){ await loadSubjects(); notify("Fan o‘chirildi.","good"); }
+  }
+});
+
+/* ======================================================
+   USTOZLAR
+   ====================================================== */
+async function loadTeachers(){
+  const s=await run("maSubjects");
+  if(!s) return;
+  subjects=s.subjects;
+  const r=await run("maTeachers");
+  if(!r) return;
+  teachers=r.teachers;
+  $("tBody").innerHTML=teachers.map(t=>
+    '<tr><td><b>'+esc(t.username)+'</b></td><td class="name">'+esc(t.name)+'</td>'+
+    '<td>'+esc(t.subject)+(t.subjectOk?'':' <span class="tag">fan o‘chirilgan</span>')+'</td>'+
+    '<td><div class="acts"><button class="btn mini" type="button" data-tedit="'+esc(t.username)+'">Tahrirlash</button>'+
+    '<button class="btn danger mini" type="button" data-tdel="'+esc(t.username)+'">O‘chirish</button></div></td></tr>'
+  ).join("");
+  $("tEmpty").classList.toggle("hidden",teachers.length>0);
+}
+function openTeacherForm(t){
+  editingTeacher=t?t.username:null;
+  $("tFormTitle").textContent=t?"Ustozni tahrirlash":"Yangi ustoz";
+  $("tSubject").innerHTML=subjects.map(s=>'<option value="'+esc(s.name)+'">'+esc(s.name)+'</option>').join("");
+  if(t&&subjects.some(s=>s.name===t.subject)) $("tSubject").value=t.subject;
+  $("tUser").value=t?t.username:"";
+  $("tUser").readOnly=!!t;
+  $("tName").value=t?t.name:"";
+  $("tPass").value="";
+  $("tPass").type="password";
+  $("tPass").closest(".pw-wrap").classList.remove("shown");
+  $("tPassHint").textContent=t?"Parolni o‘zgartirmoqchi bo‘lsangiz, yangi parolni yozing. Bo‘sh qoldirsangiz, eski parol o‘zgarmaydi.":"Parolni ustozga o‘zingiz aytasiz. Keyinroq shu yerdan yangisiga almashtirish mumkin.";
+  $("tMsg").textContent="";
+  $("tForm").classList.remove("hidden");
+  (t?$("tName"):$("tUser")).focus();
+}
+$("tNew").addEventListener("click",()=>{
+  if(!subjects.length){ notify("Avval «Fanlar» bo‘limida kamida bitta fan qo‘shing.","error"); return; }
+  openTeacherForm(null);
+});
+$("tCancel").addEventListener("click",()=>$("tForm").classList.add("hidden"));
+$("tSave").addEventListener("click",async ()=>{
+  $("tSave").disabled=true;
+  $("tMsg").className="msg info"; $("tMsg").textContent="Saqlanmoqda...";
+  const r=await run("maTeacherSave",{username:$("tUser").value.trim(),name:$("tName").value,subject:$("tSubject").value,password:$("tPass").value,create:!editingTeacher});
+  $("tSave").disabled=false;
+  if(!r){ $("tMsg").className="msg error"; $("tMsg").textContent=$("msg").textContent; notify(""); return; }
+  $("tForm").classList.add("hidden");
+  await loadTeachers();
+  notify("Ustoz saqlandi.","good");
+});
+$("tBody").addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-tedit]");
+  if(ed){ const t=teachers.find(x=>x.username===ed.dataset.tedit); if(t) openTeacherForm(t); return; }
+  const del=e.target.closest("[data-tdel]");
+  if(del){
+    if(!confirm("«"+del.dataset.tdel+"» ustozi o‘chiriladi (yuklagan testlari va natijalar saqlanib qoladi). Davom etamizmi?")) return;
+    const r=await run("maTeacherDelete",{username:del.dataset.tdel});
+    if(r){ await loadTeachers(); notify("Ustoz o‘chirildi.","good"); }
+  }
+});
+
+/* ======================================================
+   SINFLAR
+   ====================================================== */
+function renderClasses(){
+  $("cList").innerHTML=classes.map(c=>
+    '<div class="chip"><span>'+esc(c)+'</span>'+
+    '<button class="btn mini" type="button" data-cren="'+esc(c)+'">Nomini o‘zgartirish</button>'+
+    '<button class="btn danger mini" type="button" data-cdel="'+esc(c)+'">O‘chirish</button></div>'
+  ).join("");
+  $("cEmpty").classList.toggle("hidden",classes.length>0);
+}
+async function loadClasses(){
+  const r=await run("maClasses");
+  if(!r) return;
+  classes=r.classes;
+  renderClasses();
+}
+$("cAdd").addEventListener("click",async ()=>{
+  const name=$("cNew").value.trim();
+  if(!name){ notify("Sinf nomini yozing.","error"); return; }
+  const r=await run("maClassAdd",{name:name});
+  if(!r) return;
+  $("cNew").value="";
+  classes=r.classes; renderClasses();
+  notify("Sinf qo‘shildi.","good");
+});
+$("cNew").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); $("cAdd").click(); } });
+$("cList").addEventListener("click",async e=>{
+  const ren=e.target.closest("[data-cren]");
+  if(ren){
+    const name=prompt("Sinfning yangi nomi:",ren.dataset.cren);
+    if(name===null||!name.trim()) return;
+    const r=await run("maClassRename",{name:ren.dataset.cren,newName:name});
+    if(r){ classes=r.classes; renderClasses(); notify("Sinf nomi o‘zgartirildi.","good"); }
+    return;
+  }
+  const del=e.target.closest("[data-cdel]");
+  if(del){
+    if(!confirm("«"+del.dataset.cdel+"» sinfi o‘chiriladi (eski natijalar saqlanib qoladi). Davom etamizmi?")) return;
+    const r=await run("maClassDelete",{name:del.dataset.cdel});
+    if(r){ classes=r.classes; renderClasses(); notify("Sinf o‘chirildi.","good"); }
+  }
+});
+
+/* ---------- Ishga tushirish ---------- */
+if(token){
+  $("adminName").textContent=sessionStorage.getItem("ma_name")||"Admin";
+  showApp();
+  switchTab("subjects");
+}
+</script>
+</body>
+</html>
