@@ -512,6 +512,29 @@ finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()
 markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
 groupEl.onchange=()=>{msg.textContent="";refreshAvailability()};studentEl.oninput=()=>{msg.textContent=""};subjectEl.onchange=()=>{msg.textContent="";refreshAvailability()};
 loadExtraGroups();
+   /* ===== Muassasa admini bilan bog‘lanish: fanlar va sinflar ro‘yxati serverdan olinadi ===== */
+(function(){
+  function setOptions(sel,values){
+    const chosen=sel.value,first=sel.options[0]?sel.options[0].text:"";
+    sel.innerHTML="";
+    const ph=document.createElement("option");ph.value="";ph.textContent=first;sel.appendChild(ph);
+    values.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o)});
+    if(values.indexOf(chosen)!==-1)sel.value=chosen;
+  }
+  api("maPubSubjects",{}).then(r=>{
+    if(r&&r.ok&&Array.isArray(r.subjects)&&r.subjects.length){setOptions(subjectEl,r.subjects);refreshAvailability()}
+  }).catch(e=>console.warn("Fanlar ro‘yxatini olib bo‘lmadi:",e));
+  api("maPubClasses",{}).then(r=>{
+    if(r&&r.ok&&Array.isArray(r.classes)){setOptions(groupEl,r.classes);refreshAvailability()}
+  }).catch(e=>console.warn("Sinflar ro‘yxatini olib bo‘lmadi:",e));
+  const originalPrepare=prepareExam;
+  prepareExam=function(){
+    if(!QUESTION_BANKS[subjectEl.value]){
+      const err=new Error("bank");err.userMessage="Bu fan uchun test hali yuklanmagan. Ustozga murojaat qiling.";throw err;
+    }
+    return originalPrepare();
+  };
+})();
 </script>
 </body>
 </html>
