@@ -20,7 +20,8 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(
 .hidden{display:none!important}
 label{display:block;font-size:14px;font-weight:600;margin:0 0 6px}
 input[type=text],input[type=password],select{width:100%;height:44px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 12px;font-size:15px;color:#172744;outline:none;font-family:inherit}
-input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+textarea{width:100%;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:10px 12px;font-size:15px;color:#172744;outline:none;font-family:inherit;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
 input[readonly]{background:#f3f6fa;color:#526178}
 .field{margin-bottom:14px}
 .pw-wrap{position:relative}
@@ -66,7 +67,10 @@ td .acts{display:flex;gap:8px}
 .tag{display:inline-block;padding:2px 8px;border-radius:6px;background:#fff1d6;color:#8a5a00;font-size:12px;font-weight:700}
 .empty{padding:24px 16px;text-align:center;color:#526178;font-size:15px}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{display:flex;align-items:center;gap:8px;border:1px solid #cbd6e5;border-radius:10px;padding:8px 10px 8px 14px;background:#fff;font-weight:700}
+.chip{display:flex;align-items:center;flex-wrap:wrap;gap:8px;border:1px solid #cbd6e5;border-radius:10px;padding:8px 10px 8px 14px;background:#fff;font-weight:700}
+.chip.sel{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
+.st-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.st-head h3{margin:0}
 @media(max-width:700px){
   .container{padding:14px 12px 30px}
   .grid2{grid-template-columns:1fr}
@@ -108,7 +112,7 @@ td .acts{display:flex;gap:8px}
 <section id="appView" class="hidden">
 
 <div class="card bar">
-<div><div class="bar-title" id="adminName">Admin</div><div class="bar-sub">Fanlar, ustozlar va sinflarni boshqarish</div></div>
+<div><div class="bar-title" id="adminName">Admin</div><div class="bar-sub">Fanlar, ustozlar, sinflar va o‘quvchilarni boshqarish</div></div>
 <button class="btn" id="logoutBtn" type="button">Chiqish</button>
 </div>
 
@@ -174,10 +178,30 @@ td .acts{display:flex;gap:8px}
 <div class="field" style="margin-bottom:0"><input id="cNew" type="text" placeholder="Masalan: 107 yoki 9-A" autocomplete="off"></div>
 <div><button class="btn primary" id="cAdd" type="button">+ Qo‘shish</button></div>
 </div>
-<div class="hint" style="margin-bottom:0">Sinf o‘quvchi sahifasidagi guruhlar ro‘yxatida va ustoz panelida darhol paydo bo‘ladi. Sinfni o‘chirsangiz yoki nomini o‘zgartirsangiz, eski natijalar o‘zgarmaydi.</div>
+<div class="hint" style="margin-bottom:0">Sinf o‘quvchi sahifasidagi guruhlar ro‘yxatida va ustoz panelida darhol paydo bo‘ladi. Sinfni o‘chirsangiz yoki nomini o‘zgartirsangiz, eski natijalar o‘zgarmaydi. Sinf yonidagi «O‘quvchilar» tugmasi orqali o‘quvchilar ro‘yxatini kiritasiz.</div>
 </div>
 <div class="chips" id="cList"></div>
 <div class="empty hidden" id="cEmpty">Hali sinf yo‘q.</div>
+
+<!-- O'quvchilar oynasi -->
+<div class="panel-box hidden" id="stBox" style="margin-top:18px">
+<div class="st-head">
+<h3 id="stTitle">O‘quvchilar</h3>
+<button class="btn mini" id="stClose" type="button">Yopish</button>
+</div>
+<div class="field">
+<label for="stNames">O‘quvchilarni qo‘shish (har qatorga bitta ism-familiya)</label>
+<textarea id="stNames" rows="6" placeholder="Aliyev Vali&#10;Karimova Malika&#10;Toshmatov Sardor" spellcheck="false"></textarea>
+</div>
+<div class="hint">Faqat shu ro‘yxatdagi o‘quvchi testda qatnasha oladi. Ism va familiya to‘liq yozilsin: o‘quvchi sahifada ismini aynan shunday kiritadi. Bosh harf, ortiqcha bo‘shliq va so‘zlar tartibi (Ali Valiyev / Valiyev Ali) hisobga olinmaydi. Bir sinfda 200 tagacha o‘quvchi bo‘lishi mumkin.</div>
+<div class="btn-row"><button class="btn primary" id="stAdd" type="button">+ Qo‘shish</button></div>
+<div class="msg" id="stMsg" style="margin:12px 0"></div>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Ism-familiya</th><th></th></tr></thead>
+<tbody id="stBody"></tbody></table></div>
+<div class="empty hidden" id="stEmpty">Bu sinfda hali o‘quvchi yo‘q.</div>
+</div>
+
 </div>
 
 </section>
@@ -187,8 +211,8 @@ td .acts{display:flex;gap:8px}
 const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
 let token=sessionStorage.getItem("ma_token")||"";
-let subjects=[], teachers=[], classes=[];
-let editingSubject=null, editingTeacher=null;
+let subjects=[], teachers=[], classes=[], students=[];
+let editingSubject=null, editingTeacher=null, stClass=null;
 
 const $=id=>document.getElementById(id);
 function esc(s){
@@ -292,6 +316,7 @@ function switchTab(name){
   TABS.forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==name));
   document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
   notify("");
+  closeStudents();
   if(name==="subjects") loadSubjects();
   if(name==="teachers") loadTeachers();
   if(name==="classes") loadClasses();
@@ -410,7 +435,8 @@ $("tBody").addEventListener("click",async e=>{
    ====================================================== */
 function renderClasses(){
   $("cList").innerHTML=classes.map(c=>
-    '<div class="chip"><span>'+esc(c)+'</span>'+
+    '<div class="chip'+(c===stClass?' sel':'')+'"><span>'+esc(c)+'</span>'+
+    '<button class="btn primary mini" type="button" data-cst="'+esc(c)+'">O‘quvchilar</button>'+
     '<button class="btn mini" type="button" data-cren="'+esc(c)+'">Nomini o‘zgartirish</button>'+
     '<button class="btn danger mini" type="button" data-cdel="'+esc(c)+'">O‘chirish</button></div>'
   ).join("");
@@ -429,23 +455,117 @@ $("cAdd").addEventListener("click",async ()=>{
   if(!r) return;
   $("cNew").value="";
   classes=r.classes; renderClasses();
-  notify("Sinf qo‘shildi.","good");
+  notify("Sinf qo‘shildi. Endi «O‘quvchilar» tugmasi orqali o‘quvchilarni kiriting.","good");
 });
 $("cNew").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); $("cAdd").click(); } });
 $("cList").addEventListener("click",async e=>{
+  const st=e.target.closest("[data-cst]");
+  if(st){ openStudents(st.dataset.cst); return; }
   const ren=e.target.closest("[data-cren]");
   if(ren){
     const name=prompt("Sinfning yangi nomi:",ren.dataset.cren);
     if(name===null||!name.trim()) return;
     const r=await run("maClassRename",{name:ren.dataset.cren,newName:name});
-    if(r){ classes=r.classes; renderClasses(); notify("Sinf nomi o‘zgartirildi.","good"); }
+    if(r){
+      const wasOpen=(stClass===ren.dataset.cren);
+      classes=r.classes;
+      if(wasOpen){
+        const nn=name.trim().replace(/\s+/g," ").slice(0,30);
+        if(classes.indexOf(nn)!==-1) stClass=nn; else closeStudents();
+      }
+      renderClasses();
+      if(wasOpen&&stClass) openStudents(stClass);
+      notify("Sinf nomi o‘zgartirildi.","good");
+    }
     return;
   }
   const del=e.target.closest("[data-cdel]");
   if(del){
-    if(!confirm("«"+del.dataset.cdel+"» sinfi o‘chiriladi (eski natijalar saqlanib qoladi). Davom etamizmi?")) return;
+    if(!confirm("«"+del.dataset.cdel+"» sinfi o‘chiriladi. Sinfning o‘quvchilar ro‘yxati ham o‘chadi (eski natijalar saqlanib qoladi). Davom etamizmi?")) return;
     const r=await run("maClassDelete",{name:del.dataset.cdel});
-    if(r){ classes=r.classes; renderClasses(); notify("Sinf o‘chirildi.","good"); }
+    if(r){
+      if(stClass===del.dataset.cdel) closeStudents();
+      classes=r.classes; renderClasses(); notify("Sinf o‘chirildi.","good");
+    }
+  }
+});
+
+/* ======================================================
+   O'QUVCHILAR (sinf bo'yicha ro'yxat)
+   ====================================================== */
+function closeStudents(){
+  stClass=null;
+  students=[];
+  $("stBox").classList.add("hidden");
+  $("stNames").value="";
+  $("stMsg").textContent="";
+  if(classes.length) renderClasses();
+}
+function renderStudents(){
+  $("stTitle").textContent="«"+stClass+"» sinfi o‘quvchilari ("+students.length+" ta)";
+  $("stBody").innerHTML=students.map((n,i)=>
+    '<tr><td>'+(i+1)+'</td><td class="name">'+esc(n)+'</td>'+
+    '<td><div class="acts"><button class="btn mini" type="button" data-stedit="'+esc(n)+'">Tahrirlash</button>'+
+    '<button class="btn danger mini" type="button" data-stdel="'+esc(n)+'">O‘chirish</button></div></td></tr>'
+  ).join("");
+  $("stEmpty").classList.toggle("hidden",students.length>0);
+}
+async function loadStudents(){
+  const r=await run("maStudents",{group:stClass});
+  if(!r) return false;
+  students=r.students||[];
+  renderStudents();
+  return true;
+}
+async function openStudents(name){
+  stClass=name;
+  $("stNames").value="";
+  $("stMsg").textContent="";
+  $("stBox").classList.remove("hidden");
+  renderClasses();
+  const ok=await loadStudents();
+  if(!ok){ closeStudents(); return; }
+  $("stBox").scrollIntoView({behavior:"smooth",block:"start"});
+  $("stNames").focus();
+}
+$("stClose").addEventListener("click",closeStudents);
+
+$("stAdd").addEventListener("click",async ()=>{
+  const text=$("stNames").value;
+  if(!text.trim()){ $("stMsg").className="msg error"; $("stMsg").textContent="Avval o‘quvchilarning ism-familiyasini yozing."; return; }
+  $("stAdd").disabled=true;
+  $("stMsg").className="msg info"; $("stMsg").textContent="Saqlanmoqda...";
+  const r=await run("maStudentsAdd",{group:stClass,names:text});
+  $("stAdd").disabled=false;
+  if(!r){ $("stMsg").className="msg error"; $("stMsg").textContent=$("msg").textContent; notify(""); return; }
+
+  const parts=[];
+  parts.push(r.added+" ta o‘quvchi qo‘shildi.");
+  if(r.skipped&&r.skipped.length) parts.push("Allaqachon bor (o‘tkazib yuborildi): "+r.skipped.join(", ")+".");
+  if(r.invalid&&r.invalid.length) parts.push("Ism va familiya to‘liq emas, quyida qoldi: "+r.invalid.join(", ")+".");
+  $("stMsg").className="msg "+((r.invalid&&r.invalid.length)?"error":(r.added?"good":"info"));
+  $("stMsg").textContent=parts.join(" ");
+
+  // To'liq bo'lmagan ismlar maydonda qoladi — tuzatib qayta qo'shish mumkin
+  $("stNames").value=(r.invalid&&r.invalid.length)?r.invalid.join("\n"):"";
+  await loadStudents();
+});
+
+$("stBody").addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-stedit]");
+  if(ed){
+    const old=ed.dataset.stedit;
+    const nn=prompt("Ism-familiyani tuzating:",old);
+    if(nn===null||!nn.trim()) return;
+    const r=await run("maStudentRename",{group:stClass,name:old,newName:nn});
+    if(r){ await loadStudents(); $("stMsg").className="msg good"; $("stMsg").textContent="O‘quvchi ma’lumoti o‘zgartirildi."; }
+    return;
+  }
+  const del=e.target.closest("[data-stdel]");
+  if(del){
+    if(!confirm("«"+del.dataset.stdel+"» ro‘yxatdan o‘chiriladi. U testda qatnasha olmaydi. Davom etamizmi?")) return;
+    const r=await run("maStudentDelete",{group:stClass,name:del.dataset.stdel});
+    if(r){ await loadStudents(); $("stMsg").className="msg good"; $("stMsg").textContent="O‘quvchi o‘chirildi."; }
   }
 });
 
