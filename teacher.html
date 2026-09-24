@@ -23,10 +23,10 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(
 .login-card{max-width:440px;margin:30px auto;padding:28px}
 .section-title{color:var(--dark);font-size:20px;font-weight:800;margin:0 0 22px}
 label{display:block;font-size:15px;font-weight:600;margin:0 0 8px}
-input[type=text],input[type=password],input[type=date],select{width:100%;height:46px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 13px;font-size:15px;color:#172744;outline:none}
+input[type=text],input[type=password],input[type=date],input[type=datetime-local],select{width:100%;height:46px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 13px;font-size:15px;color:#172744;outline:none;font-family:inherit}
 input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
 .field{margin-bottom:18px}
-.btn{height:44px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 18px;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.btn{height:44px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 18px;font-size:14px;font-weight:700;color:#162641;cursor:pointer;font-family:inherit}
 .btn:hover{border-color:#8db7ed}
 .btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}
 .btn:disabled{opacity:.5;cursor:not-allowed}
@@ -49,8 +49,8 @@ input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 .filters label{font-size:13px;margin-bottom:6px}
 .check{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;height:46px}
 .check input{width:18px;height:18px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{height:42px;padding:0 18px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#162641;cursor:pointer}
+.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tab{height:42px;padding:0 18px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;font-size:14px;font-weight:700;color:#162641;cursor:pointer;font-family:inherit}
 .tab.active{background:#075fc9;color:#fff;border-color:#075fc9}
 .table-card{overflow:hidden}
 .table-info{padding:12px 18px;font-size:13px;color:#526178;border-bottom:1px solid var(--line)}
@@ -74,8 +74,6 @@ tr:hover td{background:#fbfcfe}
 .eye:hover{color:var(--blue)}
 .eye:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
 
-.tabs{flex-wrap:wrap}
-
 /* Tugmalar / umumiy */
 .btn.small{height:34px;padding:0 12px;font-size:13px}
 .btn.danger{color:#c0392b;border-color:#e6b9b3}
@@ -96,6 +94,7 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 .editor .pane-head{margin-bottom:18px}
 .editor>.ed-body{padding:0 20px}
 .ed-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.ed-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
 .chk-list{display:flex;flex-wrap:wrap;gap:8px}
 .chk-list label{display:flex;align-items:center;gap:7px;margin:0;padding:7px 12px;border:1px solid #cbd6e5;border-radius:8px;font-size:14px;cursor:pointer;background:#fff}
 .chk-list input{width:17px;height:17px}
@@ -111,14 +110,21 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 .orow.ok .olab{background:#2fa85f;color:#fff}
 .orow.ok input{border-color:#9bd3b1;background:#f5fcf8}
 .orow input{height:42px}
+.imgrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.qthumb{max-width:180px;max-height:120px;border-radius:8px;border:1px solid var(--line);background:#fff;object-fit:contain}
+.prev-img{max-width:100%;max-height:220px;border-radius:8px;border:1px solid var(--line);margin:8px 0;display:block}
 .ed-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
 .prev-q{padding:12px 0;border-bottom:1px solid var(--line)}
 .prev-q:last-child{border-bottom:0}
 .prev-o{padding:3px 0 3px 8px;font-size:14px}
 .prev-o.ok{color:#1f7a44;font-weight:700}
 .keyline{margin-top:12px;padding:10px 12px;background:#f3f7fc;border-radius:8px;font-weight:700;font-size:14px;color:var(--dark);line-height:1.6}
+.stt{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.stt.open{background:#dff5e7;color:#1a7a44}
+.stt.wait{background:#fff1d6;color:#8a5a00}
+.stt.end{background:#e7edf4;color:#526178}
 
-/* Guruhlarni boshqarish */
+/* Sinflarni boshqarish */
 .grp-add{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
 .grp-add .field{margin:0;min-width:200px}
 .grp-list{display:flex;flex-wrap:wrap;gap:10px}
@@ -131,7 +137,7 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 
 @media(max-width:700px){
-  .ed-grid{grid-template-columns:1fr}
+  .ed-grid,.ed-grid2{grid-template-columns:1fr}
   .pane-head{padding:14px}
   .editor>.ed-body{padding:0 14px}
   .container{padding:14px 12px 30px}
@@ -188,22 +194,23 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 
 <div class="card filters">
 <div class="filters-grid">
-<div><label for="fGroup">Guruh</label><select id="fGroup"></select></div>
+<div><label for="fGroup">Sinf</label><select id="fGroup"></select></div>
 <div><label for="fJn">Nazorat</label><select id="fJn"></select></div>
 <div><label for="fSearch">O‘quvchi (ism/familiya)</label><input id="fSearch" type="text" placeholder="Qidirish..." autocomplete="off"></div>
 <div><label for="fFrom">Sanadan</label><input id="fFrom" type="date"></div>
 <div><label for="fTo">Sanagacha</label><input id="fTo" type="date"></div>
 <div class="check"><input id="fDup" type="checkbox"><label for="fDup" style="margin:0">Takroriy urinishlar</label></div>
 <div><button class="btn" id="clearBtn" type="button" style="width:100%">Filtrlarni tozalash</button></div>
+<div><button class="btn primary" id="xlsBtn" type="button" style="width:100%" title="Joriy filtrlarga mos natijalar, har bir sinf alohida varaqda">Excel yuklab olish</button></div>
 </div>
 </div>
 </div>
 
 <div class="tabs">
 <button class="tab active" type="button" data-tab="results">Natijalar</button>
-<button class="tab" type="button" data-tab="groups">Guruhlar bo‘yicha</button>
+<button class="tab" type="button" data-tab="groups">Sinflar bo‘yicha</button>
 <button class="tab" type="button" data-tab="tests">Testlar</button>
-<button class="tab" type="button" data-tab="manage">Guruhlarni boshqarish</button>
+<button class="tab" type="button" data-tab="manage">Sinflarni boshqarish</button>
 </div>
 
 <!-- Natijalar jadvali -->
@@ -212,19 +219,19 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 <div class="bulk hidden" id="bulkBar"><span id="bulkCount"></span><button class="btn small danger" id="bulkDelete" type="button">Tanlanganlarni o‘chirish</button><button class="btn small" id="bulkClear" type="button">Tanlovni bekor qilish</button></div>
 <div class="table-wrap">
 <table>
-<thead><tr><th class="chk"><input type="checkbox" id="chkAll" aria-label="Hammasini tanlash"></th><th>№</th><th>Sana (Toshkent)</th><th>Guruh</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th><th></th></tr></thead>
+<thead><tr><th class="chk"><input type="checkbox" id="chkAll" aria-label="Hammasini tanlash"></th><th>№</th><th>Sana (Toshkent)</th><th>Sinf</th><th>O‘quvchi</th><th>Nazorat</th><th>To‘g‘ri</th><th>Foiz</th><th>Baho</th><th></th></tr></thead>
 <tbody id="resultsBody"></tbody>
 </table>
 </div>
 <div class="empty hidden" id="emptyMsg"></div>
 </div>
 
-<!-- Guruhlar bo'yicha -->
+<!-- Sinflar bo'yicha -->
 <div class="card table-card hidden" id="tabGroups">
-<div class="table-info">Har bir guruhning nazoratlar bo‘yicha o‘rtacha foizi. Bu jadvalga guruh va nazorat filtrlari ta’sir qilmaydi, sana, qidiruv va takroriy urinishlar filtri ta’sir qiladi.</div>
+<div class="table-info">Har bir sinfning nazoratlar bo‘yicha o‘rtacha foizi. Bu jadvalga sinf va nazorat filtrlari ta’sir qilmaydi, sana, qidiruv va takroriy urinishlar filtri ta’sir qiladi.</div>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Guruh</th><th>1-JN</th><th>2-JN</th><th>3-JN</th><th>4-JN</th><th>Jami</th></tr></thead>
+<thead id="groupsHead"></thead>
 <tbody id="groupsBody"></tbody>
 </table>
 </div>
@@ -236,7 +243,7 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 
 <div id="testsListView" class="card table-card">
 <div class="pane-head">
-<div><div class="bar-title">Mening testlarim</div><div class="bar-sub">Testni guruhlarga biriktiring — o‘quvchilar faqat o‘z guruhiga biriktirilgan testni ko‘radi.</div></div>
+<div><div class="bar-title">Mening testlarim</div><div class="bar-sub">Testni sinflarga biriktiring — o‘quvchilar faqat o‘z sinfiga biriktirilgan va vaqti kelgan testni ko‘radi.</div></div>
 <button class="btn primary" id="newTestBtn" type="button">＋ Yangi test</button>
 </div>
 <div id="testsList"></div>
@@ -249,10 +256,16 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 </div>
 <div class="ed-body">
 <div class="ed-grid">
-<div><label for="edTitle">Test nomi</label><input id="edTitle" type="text" maxlength="120" placeholder="Masalan: Mexanika, 1-nazorat" autocomplete="off"></div>
-<div><label for="edNazorat">Nazorat</label><select id="edNazorat"></select></div>
+<div><label for="edTitle">Test nomi</label><input id="edTitle" type="text" maxlength="120" placeholder="Masalan: Mexanika bo‘yicha test" autocomplete="off"></div>
+<div><label for="edNazorat">Nazorat turi</label><input id="edNazorat" type="text" maxlength="40" list="nazList" placeholder="1-JN yoki Oraliq nazorat" autocomplete="off">
+<datalist id="nazList"><option value="1-JN"><option value="2-JN"><option value="3-JN"><option value="4-JN"><option value="Oraliq nazorat"><option value="Yakuniy nazorat"></datalist></div>
 </div>
-<div class="field"><label>Qaysi guruhlarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
+<div class="ed-grid2">
+<div><label for="edStart">Test boshlanadigan vaqt</label><input id="edStart" type="datetime-local"></div>
+<div><label for="edEnd">Test tugaydigan vaqt</label><input id="edEnd" type="datetime-local"></div>
+</div>
+<div class="hint" style="margin-top:8px">Vaqt <b>Toshkent vaqti</b> bilan. O‘quvchi testni faqat shu oraliqda boshlay oladi. Test vaqti 45 daqiqa, lekin tugash vaqtidan oshmaydi. Nazorat turini o‘zingiz yozasiz (masalan: 1-JN, Oraliq nazorat).</div>
+<div class="field"><label>Qaysi sinflarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
 
 <div class="hint">
 <b>Savollarni kiritish.</b> Word (.docx) faylda har bir savol shunday yozilsin: avval savol, undan keyin 4 ta javob (A, B, C, D). <b>To‘g‘ri javob doim A bo‘lsin</b> — tizim savollar va javoblar tartibini har bir o‘quvchi uchun o‘zi aralashtiradi. Qo‘lda kiritganda ham xuddi shunday: A maydoniga to‘g‘ri javobni yozing.
@@ -261,7 +274,7 @@ A) 9,8 m/s²
 B) 8,9 m/s²
 C) 10,8 m/s²
 D) 6,7 m/s²</pre>
-Rasmlar Word’dan ko‘chmaydi; formulalar oddiy matn ko‘rinishida o‘tadi. Word’dan o‘qilgan savollarni saqlashdan oldin tekshirib chiqing.
+Rasmlar Word’dan ko‘chmaydi. Rasm kerak bo‘lsa, savolni qo‘shgach, shu savol ostidagi <b>«Rasm qo‘shish»</b> tugmasi orqali yuklang. Formulalar oddiy matn ko‘rinishida o‘tadi. Word’dan o‘qilgan savollarni saqlashdan oldin tekshirib chiqing.
 </div>
 
 <div class="ed-tools">
@@ -283,12 +296,12 @@ Rasmlar Word’dan ko‘chmaydi; formulalar oddiy matn ko‘rinishida o‘tadi. 
 </div>
 </div>
 
-<!-- Guruhlarni boshqarish -->
+<!-- Sinflarni boshqarish -->
 <div class="card table-card hidden" id="tabManage">
-<div class="pane-head"><div><div class="bar-title">Guruhlarim</div><div class="bar-sub">Bu yerda qo‘shilgan guruhlarga test biriktirish mumkin. Guruh o‘chirilsa, u testlardan ham olib tashlanadi; eski natijalar saqlanib qoladi.</div></div></div>
+<div class="pane-head"><div><div class="bar-title">Sinflarim</div><div class="bar-sub">Bu yerda qo‘shilgan sinflarga test biriktirish mumkin. Sinf o‘chirilsa, u testlardan ham olib tashlanadi; eski natijalar saqlanib qoladi.</div></div></div>
 <div class="pad">
 <form class="grp-add" id="groupAddForm" autocomplete="off">
-<div class="field"><label for="groupName">Yangi guruh</label><input id="groupName" type="text" maxlength="30" placeholder="Masalan: 107"></div>
+<div class="field"><label for="groupName">Yangi sinf</label><input id="groupName" type="text" maxlength="30" placeholder="Masalan: 107 yoki 9-A"></div>
 <button class="btn primary" id="groupAddBtn" type="submit">Qo‘shish</button>
 </form>
 <div id="manageMsg" class="msg info"></div>
@@ -306,13 +319,13 @@ Rasmlar Word’dan ko‘chmaydi; formulalar oddiy matn ko‘rinishida o‘tadi. 
 // index.html ichidagi RESULT_API_URL bilan BIR XIL manzilni shu yerga qo'ying
 const API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
-const JN_LIST=["1-JN","2-JN","3-JN","4-JN"];
-const DEFAULT_GROUPS=["101","102","103","104","105","106"];
+const DEFAULT_GROUPS=[];
 const TZ="Asia/Tashkent";
+const XLSX_URL="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
 
 let token=sessionStorage.getItem("gt_token")||"";
 let allRows=[];
-let serverGroups=null;      // ustozning guruhlari (serverdan)
+let serverGroups=null;      // ustozning sinflari (serverdan)
 let viewRows=[];            // jadvalda ko‘rinib turgan natijalar
 const selected=new Set();   // o‘chirish uchun tanlangan natijalar
 
@@ -331,6 +344,22 @@ function tk(iso){
   dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
   const hh=p.hour==="24"?"00":p.hour;
   return {date:p.year+"-"+p.month+"-"+p.day, full:p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute};
+}
+// ISO → <input type="datetime-local"> qiymati (Toshkent vaqti bilan)
+function toTkInput(iso){
+  const d=new Date(iso);
+  if(!iso||isNaN(d.getTime())) return "";
+  const p={};
+  dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
+  const hh=p.hour==="24"?"00":p.hour;
+  return p.year+"-"+p.month+"-"+p.day+"T"+hh+":"+p.minute;
+}
+// <input type="datetime-local"> qiymati (Toshkent vaqti) → ISO (UTC)
+function tkToIso(v){
+  const m=/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(String(v||""));
+  if(!m) return "";
+  const d=new Date(m[1]+"T"+m[2]+":00+05:00");
+  return isNaN(d.getTime())?"":d.toISOString();
 }
 
 /* ---------- Serverga so'rov ---------- */
@@ -353,10 +382,10 @@ async function api(action,payload){
   try{ data=JSON.parse(text); }
   catch(e){ throw new Error("Serverdan kutilmagan javob keldi. Apps Script yangi versiyada deploy qilinganini tekshiring."); }
   if(data&&data.source==="doPost"){
-    throw new Error("Apps Script'da ustoz paneli qismi ishlamayapti: Code.gs dagi doPost'ga qo‘shimcha kiritilganini va yangi versiya deploy qilinganini tekshiring.");
+    throw new Error("Apps Script'da ustoz paneli qismi ishlamayapti: telegram.gs dagi doPost'ga qo‘shimcha kiritilganini va yangi versiya deploy qilinganini tekshiring.");
   }
   if(data&&data.ok===false&&data.error==="Noma'lum so'rov."){
-    throw new Error("Serverda yangi funksiyalar yo‘q. Testlar.gs qo‘shilganini, Panel.gs dagi panelRouter ichida default: qatori almashtirilganini tekshiring va yangi versiya deploy qiling.");
+    throw new Error("Serverda yangi funksiyalar yo‘q. Testlar.gs qo‘shilganini va yangi versiya deploy qilinganini tekshiring.");
   }
   return data;
 }
@@ -430,6 +459,7 @@ async function loadResults(){
     allRows=(r.rows||[]).map(x=>Object.assign({},x,{d:tk(x.t)}));
     msg.textContent="";
     buildGroupFilter();
+    buildJnFilter();
     render();
   }catch(err){
     msg.className="msg error";
@@ -448,11 +478,20 @@ function groupList(){
 function buildGroupFilter(){
   const sel=$("fGroup");
   const old=sel.value;
-  sel.innerHTML='<option value="">Barcha guruhlar</option>'+groupList().map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join("");
+  sel.innerHTML='<option value="">Barcha sinflar</option>'+groupList().map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join("");
   if(old&&groupList().indexOf(old)!==-1) sel.value=old;
 }
+function nazoratList(rows){
+  const set=new Set();
+  rows.forEach(r=>{ if(r.jn) set.add(r.jn); });
+  return Array.from(set).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+}
 function buildJnFilter(){
-  $("fJn").innerHTML='<option value="">Barcha nazoratlar</option>'+JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
+  const sel=$("fJn");
+  const old=sel.value;
+  const list=nazoratList(allRows);
+  sel.innerHTML='<option value="">Barcha nazoratlar</option>'+list.map(j=>'<option value="'+esc(j)+'">'+esc(j)+'</option>').join("");
+  if(old&&list.indexOf(old)!==-1) sel.value=old;
 }
 function baseFiltered(){
   const q=$("fSearch").value.trim().toLowerCase();
@@ -518,9 +557,11 @@ function renderTable(rows){
   updateBulk();
 }
 function renderGroups(base){
+  const jns=nazoratList(base);
+  $("groupsHead").innerHTML='<tr><th>Sinf</th>'+jns.map(j=>'<th>'+esc(j)+'</th>').join("")+'<th>Jami</th></tr>';
   $("groupsBody").innerHTML=groupList().map(g=>{
     const gr=base.filter(r=>r.group===g);
-    const cells=JN_LIST.map(jn=>{
+    const cells=jns.map(jn=>{
       const x=gr.filter(r=>r.jn===jn);
       return x.length?'<td><b>'+avgPercent(x)+'%</b><span class="sub">'+x.length+' ta</span></td>':'<td class="muted">—</td>';
     }).join("");
@@ -553,11 +594,6 @@ function setTab(name){
   if(pm.className.indexOf("error")===-1) pm.textContent="";
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
-
-/* =====================================================
-   YANGI QISMLAR: parol ko‘zchasi, natijalarni o‘chirish,
-   testlar (qo‘lda / Word), guruhlarni boshqarish
-   ===================================================== */
 
 /* ---------- Sessiya bilan so‘rov ---------- */
 async function call(action,payload){
@@ -657,6 +693,74 @@ async function deleteResults(list){
   }
 }
 
+/* ---------- Excel: sinflar kesimida natijalarni yuklab olish ---------- */
+function loadXlsx(){
+  return new Promise((resolve,reject)=>{
+    if(window.XLSX){ resolve(); return; }
+    const s=document.createElement("script");
+    s.src=XLSX_URL;
+    s.onload=()=>window.XLSX?resolve():reject(new Error("Excel kutubxonasi yuklanmadi."));
+    s.onerror=()=>reject(new Error("Excel kutubxonasini yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring."));
+    document.head.appendChild(s);
+  });
+}
+function sheetName(name,used){
+  let base=String(name||"Sinf").replace(/[\[\]:*?\/\\]/g,"_").trim().slice(0,28)||"Sinf";
+  let n=base,k=2;
+  while(used[n.toLowerCase()]){ n=base.slice(0,26)+" ("+k+")"; k++; }
+  used[n.toLowerCase()]=true;
+  return n;
+}
+$("xlsBtn").addEventListener("click",async ()=>{
+  const pm=$("panelMsg");
+  const rows=tableFiltered(baseFiltered());
+  if(!rows.length){ pm.className="msg error"; pm.textContent="Yuklab olish uchun natija yo‘q (filtrlarni tekshiring)."; return; }
+  const btn=$("xlsBtn");
+  btn.disabled=true;
+  pm.className="msg info"; pm.textContent="Excel fayl tayyorlanmoqda...";
+  try{
+    await loadXlsx();
+    const byClass={};
+    rows.forEach(r=>{ (byClass[r.group]=byClass[r.group]||[]).push(r); });
+    const classes=Object.keys(byClass).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+    const wb=XLSX.utils.book_new();
+    const used={};
+
+    // 1-varaq: sinflar bo‘yicha umumiy
+    const sum=[["Sinf","Natijalar soni","O‘quvchilar soni","O‘rtacha foiz","Baho 5","Baho 4","Baho 3","Baho 2"]];
+    classes.forEach(g=>{
+      const list=byClass[g];
+      const cnt={5:0,4:0,3:0,2:0};
+      list.forEach(r=>{ if(cnt[r.grade]!==undefined) cnt[r.grade]++; });
+      sum.push([g,list.length,new Set(list.map(r=>r.student.toLowerCase())).size,avgPercent(list),cnt[5],cnt[4],cnt[3],cnt[2]]);
+    });
+    const ws0=XLSX.utils.aoa_to_sheet(sum);
+    ws0["!cols"]=[{wch:14},{wch:16},{wch:18},{wch:14},{wch:9},{wch:9},{wch:9},{wch:9}];
+    XLSX.utils.book_append_sheet(wb,ws0,sheetName("Umumiy",used));
+
+    // Har bir sinf — alohida varaq
+    classes.forEach(g=>{
+      const list=byClass[g].slice().sort((a,b)=>a.student.localeCompare(b.student)||a.jn.localeCompare(b.jn,undefined,{numeric:true})||String(a.t).localeCompare(String(b.t)));
+      const aoa=[["№","O‘quvchi","Nazorat","To‘g‘ri","Jami","Foiz","Baho","Sana (Toshkent)","Holat","Viloyat","Tuman/shahar","Ta’lim muassasasi"]];
+      list.forEach((r,i)=>{
+        aoa.push([i+1,r.student,r.jn,r.correct,r.total,r.percent,r.grade,r.d.full,r.status==="takror"?"takror":"asosiy",r.region||"",r.district||"",r.school||""]);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(aoa);
+      ws["!cols"]=[{wch:5},{wch:32},{wch:18},{wch:9},{wch:8},{wch:8},{wch:8},{wch:17},{wch:10},{wch:20},{wch:22},{wch:34}];
+      XLSX.utils.book_append_sheet(wb,ws,sheetName(g,used));
+    });
+
+    const subj=String($("teacherSubject").textContent||"Natijalar").replace(/[^\p{L}\p{N}]+/gu,"_");
+    const today=tk(new Date().toISOString()).date;
+    XLSX.writeFile(wb,"Natijalar_"+subj+"_"+today+".xlsx");
+    pm.className="msg info"; pm.textContent="Excel fayl yuklab olindi ("+rows.length+" ta natija, "+classes.length+" ta sinf).";
+  }catch(err){
+    pm.className="msg error"; pm.textContent=err.message;
+  }finally{
+    btn.disabled=false;
+  }
+});
+
 /* ---------- Word fayl o‘qish (.docx) ---------- */
 async function readDocxXml(file){
   const buf=new Uint8Array(await file.arrayBuffer());
@@ -698,7 +802,6 @@ function decodeXml(s){
           .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,"&");
 }
 function xmlToLines(xml){
-  // Word formulalari: kasr, daraja, indeks, ildiz oddiy matnga aylantiriladi
   xml=xml.replace(/<\/m:num>/g,"<m:t>/</m:t>")
          .replace(/<m:sup>/g,"<m:t>^</m:t>")
          .replace(/<m:sub>/g,"<m:t>_</m:t>")
@@ -726,7 +829,6 @@ function optIdx(ch){
   const c=ch.toUpperCase();
   return "ABCD".indexOf(({"А":"A","В":"B","С":"C"})[c]||c);
 }
-// Bitta qatorda "A) .. B) .. C) .. D) .." bo‘lsa, ajratib beradi
 function splitInline(line){
   const re=/(?:^|\s)\(?([A-DАВС])\s*[.)]\s*/gi;
   const marks=[]; let m;
@@ -739,7 +841,6 @@ function splitInline(line){
     o:seq.map((k,j)=>line.slice(k.end,seq[j+1]?seq[j+1].start:line.length).trim())
   };
 }
-// Qatorlar → savollar. Har bir savol: {q, o:[A,B,C,D]}, A — to‘g‘ri javob
 function parseQuestions(lines){
   lines=lines.map(l=>l.trim()).filter(Boolean);
   const strip=t=>t.replace(NUM_RE,"").trim();
@@ -748,17 +849,16 @@ function parseQuestions(lines){
   const out=[];
   let leftover=0;
   if(!labeled){
-    // Belgisiz format: har 5 ta qator = savol + 4 ta javob
     let L=lines;
-    if(L.length%5===1) L=L.slice(1);   // yagona ortiqcha qator — odatda sarlavha
+    if(L.length%5===1) L=L.slice(1);
     for(let i=0;i<L.length;i+=5){
       const ch=L.slice(i,i+5);
-      out.push({q:strip(ch[0]),o:[ch[1]||"",ch[2]||"",ch[3]||"",ch[4]||""]});
+      out.push({q:strip(ch[0]),o:[ch[1]||"",ch[2]||"",ch[3]||"",ch[4]||""],img:"",imgUrl:""});
     }
     leftover=L.length%5;
   }else{
     let cur=null;
-    const flush=()=>{ if(cur&&cur.n>0) out.push({q:cur.q.trim(),o:cur.o}); cur=null; };
+    const flush=()=>{ if(cur&&cur.n>0) out.push({q:cur.q.trim(),o:cur.o,img:"",imgUrl:""}); cur=null; };
     const begin=q=>{ flush(); cur={q:q||"",o:["","","",""],n:0}; };
     lines.forEach(line=>{
       const inl=splitInline(line);
@@ -781,7 +881,7 @@ function parseQuestions(lines){
         return;
       }
       if(cur.n>=4||NUM_RE.test(line)){ begin(strip(line)); return; }
-      cur.o[cur.n-1]+=" "+line;   // javob matni keyingi abzatsga o‘tib ketgan
+      cur.o[cur.n-1]+=" "+line;
     });
     flush();
   }
@@ -795,7 +895,7 @@ let editing=null;
 let edDirty=false;
 const LETTERS=["A","B","C","D"];
 const MAX_Q=200;
-const blankQ=()=>({q:"",o:["","","",""]});
+const blankQ=()=>({q:"",o:["","","",""],img:"",imgUrl:""});
 const isEmptyQ=x=>!x.q.trim()&&!x.o.some(v=>v.trim());
 const isBadQ=x=>!x.q.trim()||x.o.some(v=>!v.trim());
 
@@ -812,12 +912,12 @@ function resetPanelState(){
   setTab("results");
 }
 
-/* ---------- Guruhlarni boshqarish ---------- */
+/* ---------- Sinflarni boshqarish ---------- */
 async function loadGroups(){
   const m=$("manageMsg");
   try{
     const r=await call("groups");
-    if(!r.ok) throw new Error(r.error||"Guruhlarni olib bo‘lmadi.");
+    if(!r.ok) throw new Error(r.error||"Sinflarni olib bo‘lmadi.");
     serverGroups=r.groups||[];
     m.textContent="";
   }catch(err){
@@ -831,7 +931,7 @@ async function loadGroups(){
 function renderManage(){
   const box=$("groupsManage");
   if(serverGroups===null){ box.innerHTML=""; return; }
-  if(!serverGroups.length){ box.innerHTML='<div class="muted">Hozircha guruh yo‘q. Yuqoridan qo‘shing.</div>'; return; }
+  if(!serverGroups.length){ box.innerHTML='<div class="muted">Hozircha sinf yo‘q. Yuqoridan qo‘shing.</div>'; return; }
   box.innerHTML=serverGroups.map(g=>'<div class="grp-item">'+esc(g)+'<button class="btn small danger" type="button" data-gdel="'+esc(g)+'">O‘chirish</button></div>').join("");
 }
 $("groupAddForm").addEventListener("submit",async e=>{
@@ -842,10 +942,10 @@ $("groupAddForm").addEventListener("submit",async e=>{
   $("groupAddBtn").disabled=true;
   try{
     const r=await call("groupAdd",{name:name});
-    if(!r.ok) throw new Error(r.error||"Guruh qo‘shib bo‘lmadi.");
+    if(!r.ok) throw new Error(r.error||"Sinf qo‘shib bo‘lmadi.");
     serverGroups=r.groups||[];
     $("groupName").value="";
-    m.className="msg info"; m.textContent="Guruh qo‘shildi.";
+    m.className="msg info"; m.textContent="Sinf qo‘shildi.";
     buildGroupFilter(); renderManage(); render();
   }catch(err){
     if(err.auth) return;
@@ -857,14 +957,14 @@ $("groupAddForm").addEventListener("submit",async e=>{
 $("groupsManage").addEventListener("click",async e=>{
   const b=e.target.closest("[data-gdel]"); if(!b) return;
   const name=b.dataset.gdel;
-  if(!confirm("“"+name+"” guruhini o‘chirmoqchimisiz?\n\nGuruh testlardan ham olib tashlanadi. Eski natijalar saqlanib qoladi.")) return;
+  if(!confirm("“"+name+"” sinfini o‘chirmoqchimisiz?\n\nSinf testlardan ham olib tashlanadi. Eski natijalar saqlanib qoladi.")) return;
   const m=$("manageMsg");
   b.disabled=true;
   try{
     const r=await call("groupDelete",{name:name});
-    if(!r.ok) throw new Error(r.error||"Guruhni o‘chirib bo‘lmadi.");
+    if(!r.ok) throw new Error(r.error||"Sinfni o‘chirib bo‘lmadi.");
     serverGroups=r.groups||[];
-    m.className="msg info"; m.textContent="Guruh o‘chirildi.";
+    m.className="msg info"; m.textContent="Sinf o‘chirildi.";
     buildGroupFilter(); renderManage(); render();
     loadTests();
   }catch(err){
@@ -889,21 +989,33 @@ async function loadTests(){
   }
   renderTests();
 }
+function winState(t){
+  const now=Date.now();
+  const s=t.start?Date.parse(t.start):NaN, e=t.end?Date.parse(t.end):NaN;
+  if(!isNaN(s)&&now<s) return ["Kutilmoqda","wait"];
+  if(!isNaN(e)&&now>e) return ["Tugagan","end"];
+  if(!isNaN(s)||!isNaN(e)) return ["Ochiq","open"];
+  return ["Doim ochiq","open"];
+}
 function renderTests(){
   const box=$("testsList");
   if(!tests.length){
     box.innerHTML='<div class="empty">Hozircha test yo‘q. “＋ Yangi test” tugmasini bosing.</div>';
     return;
   }
-  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Savollar</th><th>Guruhlar</th><th>O‘zgartirilgan</th><th></th></tr></thead><tbody>'+
+  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Vaqt (Toshkent)</th><th>Holat</th><th>Savollar</th><th>Sinflar</th><th></th></tr></thead><tbody>'+
     tests.map(t=>{
       const id=esc(t.id);
       const chips=(t.groups||[]).length?t.groups.map(g=>'<span class="chip">'+esc(g)+'</span>').join(""):'<span class="muted">biriktirilmagan</span>';
-      return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat)+'</td><td>'+esc(t.count)+' ta</td>'+
-        '<td class="name">'+chips+'</td><td>'+esc(tk(t.updated).full)+'</td>'+
+      const st=winState(t);
+      const time=(t.start||t.end)?esc(tk(t.start).full)+'<span class="sub">→ '+esc(tk(t.end).full)+'</span>':'<span class="muted">belgilanmagan</span>';
+      return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat)+'</td>'+
+        '<td>'+time+'</td><td><span class="stt '+st[1]+'">'+st[0]+'</span></td>'+
+        '<td>'+esc(t.count)+' ta</td>'+
+        '<td class="name">'+chips+'</td>'+
         '<td><div class="bar-actions">'+
         '<button class="btn small" type="button" data-act="edit" data-id="'+id+'">Tahrirlash</button>'+
-        '<button class="btn small" type="button" data-act="assign" data-id="'+id+'">Guruhlar</button>'+
+        '<button class="btn small" type="button" data-act="assign" data-id="'+id+'">Sinflar</button>'+
         '<button class="btn small danger" type="button" data-act="del" data-id="'+id+'">O‘chirish</button>'+
         '</div></td></tr>';
     }).join("")+'</tbody></table></div>';
@@ -931,15 +1043,15 @@ async function deleteTest(id){
   }
 }
 
-/* ---------- Testni guruhlarga biriktirish ---------- */
+/* ---------- Testni sinflarga biriktirish ---------- */
 function openAssign(id){
   const t=tests.find(x=>x.id===id); if(!t) return;
   const gl=serverGroups||[];
   if(!gl.length){
-    openModal('<h3>Guruhlarga biriktirish</h3><p>Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</p><div class="modal-actions"><button class="btn" type="button" data-m="close">Yopish</button></div>');
+    openModal('<h3>Sinflarga biriktirish</h3><p>Avval “Sinflarni boshqarish” bo‘limida sinf qo‘shing.</p><div class="modal-actions"><button class="btn" type="button" data-m="close">Yopish</button></div>');
     return;
   }
-  openModal('<h3>“'+esc(t.title)+'” — guruhlarga biriktirish</h3>'+
+  openModal('<h3>“'+esc(t.title)+'” — sinflarga biriktirish</h3>'+
     '<div class="chk-list" id="asGroups">'+gl.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+((t.groups||[]).indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("")+'</div>'+
     '<div id="asMsg" class="msg"></div>'+
     '<div class="modal-actions"><button class="btn primary" type="button" data-m="assign" data-id="'+esc(id)+'">Saqlash</button><button class="btn" type="button" data-m="close">Bekor qilish</button></div>');
@@ -972,7 +1084,8 @@ async function openEditor(id){
       const r=await call("testGet",{id:id});
       if(!r.ok) throw new Error(r.error||"Testni olib bo‘lmadi.");
       const t=r.test;
-      editing={id:t.id,title:t.title,nazorat:t.nazorat,groups:t.groups||[],questions:(t.questions||[]).map(x=>({q:x.q,o:x.o.slice(0,4)}))};
+      editing={id:t.id,title:t.title,nazorat:t.nazorat,start:toTkInput(t.start),end:toTkInput(t.end),groups:t.groups||[],
+        questions:(t.questions||[]).map(x=>({q:x.q,o:x.o.slice(0,4),img:x.img||"",imgUrl:x.imgUrl||""}))};
       m.textContent="";
     }catch(err){
       if(err.auth) return;
@@ -980,7 +1093,7 @@ async function openEditor(id){
       return;
     }
   }else{
-    editing={id:"",title:"",nazorat:JN_LIST[0],groups:[],questions:[blankQ()]};
+    editing={id:"",title:"",nazorat:"",start:"",end:"",groups:[],questions:[blankQ()]};
   }
   if(!editing.questions.length) editing.questions=[blankQ()];
   edDirty=false;
@@ -989,6 +1102,8 @@ async function openEditor(id){
   $("edHeading").textContent=editing.id?"Testni tahrirlash":"Yangi test";
   $("edTitle").value=editing.title;
   $("edNazorat").value=editing.nazorat;
+  $("edStart").value=editing.start;
+  $("edEnd").value=editing.end;
   renderEdGroups();
   renderQuestions();
   $("edMsg").textContent="";
@@ -1005,14 +1120,20 @@ $("cancelTestBtn").addEventListener("click",()=>closeEditor());
 
 function renderEdGroups(){
   const box=$("edGroups");
-  if(serverGroups===null){ box.innerHTML='<span class="muted">Guruhlar yuklanmadi. “Guruhlarni boshqarish” bo‘limini tekshiring.</span>'; return; }
-  if(!serverGroups.length){ box.innerHTML='<span class="muted">Avval “Guruhlarni boshqarish” bo‘limida guruh qo‘shing.</span>'; return; }
+  if(serverGroups===null){ box.innerHTML='<span class="muted">Sinflar yuklanmadi. “Sinflarni boshqarish” bo‘limini tekshiring.</span>'; return; }
+  if(!serverGroups.length){ box.innerHTML='<span class="muted">Avval “Sinflarni boshqarish” bo‘limida sinf qo‘shing.</span>'; return; }
   box.innerHTML=serverGroups.map(g=>'<label><input type="checkbox" value="'+esc(g)+'"'+(editing.groups.indexOf(g)!==-1?' checked':'')+'> '+esc(g)+'</label>').join("");
+}
+function imgControls(x,i){
+  if(x.uploading) return '<div class="imgrow"><span class="muted">Rasm yuklanmoqda...</span></div>';
+  if(x.img) return '<div class="imgrow"><img class="qthumb" src="'+esc(x.imgUrl)+'" alt="Savol rasmi"><button class="btn small danger" type="button" data-imgdel="'+i+'">Rasmni olib tashlash</button></div>';
+  return '<div class="imgrow"><label class="btn small file-btn">Rasm qo‘shish<input type="file" accept="image/*" data-imgfile="'+i+'" hidden></label><span class="muted">ixtiyoriy</span></div>';
 }
 function renderQuestions(){
   $("edQuestions").innerHTML=editing.questions.map((x,i)=>
     '<div class="qcard" data-qi="'+i+'"><div class="qhead"><b>'+(i+1)+'-savol</b><button class="btn small danger" type="button" data-qdel="'+i+'">O‘chirish</button></div>'+
     '<textarea data-f="q" rows="2" placeholder="Savol matni">'+esc(x.q)+'</textarea>'+
+    imgControls(x,i)+
     LETTERS.map((L,j)=>'<div class="orow'+(j===0?' ok':'')+'"><span class="olab">'+L+'</span><input type="text" data-f="o'+j+'" value="'+esc(x.o[j])+'" placeholder="'+(j===0?'To‘g‘ri javob':'Noto‘g‘ri javob')+'" autocomplete="off"></div>').join("")+
     '</div>'
   ).join("");
@@ -1036,11 +1157,25 @@ $("edQuestions").addEventListener("input",e=>{
   updateEdCount();
 });
 $("edQuestions").addEventListener("click",e=>{
+  const im=e.target.closest("[data-imgdel]");
+  if(im&&editing){
+    const x=editing.questions[Number(im.dataset.imgdel)];
+    if(x){ x.img=""; x.imgUrl=""; edDirty=true; renderQuestions(); }
+    return;
+  }
   const b=e.target.closest("[data-qdel]"); if(!b||!editing) return;
   editing.questions.splice(Number(b.dataset.qdel),1);
   if(!editing.questions.length) editing.questions.push(blankQ());
   edDirty=true;
   renderQuestions();
+});
+$("edQuestions").addEventListener("change",async e=>{
+  const f=e.target.closest("[data-imgfile]");
+  if(!f||!editing) return;
+  const file=f.files&&f.files[0];
+  f.value="";
+  if(!file) return;
+  await attachImage(Number(f.dataset.imgfile),file);
 });
 $("testEditor").addEventListener("input",()=>{ edDirty=true; });
 $("testEditor").addEventListener("change",()=>{ edDirty=true; });
@@ -1060,6 +1195,58 @@ $("clearQBtn").addEventListener("click",()=>{
   edDirty=true;
   renderQuestions();
 });
+
+/* ---------- Savolga rasm yuklash ---------- */
+// Rasm brauzerda kichraytiriladi (eng katta tomoni 1200 px, JPEG) va serverga yuboriladi
+function shrinkImage(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.naturalWidth, h=img.naturalHeight;
+      const k=Math.min(1,1200/Math.max(w,h));
+      w=Math.max(1,Math.round(w*k)); h=Math.max(1,Math.round(h*k));
+      const c=document.createElement("canvas");
+      c.width=w; c.height=h;
+      const ctx=c.getContext("2d");
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      let out="";
+      for(const q of [0.85,0.7,0.55,0.4]){
+        out=c.toDataURL("image/jpeg",q);
+        if(out.length<=2600000) break;
+      }
+      if(out.length>2600000) reject(new Error("Rasm juda katta. Kichikroq rasm tanlang."));
+      else resolve(out);
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error("Rasmni o‘qib bo‘lmadi. JPG yoki PNG fayl tanlang.")); };
+    img.src=url;
+  });
+}
+async function attachImage(i,file){
+  const x=editing&&editing.questions[i];
+  if(!x) return;
+  const m=$("edMsg");
+  if(!/^image\//.test(file.type)){ m.className="msg error"; m.textContent="Faqat rasm fayli (JPG, PNG, WEBP) yuklang."; return; }
+  if(file.size>15*1024*1024){ m.className="msg error"; m.textContent="Rasm juda katta (15 MB dan oshmasin)."; return; }
+  x.uploading=true;
+  renderQuestions();
+  m.className="msg info"; m.textContent="Rasm yuklanmoqda...";
+  try{
+    const dataUrl=await shrinkImage(file);
+    const r=await call("imageUpload",{mime:"image/jpeg",data:dataUrl});
+    if(!r.ok) throw new Error(r.error||"Rasmni yuklab bo‘lmadi.");
+    if(editing&&editing.questions.indexOf(x)!==-1){ x.img=r.id; x.imgUrl=dataUrl; edDirty=true; }
+    m.className="msg info"; m.textContent="Rasm yuklandi.";
+  }catch(err){
+    if(err.auth) return;
+    m.className="msg error"; m.textContent=err.message;
+  }finally{
+    x.uploading=false;
+    if(editing&&!$("testEditor").classList.contains("hidden")) renderQuestions();
+  }
+}
 
 /* ---------- Word fayldan savollar qo‘shish ---------- */
 $("docxInput").addEventListener("change",async ev=>{
@@ -1108,11 +1295,12 @@ function previewShuffle(){
   }
   const sh=shuffleArr(ok).map(x=>{
     const order=shuffleArr([0,1,2,3]);
-    return {q:x.q,o:order.map(k=>x.o[k]),c:order.indexOf(0)};
+    return {q:x.q,imgUrl:x.imgUrl,o:order.map(k=>x.o[k]),c:order.indexOf(0)};
   });
   openModal('<h3>Namuna: o‘quvchi shunday ko‘radi</h3>'+
     '<div class="muted" style="font-size:13px;margin-bottom:6px">Har bir o‘quvchiga savollar va javoblar tartibi alohida aralashtiriladi, kalit ham shunga mos o‘zgaradi.</div>'+
     sh.map((x,i)=>'<div class="prev-q"><b>'+(i+1)+'. '+esc(x.q)+'</b>'+
+      (x.imgUrl?'<img class="prev-img" src="'+esc(x.imgUrl)+'" alt="Savol rasmi">':'')+
       x.o.map((t,j)=>'<div class="prev-o'+(j===x.c?' ok':'')+'">'+LETTERS[j]+') '+esc(t)+(j===x.c?' ✓':'')+'</div>').join("")+'</div>').join("")+
     '<div class="keyline">Kalit: '+sh.map((x,i)=>(i+1)+"-"+LETTERS[x.c]).join(", ")+'</div>'+
     '<div class="modal-actions"><button class="btn primary" type="button" data-m="reshuffle">Yana aralashtirish</button><button class="btn" type="button" data-m="close">Yopish</button></div>');
@@ -1125,10 +1313,18 @@ async function saveTest(){
   if(!editing) return;
   const msg=$("edMsg");
   msg.className="msg error";
+  if(editing.questions.some(x=>x.uploading)){ msg.textContent="Rasm yuklanmoqda, biroz kuting."; return; }
   editing.title=$("edTitle").value.trim();
-  editing.nazorat=$("edNazorat").value;
+  editing.nazorat=$("edNazorat").value.trim();
+  editing.start=$("edStart").value;
+  editing.end=$("edEnd").value;
   editing.groups=Array.from(document.querySelectorAll("#edGroups input:checked")).map(i=>i.value);
   if(!editing.title){ msg.textContent="Test nomini kiriting."; $("edTitle").focus(); return; }
+  if(!editing.nazorat){ msg.textContent="Nazorat turini yozing (masalan: 1-JN yoki Oraliq nazorat)."; $("edNazorat").focus(); return; }
+  if(!editing.start||!editing.end){ msg.textContent="Testning boshlanish va tugash vaqtini kiriting."; (editing.start?$("edEnd"):$("edStart")).focus(); return; }
+  const startIso=tkToIso(editing.start), endIso=tkToIso(editing.end);
+  if(!startIso||!endIso){ msg.textContent="Vaqt noto‘g‘ri kiritilgan."; return; }
+  if(Date.parse(endIso)<=Date.parse(startIso)){ msg.textContent="Tugash vaqti boshlanish vaqtidan keyin bo‘lishi kerak."; $("edEnd").focus(); return; }
   editing.questions=editing.questions.filter(x=>!isEmptyQ(x));
   if(!editing.questions.length){
     editing.questions=[blankQ()]; renderQuestions();
@@ -1148,8 +1344,8 @@ async function saveTest(){
   msg.className="msg info"; msg.textContent="Saqlanmoqda...";
   try{
     const r=await call("testSave",{
-      id:editing.id,title:editing.title,nazorat:editing.nazorat,groups:editing.groups,
-      questions:editing.questions.map(x=>({q:x.q.trim(),o:x.o.map(v=>v.trim())}))
+      id:editing.id,title:editing.title,nazorat:editing.nazorat,start:startIso,end:endIso,groups:editing.groups,
+      questions:editing.questions.map(x=>({q:x.q.trim(),o:x.o.map(v=>v.trim()),img:x.img||""}))
     });
     if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
     closeEditor(true);
@@ -1165,7 +1361,6 @@ async function saveTest(){
 
 /* ---------- Ishga tushirish ---------- */
 buildJnFilter();
-$("edNazorat").innerHTML=JN_LIST.map(j=>'<option value="'+j+'">'+j+'</option>').join("");
 buildGroupFilter();
 if(token){
   showPanel();
