@@ -156,7 +156,7 @@ function fillSelect(sel,placeholder,items,withOther){
 }
 function pick(sel,other){return sel.value===OTHER_OPT?other.value.trim():sel.value}
 function initRegions(){
-  fillSelect(regionEl,"Viloyatni tanlang",Object.keys(REGIONS),false);
+  fillSelect(regionEl,"Viloyatni tanlang",Object.keys(UZBEKISTAN),false);
   fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true;
   resetSchool("Avval tumanni tanlang");
 }
@@ -177,7 +177,7 @@ regionEl.onchange=()=>{
   msg.textContent="";
   districtOtherEl.classList.add("hidden");districtOtherEl.value="";
   if(!regionEl.value){fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true}
-  else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",REGIONS[regionEl.value]||[],true);districtEl.disabled=false}
+ else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",UZBEKISTAN[regionEl.value]||[],true);districtEl.disabled=false}
   resetSchool("Avval tumanni tanlang");
 };
 districtEl.onchange=()=>{
