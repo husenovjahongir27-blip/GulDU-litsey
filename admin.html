@@ -15,8 +15,6 @@
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 .page { display: none; }
 .page.active { display: block; }
-
-/* LOGIN */
 .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
 .login-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 400px; }
 .login-logo { text-align: center; margin-bottom: 2rem; }
@@ -45,8 +43,6 @@ label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px
 .err-msg.show { display: block; }
 .ok-msg { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: #86efac; border-radius: var(--radius); padding: 8px 12px; font-size: 13px; margin-bottom: 1rem; display: none; }
 .ok-msg.show { display: block; }
-
-/* MODAL */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; z-index: 999; padding: 1rem; }
 .overlay.show { display: flex; }
 .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
@@ -55,8 +51,6 @@ label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px
 .modal > p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
 .modal-actions { display: flex; gap: 10px; margin-top: 1.25rem; }
 .modal-actions .btn { flex: 1; }
-
-/* TOPBAR */
 .topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 1.5rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
 .topbar-left { display: flex; align-items: center; gap: 12px; }
 .topbar-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -66,31 +60,24 @@ label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 6px
 .udot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; }
 .logout-btn { background: none; border: 1px solid var(--border); color: var(--text2); padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
 .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
-
-/* TABS */
 .tabs { display: flex; gap: 4px; background: var(--card2); padding: 4px; border-radius: 10px; margin-bottom: 1.5rem; }
 .tab { flex: 1; padding: 8px; text-align: center; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; color: var(--text2); border: none; background: none; transition: all .15s; }
 .tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.3); }
-
-/* MAIN */
 .main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 1.75rem; }
 .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }
 .stat-label { font-size: 11px; color: var(--text2); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
 .stat-val { font-size: 26px; font-weight: 700; }
 .c-blue { color: var(--accent2); } .c-green { color: var(--success); } .c-amber { color: var(--warning); } .c-red { color: #f87171; }
-
 .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
 .section-header h3 { font-size: 15px; font-weight: 700; }
 .btn-add { display: flex; align-items: center; gap: 6px; background: var(--accent); border: none; color: #fff; padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; }
 .btn-add:hover { opacity: .88; }
-
 .search-row { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
 .search-wrap { position: relative; flex: 1; min-width: 200px; }
 .search-wrap .inp { padding-left: 36px; }
 .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
 select.inp { cursor: pointer; }
-
 .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; min-width: 700px; }
 thead th { background: var(--card2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
@@ -114,49 +101,35 @@ tbody td { padding: 11px 14px; font-size: 13px; }
 .avatar { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
 .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text3); }
 .empty-icon { font-size: 36px; margin-bottom: .75rem; }
-
-/* FORM GRID */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-grid .full { grid-column: 1/-1; }
 @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .form-grid .full { grid-column: 1; } }
-
-/* PERM */
 .perm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .perm-item { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
 .perm-item input { accent-color: var(--accent); }
 .perm-item label { font-size: 12px; cursor: pointer; color: var(--text2); }
 .perm-item:has(input:checked) { border-color: var(--accent); background: rgba(99,102,241,.08); }
 .perm-item:has(input:checked) label { color: var(--accent2); }
-
-/* LOG */
 .log-item { display: flex; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: flex-start; }
 .log-item:last-child { border-bottom: none; }
 .log-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
 .log-time { color: var(--text3); font-size: 11px; min-width: 80px; text-align: right; }
-
-/* OTP INPUT */
 .otp-row { display: flex; gap: 10px; justify-content: center; margin: 1rem 0; }
 .otp-row input { width: 48px; height: 52px; text-align: center; font-size: 22px; font-weight: 700; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); outline: none; transition: border .2s; }
 .otp-row input:focus { border-color: var(--accent); }
-
-/* DETAIL PANEL */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem; }
 .detail-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
 .detail-key { font-size: 11px; color: var(--text3); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
 .detail-val { font-size: 14px; font-weight: 500; }
-
-/* REGION FILTER BADGES */
 .filter-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
 .filter-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); color: var(--text2); background: var(--card2); }
 .filter-badge.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
-
 .hint { font-size: 12px; color: var(--text3); margin-top: 4px; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN PAGE ===== -->
 <div id="pgLogin" class="page active">
   <div class="login-wrap">
     <div class="login-card">
@@ -183,7 +156,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- ===== FORGOT STEP 1: Email ===== -->
 <div id="pgForgot1" class="page">
   <div class="login-wrap">
     <div class="login-card">
@@ -206,7 +178,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- ===== FORGOT STEP 2: OTP ===== -->
 <div id="pgForgot2" class="page">
   <div class="login-wrap">
     <div class="login-card">
@@ -233,7 +204,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- ===== FORGOT STEP 3: New pass ===== -->
 <div id="pgForgot3" class="page">
   <div class="login-wrap">
     <div class="login-card">
@@ -266,7 +236,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
 <div id="pgDash" class="page">
   <div class="topbar">
     <div class="topbar-left">
@@ -286,7 +255,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
       <button class="tab" onclick="switchTab('tabSettings',this)">⚙️ Sozlamalar</button>
     </div>
 
-    <!-- TAB: ADMINS -->
     <div id="tabAdmins">
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-label">Jami Adminlar</div><div class="stat-val c-blue" id="stTotal">0</div></div>
@@ -304,7 +272,7 @@ tbody td { padding: 11px 14px; font-size: 13px; }
       <div class="search-row">
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input class="inp" type="text" id="searchInput" placeholder="Ism, login, email, telefon..." oninput="renderTable()" />
+          <input class="inp" type="text" id="searchInput" placeholder="Ism, login, email, telefon, muassasa..." oninput="renderTable()" />
         </div>
         <select class="inp" id="filterRegion" style="width:160px" onchange="renderTable()">
           <option value="">Barcha viloyat</option>
@@ -325,7 +293,7 @@ tbody td { padding: 11px 14px; font-size: 13px; }
               <th>Admin</th>
               <th>Email / Login</th>
               <th>Telefon</th>
-              <th>Viloyat / Tuman</th>
+              <th>Hudud / Muassasa</th>
               <th>Holat</th>
               <th>Qo'shilgan</th>
               <th>Amallar</th>
@@ -336,7 +304,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
       </div>
     </div>
 
-    <!-- TAB: LOGS -->
     <div id="tabLogs" style="display:none">
       <div class="section-header">
         <h3>📋 Faoliyat tarixi</h3>
@@ -345,7 +312,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
       <div class="table-wrap" id="logWrap"></div>
     </div>
 
-    <!-- TAB: SETTINGS -->
     <div id="tabSettings" style="display:none">
       <div style="max-width:500px">
         <h3 style="margin-bottom:1.25rem">⚙️ Tizim sozlamalari</h3>
@@ -373,9 +339,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- ===== MODALS ===== -->
-
-<!-- Change superadmin pass -->
 <div class="overlay" id="mChangePass">
   <div class="modal">
     <h3>🔑 Parol o'zgartirish</h3>
@@ -391,7 +354,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- Delete confirm -->
 <div class="overlay" id="mDelete">
   <div class="modal">
     <h3>🗑️ Adminni o'chirish</h3>
@@ -403,7 +365,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- Reset admin pass -->
 <div class="overlay" id="mResetAdminPass">
   <div class="modal">
     <h3>🔐 Admin paroli</h3>
@@ -417,7 +378,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- Add / Edit admin -->
 <div class="overlay" id="mAdmin">
   <div class="modal wide">
     <h3 id="mAdminTitle">➕ Yangi admin</h3>
@@ -431,7 +391,8 @@ tbody td { padding: 11px 14px; font-size: 13px; }
       <div class="fg"><label>Telefon</label><input class="inp" type="text" id="aPhone" placeholder="+998 90 123 45 67" /></div>
       <div class="fg"><label>Viloyat *</label><select class="inp" id="aRegion" onchange="populateDistricts()"><option value="">— Tanlang —</option></select></div>
       <div class="fg"><label>Tuman *</label><select class="inp" id="aDistrict"><option value="">— Viloyat tanlang —</option></select></div>
-      <div class="fg full"><label>Lavozim</label><input class="inp" type="text" id="aRole" placeholder="Masalan: Tuman ta'lim bo'limi boshlig'i" /></div>
+      <div class="fg full"><label>Ta'lim muassasasi *</label><input class="inp" type="text" id="aSchool" placeholder="Masalan: GulDU akademik litseyi yoki 21-maktab" /><p class="hint">Admin faqat shu ta'lim muassasasini boshqaradi.</p></div>
+      <div class="fg full"><label>Lavozim</label><input class="inp" type="text" id="aRole" placeholder="Masalan: Ta'lim muassasasi admini" /></div>
     </div>
     <hr class="divider">
     <div class="fg"><label>Ruxsatlar</label>
@@ -450,7 +411,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
-<!-- Admin detail -->
 <div class="overlay" id="mDetail">
   <div class="modal wide">
     <h3 id="dtTitle">Admin ma'lumotlari</h3>
@@ -463,11 +423,6 @@ tbody td { padding: 11px 14px; font-size: 13px; }
 </div>
 
 <script>
-// ======================================================
-// Backend bilan aloqa
-// index.html / teacher.html dagi bilan BIR XIL API manzili
-// (bu ham o'sha Apps Script loyihasiga ulanadi).
-// ======================================================
 const API_URL = "https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
 let token = sessionStorage.getItem("sa_token") || "";
@@ -475,28 +430,27 @@ let admins = [];
 let logs = [];
 let customRegions = [];
 let deleteTarget = null, editTarget = null, resetTarget = null;
-let resetToken = "";          // parolni tiklashda vaqtinchalik token
+let resetToken = "";
 let otpEmailPending = "";
 let otpTimer = null;
 
 const UZBEKISTAN = {
-  "Toshkent shahri": ["Bektemir","Chilonzor","Hamza","Mirobod","Mirzo Ulug'bek","Olmazar","Sergeli","Shayxontohur","Uchtepa","Yunusobod","Yakkasaroy","Yashnobod"],
-  "Toshkent viloyati": ["Angren","Bekobod","Bo'stonliq","Chinoz","Ohangaron","Oqqo'rg'on","Parkent","Piskent","Quyichirchiq","Yuqorichirchiq","Zangiota","Nurafshon"],
-  "Samarqand": ["Samarqand shahri","Bulungur","Jomboy","Kattaqo'rg'on","Narpay","Pastdarg'om","Payariq","Paxtachi","Toyloq","Urgut","Ishtiхon","Qo'shrabot"],
-  "Buxoro": ["Buxoro shahri","Romitan","G'ijduvon","Jondor","Kogon","Qorako'l","Peshku","Shofirkon","Vobkent"],
-  "Namangan": ["Namangan shahri","Chust","Kosonsoy","Mingbuloq","Namangan tumani","Norin","Pop","To'raqo'rg'on","Uychi","Yangiqo'rg'on"],
-  "Andijon": ["Andijon shahri","Asaka","Baliqchi","Bo'ston","Buloqboshi","Jalolquduq","Izboskan","Marhamat","Oltinko'l","Pakhtaobod","Qo'rg'ontepa","Shahrixon","Ulug'nor"],
-  "Farg'ona": ["Farg'ona shahri","Bag'dod","Beshariq","Buvayda","Dangara","Furqat","Qo'qon","Marg'ilon","Oltiariq","Quva","Rishton","So'x","Toshloq","Uchko'prik","O'zbekiston","Yozyovon"],
-  "Qashqadaryo": ["Qarshi shahri","Chiroqchi","Dehqonobod","G'uzor","Kasbi","Kitob","Koson","Mirishkor","Muborak","Nishon","Qamashi","Shahrisabz","Yakkabog'"],
-  "Surхondaryo": ["Termiz shahri","Angor","Bandixon","Boysun","Denov","Jarqo'rg'on","Muzrabot","Oltinsoy","Qiziriq","Qumqo'rg'on","Sariosiyo","Sherobod","Sho'rchi","Uzun"],
-  "Xorazm": ["Urganch shahri","Bog'ot","Gurlan","Hazorasp","Хiva","Хonqa","Qo'shko'pir","Shovot","Tuproqqal'a","Yang'ariq","Yangibozor"],
-  "Navoiy": ["Navoiy shahri","Karmana","Konimex","Navbahor","Nurota","Qiziltepa","Tomdi","Uchquduq","Xatirchi"],
-  "Jizzax": ["Jizzax shahri","Arnasoy","Baxmal","Do'stlik","Forish","G'allaorol","Mirzacho'l","Paxtakor","Yangiobod","Zafar","Zomin","Zarbdor"],
-  "Sirdaryo": ["Guliston shahri","Baxt","Boyovut","Mirzaobod","Oqoltin","Sardoba","Sayxunobod","Xavast"],
-  "Qoraqalpog'iston": ["Nukus shahri","Amudaryo","Beruniy","Chimboy","Ellikkala","Qanliko'l","Qo'ng'irot","Mo'ynoq","Nukus tumani","Taxtako'pir","To'rtko'l","Xo'jayli"]
+"Toshkent shahri": ["Bektemir","Chilonzor","Hamza","Mirobod","Mirzo Ulug'bek","Olmazar","Sergeli","Shayxontohur","Uchtepa","Yunusobod","Yakkasaroy","Yashnobod"],
+"Toshkent viloyati": ["Angren","Bekobod","Bo'stonliq","Chinoz","Ohangaron","Oqqo'rg'on","Parkent","Piskent","Quyichirchiq","Yuqorichirchiq","Zangiota","Nurafshon"],
+"Samarqand": ["Samarqand shahri","Bulungur","Jomboy","Kattaqo'rg'on","Narpay","Pastdarg'om","Payariq","Paxtachi","Toyloq","Urgut","Ishtiхon","Qo'shrabot"],
+"Buxoro": ["Buxoro shahri","Romitan","G'ijduvon","Jondor","Kogon","Qorako'l","Peshku","Shofirkon","Vobkent"],
+"Namangan": ["Namangan shahri","Chust","Kosonsoy","Mingbuloq","Namangan tumani","Norin","Pop","To'raqo'rg'on","Uychi","Yangiqo'rg'on"],
+"Andijon": ["Andijon shahri","Asaka","Baliqchi","Bo'ston","Buloqboshi","Jalolquduq","Izboskan","Marhamat","Oltinko'l","Pakhtaobod","Qo'rg'ontepa","Shahrixon","Ulug'nor"],
+"Farg'ona": ["Farg'ona shahri","Bag'dod","Beshariq","Buvayda","Dangara","Furqat","Qo'qon","Marg'ilon","Oltiariq","Quva","Rishton","So'x","Toshloq","Uchko'prik","O'zbekiston","Yozyovon"],
+"Qashqadaryo": ["Qarshi shahri","Chiroqchi","Dehqonobod","G'uzor","Kasbi","Kitob","Koson","Mirishkor","Muborak","Nishon","Qamashi","Shahrisabz","Yakkabog'"],
+"Surхondaryo": ["Termiz shahri","Angor","Bandixon","Boysun","Denov","Jarqo'rg'on","Muzrabot","Oltinsoy","Qiziriq","Qumqo'rg'on","Sariosiyo","Sherobod","Sho'rchi","Uzun"],
+"Xorazm": ["Urganch shahri","Bog'ot","Gurlan","Hazorasp","Хiva","Хonqa","Qo'shko'pir","Shovot","Tuproqqal'a","Yang'ariq","Yangibozor"],
+"Navoiy": ["Navoiy shahri","Karmana","Konimex","Navbahor","Nurota","Qiziltepa","Tomdi","Uchquduq","Xatirchi"],
+"Jizzax": ["Jizzax shahri","Arnasoy","Baxmal","Do'stlik","Forish","G'allaorol","Mirzacho'l","Paxtakor","Yangiobod","Zafar","Zomin","Zarbdor"],
+"Sirdaryo": ["Guliston shahri","Baxt","Boyovut","Mirzaobod","Oqoltin","Sardoba","Sayxunobod","Xavast"],
+"Qoraqalpog'iston": ["Nukus shahri","Amudaryo","Beruniy","Chimboy","Ellikkala","Qanliko'l","Qo'ng'irot","Mo'ynoq","Nukus tumani","Taxtako'pir","To'rtko'l","Xo'jayli"]
 };
 
-// ===== BACKENDGA SO'ROV =====
 async function api(action, payload) {
   let res;
   try {
@@ -527,13 +481,11 @@ async function call(action, payload) {
   return r;
 }
 
-// ===== PAGES =====
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-// ===== AUTH =====
 async function doLogin() {
   const l = v('loginInput'), p = v('passInput');
   hide('loginErr');
@@ -575,7 +527,6 @@ function doLogout() {
   api('saLogout', { token: t }).catch(function(){});
 }
 
-// ===== FORGOT PASSWORD (haqiqiy OTP, kod ekranda ko'rsatilmaydi) =====
 function openForgot() {
   document.getElementById('forgotEmail').value = '';
   hide('f1Err'); hide('f1Ok');
@@ -657,7 +608,6 @@ async function saveNewCreds() {
   }
 }
 
-// ===== CHANGE PASS (dashboarddan) =====
 function openChangePass() {
   ['cpOld','cpNew','cpConf'].forEach(id => document.getElementById(id).value = '');
   hide('cpErr');
@@ -678,7 +628,6 @@ async function doChangePass() {
   }
 }
 
-// ===== SETTINGS =====
 async function loadSettings() {
   try {
     const r = await call('saSettingsGet');
@@ -687,7 +636,7 @@ async function loadSettings() {
       document.getElementById('settLogin').value = r.login;
       document.getElementById('topUser').textContent = r.login;
     }
-  } catch (e) { /* AUTH bo'lsa call() o'zi login sahifasiga qaytaradi */ }
+  } catch (e) { }
 }
 async function saveSettings() {
   const e = v('settEmail'), l = v('settLogin');
@@ -704,13 +653,12 @@ async function saveSettings() {
   }
 }
 
-// ===== REGIONS =====
 function allRegions() { return [...Object.keys(UZBEKISTAN), ...customRegions]; }
 async function loadRegions() {
   try {
     const r = await call('saRegionsList');
     if (r.ok) customRegions = r.regions || [];
-  } catch (e) { /* AUTH bo'lsa call() o'zi hal qiladi */ }
+  } catch (e) { }
 }
 async function addRegion() {
   const n = v('newRegionName').trim();
@@ -768,7 +716,6 @@ function populateDistricts() {
   sel.innerHTML = '<option value="">— Tanlang —</option>' + (UZBEKISTAN[reg] || []).map(d => `<option>${esc(d)}</option>`).join('');
 }
 
-// ===== ADMINLAR =====
 async function loadAdmins() {
   const m = document.getElementById('adminsMsg');
   try {
@@ -798,7 +745,7 @@ function renderTable() {
   const fs = v('filterStatus');
   const tbody = document.getElementById('adminTable');
   let filtered = admins.filter(a =>
-    (!q || (a.name+' '+a.surname+' '+a.login+' '+(a.email||'')+' '+(a.phone||'')).toLowerCase().includes(q)) &&
+    (!q || (a.name+' '+a.surname+' '+a.login+' '+(a.email||'')+' '+(a.phone||'')+' '+(a.school||'')).toLowerCase().includes(q)) &&
     (!fr || a.region === fr) &&
     (!fs || (fs==='active' ? a.active : !a.active))
   );
@@ -822,6 +769,7 @@ function renderTable() {
       <td style="font-size:12px">
         <span style="color:var(--text)">📍 ${esc(a.region||'—')}</span><br>
         <span style="color:var(--text3)">${esc(a.district||'')}</span>
+        ${a.school?`<br><span style="color:var(--text2)">🏫 ${esc(a.school)}</span>`:''}
       </td>
       <td><span class="badge ${a.active?'bg-green':'bg-red'}">${a.active?'Faol':'Bloklangan'}</span></td>
       <td style="color:var(--text3);font-size:12px">${esc(dateOnly(a.date))}</td>
@@ -847,7 +795,6 @@ function updateStats() {
   document.getElementById('stRegions').textContent = regs.size;
 }
 
-// ===== DETAIL =====
 function openDetail(id) {
   const a = admins.find(x=>x.id===id);
   if (!a) return;
@@ -868,6 +815,7 @@ function openDetail(id) {
       <div class="detail-item"><div class="detail-key">Qo'shilgan sana</div><div class="detail-val">${esc(dateOnly(a.date))}</div></div>
       <div class="detail-item"><div class="detail-key">Viloyat</div><div class="detail-val">📍 ${esc(a.region||'—')}</div></div>
       <div class="detail-item"><div class="detail-key">Tuman</div><div class="detail-val">${esc(a.district||'—')}</div></div>
+      <div class="detail-item full" style="grid-column:1/-1"><div class="detail-key">Ta'lim muassasasi</div><div class="detail-val">🏫 ${esc(a.school||'—')}</div></div>
       <div class="detail-item full" style="grid-column:1/-1"><div class="detail-key">Ruxsatlar</div><div class="detail-val" style="margin-top:6px">${formatPerms(a.perms)}</div></div>
     </div>
   `;
@@ -875,11 +823,10 @@ function openDetail(id) {
   showModal('mDetail');
 }
 
-// ===== ADD/EDIT =====
 function openAddModal() {
   editTarget = null;
   document.getElementById('mAdminTitle').textContent = "➕ Yangi admin qo'shish";
-  ['aName','aSurname','aEmail','aLogin','aPass','aPhone','aRole'].forEach(id => document.getElementById(id).value = '');
+  ['aName','aSurname','aEmail','aLogin','aPass','aPhone','aRole','aSchool'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('aPassGroup').style.display = '';
   populateRegionSelect();
   document.getElementById('aRegion').value = '';
@@ -898,6 +845,7 @@ function openEdit(id) {
   document.getElementById('aEmail').value = a.email||'';
   document.getElementById('aLogin').value = a.login;
   document.getElementById('aPhone').value = a.phone||'';
+  document.getElementById('aSchool').value = a.school||'';
   document.getElementById('aRole').value = a.role||'';
   document.getElementById('aPassGroup').style.display = 'none';
   populateRegionSelect();
@@ -916,6 +864,7 @@ async function saveAdmin() {
   const email = v('aEmail').trim(), login = v('aLogin').trim();
   const pass = v('aPass'), phone = v('aPhone').trim();
   const region = v('aRegion'), district = v('aDistrict');
+  const school = v('aSchool').trim();
   const role = v('aRole').trim();
   const perms = [];
   if (document.getElementById('pAdmin').checked) perms.push('admin');
@@ -929,6 +878,7 @@ async function saveAdmin() {
   if (!login) { showErr('aErr','Login kiritilmadi'); return; }
   if (!region) { showErr('aErr','Viloyat tanlanmadi'); return; }
   if (!district) { showErr('aErr','Tuman tanlanmadi'); return; }
+  if (!school) { showErr('aErr','Ta\'lim muassasasini kiriting'); return; }
   if (!editTarget && pass.length < 8) { showErr('aErr','Parol kamida 8 belgi bo\'lsin'); return; }
 
   const btn = document.getElementById('aSaveBtn');
@@ -936,9 +886,9 @@ async function saveAdmin() {
   try {
     let r;
     if (editTarget) {
-      r = await call('saAdminUpdate', { id: editTarget, name, surname, email, login, phone, region, district, role, perms });
+      r = await call('saAdminUpdate', { id: editTarget, name, surname, email, login, phone, region, district, school, role, perms });
     } else {
-      r = await call('saAdminAdd', { name, surname, email, login, password: pass, phone, region, district, role, perms });
+      r = await call('saAdminAdd', { name, surname, email, login, password: pass, phone, region, district, school, role, perms });
     }
     if (!r.ok) { showErr('aErr', r.error || "Saqlab bo'lmadi"); return; }
     closeModal('mAdmin');
@@ -953,7 +903,6 @@ async function saveAdmin() {
   }
 }
 
-// ===== DELETE =====
 function openDelete(id) {
   const a = admins.find(x=>x.id===id);
   if (!a) return;
@@ -974,7 +923,6 @@ async function confirmDelete() {
   }
 }
 
-// ===== BLOCK =====
 async function toggleBlock(id) {
   try {
     const r = await call('saAdminToggleBlock', { id: id });
@@ -987,7 +935,6 @@ async function toggleBlock(id) {
   }
 }
 
-// ===== RESET ADMIN PASS =====
 function openResetPass(id) {
   const a = admins.find(x=>x.id===id);
   if (!a) return;
@@ -1011,7 +958,6 @@ async function confirmResetPass() {
   }
 }
 
-// ===== LOGS =====
 function tkTime(iso) {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return String(iso||'');
@@ -1047,7 +993,6 @@ async function clearLogs() {
   }
 }
 
-// ===== TABS =====
 function switchTab(tabId, btn) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
@@ -1058,12 +1003,10 @@ function switchTab(tabId, btn) {
   if (tabId==='tabSettings') { renderRegionList(); loadSettings(); }
 }
 
-// ===== MODAL HELPERS =====
 function showModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) closeModal(o.id); }));
 
-// ===== UTILS =====
 function v(id) { return document.getElementById(id)?.value||''; }
 function showErr(id, msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('show'); }
 function hide(id) { document.getElementById(id)?.classList.remove('show'); }
@@ -1075,7 +1018,6 @@ function togglePass(id, iconId) {
 function esc(s) { return String(s==null?'':s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function escAttr(s) { return esc(s).replace(/`/g,'&#96;'); }
 
-// ===== INIT =====
 populateRegionSelect();
 renderRegionFilter();
 
