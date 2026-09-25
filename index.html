@@ -23,6 +23,7 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 .field{margin-bottom:22px}
 .notice{margin-top:10px;padding:17px 18px;border-radius:10px;border:1px solid #cce0ff;background:#eef6ff;color:#153b78;line-height:1.65;font-size:14px}
 .notice strong{display:block;font-size:16px;margin-bottom:4px}
+.notice.warn{border-color:#f3d38a;background:#fff8ea;color:#7a5a00}
 .controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-content:start}
 .list-msg{grid-column:1/-1;padding:18px;border:1px dashed #cbd6e5;border-radius:12px;color:#526178;font-size:15px;line-height:1.6}
 .test-card{border:1px solid #d5deea;border-radius:12px;padding:18px;min-height:168px;position:relative;background:#fff;transition:.2s}
@@ -72,10 +73,11 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <div class="field"><label>Viloyatni tanlang</label><select id="region"></select></div>
 <div class="field"><label>Tuman yoki shaharni tanlang</label><select id="district" disabled></select><input id="districtOther" class="other-input hidden" type="text" placeholder="Tuman yoki shahar nomini yozing" autocomplete="off"></div>
 <div class="field"><label>Ta’lim muassasasini tanlang</label><select id="school" disabled></select><input id="schoolOther" class="other-input hidden" type="text" placeholder="Ta’lim muassasasi nomini yozing" autocomplete="off"></div>
-<div class="field"><label>Sinfni tanlang</label><select id="group"><option value="">Sinfni tanlang</option></select></div>
+<div class="field"><label>Sinfni tanlang</label><select id="group" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
 <div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div>
-<div class="field"><label>Fanni tanlang</label><select id="subject"><option value="">Fanni tanlang</option></select></div>
-<div class="notice"><strong>ⓘ Eslatma</strong>Avval sinf, fan va ism-familiyangizni kiriting, so‘ng o‘ng tomondagi ro‘yxatdan <b>“Mavjud”</b> nazoratni tanlang.<br>Nazorat ustoz belgilagan vaqtda ochiladi va o‘sha vaqtda yopiladi.</div>
+<div class="field"><label>Fanni tanlang</label><select id="subject" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
+<div class="notice"><strong>ⓘ Eslatma</strong>Avval viloyat, tuman va ta’lim muassasangizni tanlang — shundan keyin sinf va fan ro‘yxati ochiladi.<br>Nazorat ustoz belgilagan vaqtda ochiladi va o‘sha vaqtda yopiladi.</div>
+<div id="scopeMsg" class="notice warn hidden"></div>
 <div id="loginMessage" class="login-message"></div>
 </div>
 
@@ -112,8 +114,10 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <script>
 let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false, starting=false;
 let currentTest=null, tests=[], skew=0, listState="idle", availSeq=0;
+let scopeSeq=0, scopeReady=false;
 const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
 const regionEl=document.getElementById("region"), districtEl=document.getElementById("district"), schoolEl=document.getElementById("school"), districtOtherEl=document.getElementById("districtOther"), schoolOtherEl=document.getElementById("schoolOther");
+const scopeMsg=document.getElementById("scopeMsg");
 const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
 const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
 const testListEl=document.getElementById("testList"), qimgBox=document.getElementById("qimgBox");
@@ -121,10 +125,12 @@ const testListEl=document.getElementById("testList"), qimgBox=document.getElemen
 // Backend manzili. Bot tokenini BU YERGA yozmang.
 const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
-/* ================= Hudud: viloyat → tuman/shahar → ta’lim muassasasi =================
-   Ro‘yxatlarni shu yerda tahrirlash mumkin. Ro‘yxatda yo‘q bo‘lsa, o‘quvchi
-   “Boshqa” ni tanlab nomini o‘zi yozadi.
-   Ta’lim muassasalari INSTITUTIONS ga "Viloyat|Tuman" kaliti bilan qo‘shiladi. */
+/* ================= Hudud: viloyat → tuman/shahar =================
+   Tuman ro'yxati shu yerda tahrirlanadi. Ta'lim muassasalari esa
+   ENDI serverdan (Super Admin ro'yxatidan) olinadi — ro'yxatda
+   yo'q bo'lsa, o'quvchi "Boshqa" ni tanlab nomini o'zi yozadi
+   (lekin bunday holda sinf va fan ro'yxati ochilmaydi, chunki
+   bu muassasa tizimda ro'yxatdan o'tmagan). */
 const OTHER_OPT="Boshqa (ro‘yxatda yo‘q)";
 const REGIONS={
 "Qoraqalpog‘iston Respublikasi":["Nukus shahri","Taxiatosh shahri","Amudaryo tumani","Beruniy tumani","Bo‘zatov tumani","Chimboy tumani","Ellikqal‘a tumani","Kegeyli tumani","Mo‘ynoq tumani","Nukus tumani","Qanliko‘l tumani","Qo‘ng‘irot tumani","Qorao‘zak tumani","Shumanay tumani","Taxtako‘pir tumani","To‘rtko‘l tumani","Xo‘jayli tumani"],
@@ -142,9 +148,6 @@ const REGIONS={
 "Toshkent shahri":["Bektemir tumani","Chilonzor tumani","Mirobod tumani","Mirzo Ulug‘bek tumani","Olmazor tumani","Sergeli tumani","Shayxontohur tumani","Uchtepa tumani","Yakkasaroy tumani","Yangihayot tumani","Yashnobod tumani","Yunusobod tumani"],
 "Xorazm viloyati":["Urganch shahri","Xiva shahri","Bog‘ot tumani","Gurlan tumani","Hazorasp tumani","Qo‘shko‘pir tumani","Shovot tumani","Tuproqqal‘a tumani","Urganch tumani","Xiva tumani","Xonqa tumani","Yangiariq tumani","Yangibozor tumani"]
 };
-const INSTITUTIONS={
-"Sirdaryo viloyati|Guliston shahri":["Guliston davlat universiteti akademik litseyi"]
-};
 function fillSelect(sel,placeholder,items,withOther){
   sel.innerHTML="";
   const first=document.createElement("option");first.value="";first.textContent=placeholder;sel.appendChild(first);
@@ -155,32 +158,73 @@ function pick(sel,other){return sel.value===OTHER_OPT?other.value.trim():sel.val
 function initRegions(){
   fillSelect(regionEl,"Viloyatni tanlang",Object.keys(REGIONS),false);
   fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true;
-  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
+  resetSchool("Avval tumanni tanlang");
+}
+function resetSchool(placeholder){
+  fillSelect(schoolEl,placeholder,[],false);
+  schoolEl.disabled=true;
+  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
+  disableScope("Avval ta’lim muassasasini tanlang");
+}
+function disableScope(placeholder){
+  scopeReady=false;
+  fillSelect(groupEl,placeholder,[],false);groupEl.disabled=true;
+  fillSelect(subjectEl,placeholder,[],false);subjectEl.disabled=true;
+  tests=[];listState="idle";renderTests();
+  scopeMsg.classList.add("hidden");
 }
 regionEl.onchange=()=>{
   msg.textContent="";
   districtOtherEl.classList.add("hidden");districtOtherEl.value="";
-  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
   if(!regionEl.value){fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true}
   else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",REGIONS[regionEl.value]||[],true);districtEl.disabled=false}
-  fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;
+  resetSchool("Avval tumanni tanlang");
 };
 districtEl.onchange=()=>{
   msg.textContent="";
   const other=districtEl.value===OTHER_OPT;
   districtOtherEl.classList.toggle("hidden",!other);if(!other)districtOtherEl.value="";
-  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
-  if(!districtEl.value){fillSelect(schoolEl,"Avval tumanni tanlang",[],false);schoolEl.disabled=true;return}
-  fillSelect(schoolEl,"Ta’lim muassasasini tanlang",other?[]:(INSTITUTIONS[regionEl.value+"|"+districtEl.value]||[]),true);
-  schoolEl.disabled=false;
-  if(other){schoolEl.value=OTHER_OPT;schoolOtherEl.classList.remove("hidden")}
+  if(!districtEl.value){resetSchool("Avval tumanni tanlang");return}
+  if(other){
+    // Ro'yxatda yo'q tuman — muassasa ro'yxati ham bo'lmaydi
+    fillSelect(schoolEl,"",[],false);
+    schoolEl.innerHTML='<option value="'+OTHER_OPT+'" selected>'+OTHER_OPT+'</option>';
+    schoolEl.disabled=true;
+    schoolOtherEl.classList.remove("hidden");
+    disableScope("Avval ta’lim muassasasini tanlang");
+    return;
+  }
+  loadSchools();
 };
+async function loadSchools(){
+  fillSelect(schoolEl,"Yuklanmoqda...",[],false);schoolEl.disabled=true;
+  disableScope("Avval ta’lim muassasasini tanlang");
+  try{
+    const r=await api("maPubInstitutions",{region:regionEl.value,district:districtEl.value});
+    const list=(r&&r.ok&&Array.isArray(r.schools))?r.schools:[];
+    fillSelect(schoolEl,"Ta’lim muassasasini tanlang",list,true);
+    schoolEl.disabled=false;
+  }catch(e){
+    console.warn("Muassasalar ro‘yxatini olib bo‘lmadi:",e);
+    fillSelect(schoolEl,"Ta’lim muassasasini tanlang",[],true);
+    schoolEl.disabled=false;
+  }
+}
 schoolEl.onchange=()=>{
   msg.textContent="";
   const other=schoolEl.value===OTHER_OPT;
   schoolOtherEl.classList.toggle("hidden",!other);if(!other)schoolOtherEl.value="";
+  if(other){
+    scopeMsg.textContent="Bu ta’lim muassasasi tizimda ro‘yxatdan o‘tmagan. Sinf va fan ro‘yxati faqat ro‘yxatdan o‘tgan muassasalar uchun ochiladi. Iltimos, maktab administratoringizga murojaat qiling.";
+    scopeMsg.classList.remove("hidden");
+    disableScope("Muassasa ro‘yxatdan o‘tmagan");
+    return;
+  }
+  if(!schoolEl.value){disableScope("Avval ta’lim muassasasini tanlang");return}
+  refreshScope();
 };
-districtOtherEl.oninput=()=>{msg.textContent=""};schoolOtherEl.oninput=()=>{msg.textContent=""};
+districtOtherEl.oninput=()=>{msg.textContent=""};
+schoolOtherEl.oninput=()=>{msg.textContent=""};
 initRegions();
 
 /* ================= Serverga so‘rov ================= */
@@ -194,6 +238,41 @@ async function api(action,payload){
   }finally{clearTimeout(tm)}
 }
 
+/* ================= Muassasa tanlangach: shu maktabning sinf va fanlarini yuklash ================= */
+async function refreshScope(){
+  const seq=++scopeSeq;
+  scopeMsg.classList.add("hidden");
+  fillSelect(groupEl,"Yuklanmoqda...",[],false);groupEl.disabled=true;
+  fillSelect(subjectEl,"Yuklanmoqda...",[],false);subjectEl.disabled=true;
+  const region=regionEl.value, district=districtEl.value, school=schoolEl.value;
+  try{
+    const [rs,rc]=await Promise.all([
+      api("maPubSubjects",{region,district,school}),
+      api("maPubClasses",{region,district,school})
+    ]);
+    if(seq!==scopeSeq)return;
+    const subjects=(rs&&rs.ok&&Array.isArray(rs.subjects))?rs.subjects:[];
+    const classes=(rc&&rc.ok&&Array.isArray(rc.classes))?rc.classes:[];
+    if(!subjects.length&&!classes.length){
+      scopeMsg.textContent="Bu ta’lim muassasasi uchun hali fan yoki sinf kiritilmagan. Maktab administratoringizga murojaat qiling.";
+      scopeMsg.classList.remove("hidden");
+      fillSelect(groupEl,"Sinf mavjud emas",[],false);
+      fillSelect(subjectEl,"Fan mavjud emas",[],false);
+      scopeReady=false;
+      return;
+    }
+    fillSelect(groupEl,"Sinfni tanlang",classes,false);groupEl.disabled=false;
+    fillSelect(subjectEl,"Fanni tanlang",subjects,false);subjectEl.disabled=false;
+    scopeReady=true;
+    refreshTests();
+  }catch(e){
+    if(seq!==scopeSeq)return;
+    console.warn("Sinf/fan ro‘yxatini olib bo‘lmadi:",e);
+    scopeMsg.textContent="Sinf va fan ro‘yxatini olib bo‘lmadi. Internetni tekshirib, muassasani qayta tanlang.";
+    scopeMsg.classList.remove("hidden");
+  }
+}
+
 /* ================= Nazoratlar ro‘yxati (ustoz biriktirgan testlar) ================= */
 const dtf=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Tashkent",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false});
 function fmtTk(iso){
@@ -202,7 +281,6 @@ function fmtTk(iso){
   const p={};dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
   return p.day+"."+p.month+"."+p.year+" "+(p.hour==="24"?"00":p.hour)+":"+p.minute;
 }
-// "soon" — hali boshlanmagan, "open" — ochiq, "closed" — tugagan
 function stateOf(t){
   const now=Date.now()+skew;
   const s=t.start?Date.parse(t.start):NaN, e=t.end?Date.parse(t.end):NaN;
@@ -215,6 +293,7 @@ function note(text){
 }
 function renderTests(){
   testListEl.innerHTML="";
+  if(!scopeReady){note("Avval viloyat, tuman va ta’lim muassasangizni tanlang.");return}
   if(!groupEl.value||!subjectEl.value){note("Sinf va fanni tanlang — mavjud nazoratlar shu yerda ko‘rinadi.");return}
   if(listState==="loading"){note("Nazoratlar yuklanmoqda...");return}
   if(listState==="error"){note("Nazoratlar ro‘yxatini olib bo‘lmadi. Internetni tekshiring va sinf yoki fanni qayta tanlang.");return}
@@ -243,7 +322,7 @@ function renderTests(){
 }
 async function refreshTests(){
   const seq=++availSeq;
-  if(!groupEl.value||!subjectEl.value){tests=[];listState="idle";renderTests();return}
+  if(!scopeReady||!groupEl.value||!subjectEl.value){tests=[];listState="idle";renderTests();return}
   listState="loading";renderTests();
   try{
     const r=await api("pubTests",{subject:subjectEl.value,group:groupEl.value});
@@ -260,7 +339,6 @@ async function refreshTests(){
   }
   renderTests();
 }
-// Vaqti kelgan nazorat o‘zi “Mavjud” bo‘lishi uchun ro‘yxat vaqti-vaqti bilan yangilanadi
 setInterval(()=>{if(!started&&!starting&&tests.length)renderTests()},30000);
 renderTests();
 
@@ -271,7 +349,8 @@ function valid(){
   if(!districtEl.value){msg.textContent="Avval tuman yoki shaharni tanlang.";districtEl.focus();return false}
   if(districtEl.value===OTHER_OPT&&districtOtherEl.value.trim().length<3){msg.textContent="Tuman yoki shahar nomini yozing.";districtOtherEl.focus();return false}
   if(!schoolEl.value){msg.textContent="Avval ta’lim muassasasini tanlang.";schoolEl.focus();return false}
-  if(schoolEl.value===OTHER_OPT&&schoolOtherEl.value.trim().length<3){msg.textContent="Ta’lim muassasasi nomini yozing.";schoolOtherEl.focus();return false}
+  if(schoolEl.value===OTHER_OPT){msg.textContent="Bu ta’lim muassasasi tizimda ro‘yxatdan o‘tmagan, shuning uchun nazorat topshirib bo‘lmaydi.";return false}
+  if(!scopeReady){msg.textContent="Sinf va fan ro‘yxati hali yuklanmadi. Muassasani qayta tanlang.";return false}
   if(!groupEl.value){msg.textContent="Avval sinfni tanlang.";groupEl.focus();return false}
   if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}
   if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
@@ -326,7 +405,6 @@ async function start(t){
     const r=await api("pubTest",{id:t.id,group:groupEl.value,student:studentEl.value.trim()});
     if(!r||!r.ok||!Array.isArray(r.questions)||!r.questions.length){const err=new Error("load");err.userMessage=(r&&r.error)||"Testni yuklab bo‘lmadi.";throw err}
     if(r.now){const sv=Date.parse(r.now);if(!isNaN(sv))skew=sv-Date.now()}
-    // Vaqt 45 daqiqa, lekin ustoz belgilagan tugash vaqtidan oshmaydi
     if(r.end){const left=Math.floor((Date.parse(r.end)-(Date.now()+skew))/1000);if(!isNaN(left))dur=Math.min(dur,left)}
     if(dur<=0){const err=new Error("late");err.userMessage="Test vaqti tugagan.";throw err}
     currentTest=Object.assign({},t,{nazorat:r.nazorat||t.nazorat,title:r.title||t.title});
@@ -397,23 +475,6 @@ markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
 groupEl.onchange=()=>{msg.textContent="";refreshTests()};
 studentEl.oninput=()=>{msg.textContent=""};
 subjectEl.onchange=()=>{msg.textContent="";refreshTests()};
-
-/* ===== Muassasa admini bilan bog‘lanish: fanlar va sinflar ro‘yxati serverdan olinadi ===== */
-(function(){
-  function setOptions(sel,values){
-    const chosen=sel.value,first=sel.options[0]?sel.options[0].text:"";
-    sel.innerHTML="";
-    const ph=document.createElement("option");ph.value="";ph.textContent=first;sel.appendChild(ph);
-    values.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o)});
-    if(values.indexOf(chosen)!==-1)sel.value=chosen;
-  }
-  api("maPubSubjects",{}).then(r=>{
-    if(r&&r.ok&&Array.isArray(r.subjects)){setOptions(subjectEl,r.subjects);refreshTests()}
-  }).catch(e=>console.warn("Fanlar ro‘yxatini olib bo‘lmadi:",e));
-  api("maPubClasses",{}).then(r=>{
-    if(r&&r.ok&&Array.isArray(r.classes)){setOptions(groupEl,r.classes);refreshTests()}
-  }).catch(e=>console.warn("Sinflar ro‘yxatini olib bo‘lmadi:",e));
-})();
 </script>
 </body>
 </html>
