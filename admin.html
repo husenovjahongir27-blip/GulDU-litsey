@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Admin Panel</title>
+<title>Superadmin paneli — Test Markaz Edu</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -126,32 +127,427 @@ tbody td { padding: 11px 14px; font-size: 13px; }
 .filter-badge.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
 .hint { font-size: 12px; color: var(--text3); margin-top: 4px; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+/* ===== SUPERADMIN LAMP LOGIN ===== */
+:root{
+  --lamp-bg:#121417;
+  --lamp-shade:#f5f0e6;
+  --lamp-base:#d1ccc2;
+  --lamp-glow:rgba(255,214,110,1);
+  --lamp-accent:#d4a373;
+  --lamp-on:0;
+  --lamp-transition:.55s cubic-bezier(.4,0,.2,1);
+}
+
+.lamp-login{
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+  background:var(--lamp-bg);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background var(--lamp-transition);
+}
+
+.lamp-login-bg{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255,214,110,.72),
+      transparent 12%,
+      rgba(255,214,110,.25) 28%,
+      transparent 68%);
+  opacity:var(--lamp-on);
+  transition:opacity var(--lamp-transition);
+}
+
+.lamp-login::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255,235,170,.42),
+      transparent 22%,
+      rgba(255,214,110,.12) 42%,
+      transparent 72%);
+  opacity:var(--lamp-on);
+  transition:opacity var(--lamp-transition);
+}
+
+.lamp-stage{
+  position:relative;
+  z-index:2;
+  width:min(1080px,94vw);
+  min-height:650px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(35px,7vw,105px);
+  padding:40px 25px;
+}
+
+.lamp-area{
+  position:relative;
+  width:min(360px,42vw);
+  min-width:270px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.lamp-svg{
+  width:100%;
+  max-width:350px;
+  height:auto;
+  overflow:visible;
+  filter:drop-shadow(0 15px 24px rgba(0,0,0,.35));
+}
+
+.lamp-shade{
+  fill:var(--lamp-shade);
+  transition:
+    fill var(--lamp-transition),
+    filter var(--lamp-transition);
+}
+
+.lamp-neck,
+.lamp-base{
+  fill:var(--lamp-base);
+  transition:
+    fill var(--lamp-transition),
+    filter var(--lamp-transition);
+}
+
+.inner-glow{
+  fill:var(--lamp-glow);
+  opacity:var(--lamp-on);
+  filter:url(#lampGlow);
+  transition:opacity var(--lamp-transition);
+}
+
+.cord-line{
+  stroke:#b9b1a5;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  transition:stroke var(--lamp-transition);
+}
+
+.cord-bead{
+  fill:var(--lamp-accent);
+  cursor:grab;
+  transition:fill var(--lamp-transition);
+}
+
+.cord-hit{
+  cursor:grab;
+}
+
+.lamp-hint{
+  margin-top:-8px;
+  color:rgba(255,255,255,.58);
+  font-size:12px;
+  text-align:center;
+  transition:color var(--lamp-transition);
+}
+
+.lamp-hint span{
+  color:#d4a373;
+  margin-right:5px;
+}
+
+.lamp-login-card{
+  position:relative;
+  width:min(390px,90vw);
+  padding:2.15rem 2rem 1.5rem;
+  border-radius:22px;
+  background:rgba(43,43,39,.68);
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  transition:
+    background var(--lamp-transition),
+    border-color var(--lamp-transition),
+    box-shadow var(--lamp-transition),
+    transform var(--lamp-transition);
+}
+
+.lamp-login-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:24px;
+  pointer-events:none;
+  background:radial-gradient(
+    circle at 28% 35%,
+    rgba(255,214,110,.24),
+    transparent 58%
+  );
+  opacity:var(--lamp-on);
+  transition:opacity var(--lamp-transition);
+}
+
+.lamp-login-card > *{
+  position:relative;
+  z-index:1;
+}
+
+.lamp-login-logo{
+  text-align:center;
+  margin-bottom:1.6rem;
+}
+
+.lamp-mini-logo{
+  width:52px;
+  height:52px;
+  margin:0 auto .7rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:15px;
+  color:#fff;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 0 0 rgba(255,214,110,0);
+  transition:
+    background var(--lamp-transition),
+    box-shadow var(--lamp-transition);
+}
+
+.lamp-mini-logo svg{
+  width:29px;
+  height:29px;
+}
+
+.lamp-login-logo h1{
+  font-size:22px;
+  margin:0;
+  color:#fff;
+}
+
+.lamp-login-logo p{
+  margin:6px 0 0;
+  font-size:12px;
+  color:rgba(255,255,255,.58);
+}
+
+.lamp-login .inp{
+  background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.12);
+  color:#fff;
+}
+
+.lamp-login .inp::placeholder{
+  color:rgba(255,255,255,.35);
+}
+
+.lamp-login .inp:focus{
+  border-color:rgba(255,214,110,.65);
+  box-shadow:0 0 0 3px rgba(255,214,110,.08);
+}
+
+.lamp-login label{
+  color:rgba(255,255,255,.6);
+}
+
+.lamp-login .forgot-link{
+  color:#f0c56e;
+}
+
+.lamp-sign-btn{
+  background:linear-gradient(180deg,#ffe9a7,#e6bd5c);
+  color:#30230a;
+  border:1px solid rgba(255,236,170,.8);
+  box-shadow:0 8px 25px rgba(226,185,76,.18);
+}
+
+.lamp-sign-btn:hover{
+  opacity:1;
+  transform:translateY(-1px);
+  box-shadow:0 10px 30px rgba(226,185,76,.3);
+}
+
+.lamp-login-footer{
+  margin-top:18px;
+  text-align:center;
+  font-size:11px;
+  color:rgba(255,255,255,.36);
+}
+
+.lamp-login.lamp-is-on .lamp-shade{
+  fill:#fffdf5;
+  filter:drop-shadow(0 0 22px rgba(255,238,174,.9));
+}
+
+.lamp-login.lamp-is-on .lamp-neck,
+.lamp-login.lamp-is-on .lamp-base{
+  fill:#fffaf0;
+  filter:drop-shadow(0 0 9px rgba(255,231,157,.55));
+}
+
+.lamp-login.lamp-is-on .lamp-login-card{
+  border-color:rgba(255,224,145,.25);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.42),
+    0 0 70px rgba(255,214,110,.10),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.lamp-login.lamp-is-on .lamp-mini-logo{
+  background:rgba(255,214,110,.13);
+  box-shadow:0 0 30px rgba(255,214,110,.18);
+}
+
+@media(max-width:760px){
+  .lamp-stage{
+    min-height:100vh;
+    flex-direction:column;
+    gap:12px;
+    padding:25px 15px 35px;
+  }
+
+  .lamp-area{
+    width:270px;
+    min-width:0;
+    transform:scale(.82);
+    margin-top:-15px;
+    margin-bottom:-35px;
+  }
+
+  .lamp-login-card{
+    width:min(390px,92vw);
+    padding:1.7rem 1.35rem 1.25rem;
+  }
+}
+
+@media(max-width:480px){
+  .lamp-stage{
+    gap:0;
+  }
+
+  .lamp-area{
+    transform:scale(.68);
+    margin-top:-45px;
+    margin-bottom:-75px;
+  }
+
+  .lamp-login-card{
+    border-radius:18px;
+  }
+
+  .lamp-login-logo h1{
+    font-size:20px;
+  }
+}
+
 </style>
 </head>
 <body>
 
 <div id="pgLogin" class="page active">
-  <div class="login-wrap">
-    <div class="login-card">
-      <div class="login-logo">
-        <div class="icon">🛡️</div>
-        <h1>Super Admin</h1>
-        <p>Ta'lim platformasi boshqaruv tizimi</p>
-      </div>
-      <div id="loginErr" class="err-msg"></div>
-      <div class="fg">
-        <label>Login yoki Email</label>
-        <input class="inp" type="text" id="loginInput" placeholder="superadmin" />
-      </div>
-      <div class="fg">
-        <label>Parol</label>
-        <div class="inp-wrap">
-          <input class="inp" type="password" id="passInput" placeholder="••••••••" />
-          <button class="eye-btn" onclick="togglePass('passInput','ei1')" aria-label="Ko'rsat"><span id="ei1">👁️</span></button>
+  <div class="lamp-login" id="lampLogin">
+
+    <div class="lamp-login-bg"></div>
+
+    <div class="lamp-stage">
+
+      <div class="lamp-area">
+        <svg class="lamp-svg"
+             viewBox="0 0 220 330"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-label="Superadmin lampasi">
+
+          <defs>
+            <filter id="lampGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="10" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <ellipse class="inner-glow"
+                   cx="110" cy="88" rx="74" ry="38"/>
+
+          <path class="lamp-shade"
+                d="M35 92
+                   C35 45 185 45 185 92
+                   C185 108 35 108 35 92 Z"/>
+
+          <rect class="lamp-neck"
+                x="102" y="100" width="16" height="150" rx="8"/>
+
+          <rect class="lamp-base"
+                x="70" y="248" width="96" height="13" rx="6.5"/>
+
+          <g class="pull-cord">
+            <line class="cord-line"
+                  x1="146" y1="93" x2="146" y2="168"/>
+            <circle class="cord-bead"
+                    cx="146" cy="180" r="7"/>
+            <circle class="cord-hit"
+                    cx="146" cy="180" r="27"
+                    fill="transparent"/>
+          </g>
+        </svg>
+
+        <div class="lamp-hint">
+          <span>●</span> Chiroqni yoqish uchun shnurni torting
         </div>
-        <span class="forgot-link" onclick="openForgot()">Parolni unutdim →</span>
       </div>
-      <button class="btn btn-primary" id="loginBtn" onclick="doLogin()">Kirish</button>
+
+      <div class="lamp-login-card login-card">
+        <div class="lamp-login-logo">
+          <div class="lamp-mini-logo">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.5 5 6v5.2c0 4.6 2.9 7.8 7 9.3 4.1-1.5 7-4.7 7-9.3V6l-7-2.5Z"
+                    stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="m9 12 2 2 4-4"
+                    stroke="currentColor" stroke-width="1.7"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1>Super Admin</h1>
+          <p>Ta'lim platformasi boshqaruv tizimi</p>
+        </div>
+
+        <div id="loginErr" class="err-msg"></div>
+
+        <div class="fg">
+          <label>Login yoki Email</label>
+          <input class="inp" type="text" id="loginInput"
+                 placeholder="superadmin" autocomplete="username" />
+        </div>
+
+        <div class="fg">
+          <label>Parol</label>
+          <div class="inp-wrap">
+            <input class="inp" type="password" id="passInput"
+                   placeholder="••••••••" autocomplete="current-password" />
+            <button class="eye-btn" onclick="togglePass('passInput','ei1')" aria-label="Ko'rsat">
+              <span id="ei1">👁️</span>
+            </button>
+          </div>
+          <span class="forgot-link" onclick="openForgot()">Parolni unutdim →</span>
+        </div>
+
+        <button class="btn btn-primary lamp-sign-btn" id="loginBtn" onclick="doLogin()">
+          <span>Kirish</span>
+        </button>
+
+        <div class="lamp-login-footer">Test Markaz Edu • Superadmin</div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -422,7 +818,107 @@ tbody td { padding: 11px 14px; font-size: 13px; }
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/Draggable.min.js"></script>
 <script>
+
+/* ===== SUPERADMIN LAMP BEHAVIOR ===== */
+let lampIsOn = false;
+let lampDragStart = 0;
+
+function setLamp(on, animate = true) {
+  lampIsOn = !!on;
+
+  const root = document.documentElement;
+  const page = document.getElementById('lampLogin');
+  if (!page) return;
+
+  root.style.setProperty('--lamp-on', lampIsOn ? '1' : '0');
+  page.classList.toggle('lamp-is-on', lampIsOn);
+  document.body.dataset.on = lampIsOn ? 'true' : 'false';
+
+  const bead = document.querySelector('.cord-bead');
+  const line = document.querySelector('.cord-line');
+
+  if (bead && line) {
+    if (animate && window.gsap) {
+      gsap.to(bead, {
+        attr: { cy: 180 },
+        duration: .25,
+        ease: "power2.out"
+      });
+      gsap.to(line, {
+        attr: { y2: 168 },
+        duration: .25,
+        ease: "power2.out"
+      });
+    } else {
+      bead.setAttribute('cy', '180');
+      line.setAttribute('y2', '168');
+    }
+  }
+}
+
+function toggleLamp() {
+  setLamp(!lampIsOn, true);
+}
+
+function initLamp() {
+  if (!window.gsap || !window.Draggable) return;
+
+  gsap.registerPlugin(Draggable);
+
+  const hitArea = document.querySelector('.cord-hit');
+  const bead = document.querySelector('.cord-bead');
+  const line = document.querySelector('.cord-line');
+
+  if (!hitArea || !bead || !line) return;
+
+  Draggable.create(hitArea, {
+    type: 'y',
+    bounds: { minY: 0, maxY: 62 },
+
+    onPress() {
+      lampDragStart = this.y;
+    },
+
+    onDrag() {
+      const y = this.y;
+      gsap.set(bead, { attr: { cy: 180 + y } });
+      gsap.set(line, { attr: { y2: 168 + y } });
+    },
+
+    onRelease() {
+      const pulled = Math.abs(this.y - lampDragStart) > 12 || this.y > 22;
+
+      gsap.to(bead, {
+        attr: { cy: 180 },
+        duration: .22,
+        ease: "power2.out"
+      });
+
+      gsap.to(line, {
+        attr: { y2: 168 },
+        duration: .22,
+        ease: "power2.out"
+      });
+
+      if (pulled) toggleLamp();
+    }
+  });
+
+  // Klaviaturada lampani boshqarish ham mumkin.
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('pgLogin')?.classList.contains('active')) return;
+    if (e.key === 'l' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      toggleLamp();
+    }
+  });
+
+  setLamp(false, false);
+}
+
+
 const API_URL = "https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
 
 let token = sessionStorage.getItem("sa_token") || "";
@@ -1020,6 +1516,7 @@ function escAttr(s) { return esc(s).replace(/`/g,'&#96;'); }
 
 populateRegionSelect();
 renderRegionFilter();
+initLamp();
 
 (async function init(){
   if (token) {
