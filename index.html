@@ -8,7 +8,15 @@
 <style>
 :root{--blue:#0758c9;--dark:#0d2a5b;--green:#2fa85f;--shadow:0 8px 28px rgba(13,42,91,.10)}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);color:#12203b}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);
+    color:#12203b;
+}
 .header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff;min-height:142px;position:relative;overflow:hidden}
 .header:after{content:"";position:absolute;right:-80px;top:-110px;width:430px;height:300px;border-radius:50%;border:45px solid rgba(255,255,255,.05)}
 .header-inner{max-width:1180px;margin:auto;min-height:142px;display:flex;align-items:center;gap:24px;padding:22px 28px}
@@ -49,7 +57,17 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(
     margin:12px 0 0;
     font-size:16px
 }
-.container{max-width:1180px;margin:0 auto;padding:22px 24px 40px}.card{background:#fff;border:1px solid #e3eaf3;border-radius:15px;box-shadow:var(--shadow)}
+.footer{
+    margin-top:18px;
+    background:linear-gradient(110deg,#071d43,#0b4fae);
+    color:rgba(255,255,255,.9);
+    padding:20px 18px;
+    text-align:center;
+    font-size:13px;
+    letter-spacing:.2px;
+    border-top:1px solid rgba(255,255,255,.12);
+}
+.card{background:#fff;border:1px solid #e3eaf3;border-radius:15px;box-shadow:var(--shadow)}
 .top-card{padding:28px;display:grid;grid-template-columns:42% 58%;gap:30px}
 .section-title{display:flex;align-items:center;gap:12px;color:var(--dark);font-size:22px;font-weight:800;margin:4px 0 24px}
 .icon{width:34px;height:34px;border-radius:10px;background:#eaf3ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
