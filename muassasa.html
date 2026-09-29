@@ -21,12 +21,12 @@ body{
 .header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff}
 .header-inner{max-width:1100px;margin:auto;display:flex;align-items:center;gap:18px;padding:20px 24px}
 .logo{
-    width:60px;
-    height:60px;
-    min-width:60px;
-    max-width:60px;
-    min-height:60px;
-    max-height:60px;
+    width:64px;
+    height:64px;
+    min-width:64px;
+    max-width:64px;
+    min-height:64px;
+    max-height:64px;
     border-radius:50%;
     border:3px solid rgba(255,255,255,.75);
     display:flex;
@@ -115,6 +115,339 @@ td .acts{display:flex;gap:8px}
   .grid2{grid-template-columns:1fr}
   .header h1{font-size:19px}
 }
+
+/* ================= DARK MODE SWITCH ================= */
+.header-inner{
+  justify-content:space-between;
+}
+
+.brand{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex:1;
+}
+
+.brand-text{
+  min-width:0;
+}
+
+.theme-switch{
+  position:relative;
+  width:154px;
+  height:62px;
+  flex:none;
+  border:0;
+  padding:0;
+  background:transparent;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.theme-track{
+  position:absolute;
+  inset:5px;
+  border-radius:30px;
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(255,255,255,.45);
+  box-shadow:0 8px 22px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.8);
+  overflow:hidden;
+  transition:background .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+
+.theme-sun,
+.theme-moon{
+  position:absolute;
+  top:50%;
+  width:36px;
+  height:36px;
+  transform:translateY(-50%);
+  display:grid;
+  place-items:center;
+  transition:opacity .3s ease, transform .35s ease, color .35s ease;
+}
+
+.theme-sun{
+  left:9px;
+  color:#f59e0b;
+}
+
+.theme-sun svg{
+  width:25px;
+  height:25px;
+}
+
+.theme-moon{
+  right:9px;
+  color:#172033;
+  opacity:.18;
+}
+
+.theme-moon svg{
+  width:25px;
+  height:25px;
+  fill:currentColor;
+}
+
+.theme-stickman{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:22px;
+  height:35px;
+  --walk-x:0px;
+  --walk-tilt:0deg;
+  transform:translate(calc(-50% + var(--walk-x)), -50%) rotate(var(--walk-tilt));
+  color:#172033;
+  transition:transform .48s cubic-bezier(.22,1,.36,1), color .35s ease;
+  will-change:transform;
+  z-index:3;
+}
+
+.theme-switch.walking .theme-stickman{
+  animation:personBob .22s ease-in-out infinite alternate;
+}
+
+.theme-switch.walking .stick-leg-left{
+  animation:legLeft .22s ease-in-out infinite alternate;
+}
+
+.theme-switch.walking .stick-leg-right{
+  animation:legRight .22s ease-in-out infinite alternate;
+}
+
+.theme-switch.walking .stick-arm-left{
+  animation:armLeft .22s ease-in-out infinite alternate;
+}
+
+.theme-switch.walking .stick-arm-right{
+  animation:armRight .22s ease-in-out infinite alternate;
+}
+
+@keyframes personBob{
+  from{margin-top:0; transform:translate(calc(-50% + var(--walk-x)), -50%) rotate(calc(var(--walk-tilt) - 2deg))}
+  to{margin-top:2px; transform:translate(calc(-50% + var(--walk-x)), -50%) rotate(calc(var(--walk-tilt) + 2deg))}
+}
+
+@keyframes legLeft{
+  from{transform:rotate(135deg)}
+  to{transform:rotate(95deg)}
+}
+
+@keyframes legRight{
+  from{transform:rotate(45deg)}
+  to{transform:rotate(75deg)}
+}
+
+@keyframes armLeft{
+  from{transform:rotate(220deg)}
+  to{transform:rotate(190deg)}
+}
+
+@keyframes armRight{
+  from{transform:rotate(-40deg)}
+  to{transform:rotate(-10deg)}
+}
+
+.stick-head{
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  left:7px;
+  top:1px;
+  background:currentColor;
+}
+
+.stick-body{
+  position:absolute;
+  width:3px;
+  height:15px;
+  border-radius:3px;
+  left:9.5px;
+  top:10px;
+  background:currentColor;
+}
+
+.stick-arm,
+.stick-leg{
+  position:absolute;
+  height:3px;
+  border-radius:3px;
+  background:currentColor;
+  transform-origin:left center;
+}
+
+.stick-arm{
+  width:10px;
+  top:13px;
+  left:10px;
+}
+
+.stick-arm-left{transform:rotate(205deg)}
+.stick-arm-right{transform:rotate(-25deg)}
+
+.stick-leg{
+  width:12px;
+  top:24px;
+  left:10px;
+}
+
+.stick-leg-left{transform:rotate(120deg)}
+.stick-leg-right{transform:rotate(60deg)}
+
+body.dark{
+  --blue:#4d9cff;
+  --dark:#e8f0ff;
+  --line:#263957;
+  --shadow:0 10px 30px rgba(0,0,0,.28);
+  background:linear-gradient(180deg,#07111f 0,#0d1728 420px);
+  color:#e8eef8;
+}
+
+body.dark .header{
+  background:linear-gradient(110deg,#020914,#102d57);
+}
+
+body.dark .theme-track{
+  background:#172033;
+  border-color:rgba(255,255,255,.08);
+  box-shadow:0 8px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+body.dark .theme-sun{
+  opacity:.16;
+  transform:translateY(-50%) scale(.82);
+}
+
+body.dark .theme-moon{
+  opacity:1;
+  color:#f4f7ff;
+  transform:translateY(-50%) scale(1.02);
+}
+
+body.dark .theme-stickman{
+  color:#f5f7fb;
+}
+
+body.dark .card{
+  background:#111d30;
+  border-color:#263957;
+  box-shadow:var(--shadow);
+}
+
+body.dark .panel-box{
+  background:#0e1a2b;
+  border-color:#263957;
+}
+
+body.dark input[type=text],
+body.dark input[type=password],
+body.dark select,
+body.dark textarea{
+  background:#0c1727;
+  color:#e8eef8;
+  border-color:#334968;
+}
+
+body.dark input[readonly]{
+  background:#18263a;
+  color:#aab8cc;
+}
+
+body.dark th{
+  background:#172338;
+  color:#dce7f7;
+}
+
+body.dark td{
+  border-bottom-color:#22334d;
+}
+
+body.dark tr:hover td{
+  background:#142136;
+}
+
+body.dark .btn,
+body.dark .tab{
+  background:#142238;
+  color:#e8eef8;
+  border-color:#334968;
+}
+
+body.dark .btn:hover,
+body.dark .tab:hover{
+  border-color:#5b8dca;
+}
+
+body.dark .btn.primary,
+body.dark .tab.active{
+  background:#0d6fe8;
+  color:#fff;
+  border-color:#0d6fe8;
+}
+
+body.dark .chip{
+  background:#142238;
+  border-color:#334968;
+  color:#e8eef8;
+}
+
+body.dark .hint,
+body.dark .bar-sub,
+body.dark .empty{
+  color:#9fb0c7;
+}
+
+body.dark .section-title,
+body.dark .row-head h2,
+body.dark .panel-box h3,
+body.dark .bar-title{
+  color:#e8f0ff;
+}
+
+body.dark .eye{
+  color:#aab8cc;
+}
+
+body.dark .eye:hover{
+  background:#1b2b43;
+  color:#65a8ff;
+}
+
+body.dark .footer{
+  background:linear-gradient(110deg,#020914,#102d57);
+}
+
+@media(max-width:600px){
+  .header-inner{
+    padding:15px 14px;
+    gap:10px;
+  }
+  .brand{
+    gap:10px;
+  }
+  .logo{
+    width:54px;
+    height:54px;
+    min-width:54px;
+    max-width:54px;
+    min-height:54px;
+    max-height:54px;
+  }
+  .theme-switch{
+    width:132px;
+    height:54px;
+  }
+  .theme-stickman{
+    --walk-x:0px;
+    transform:translate(calc(-50% + var(--walk-x)), -50%) scale(.9) rotate(var(--walk-tilt));
+  }
+  body.dark .theme-stickman{
+    color:#f5f7fb;
+  }
+}
     .footer{
     margin-top:auto;
     background:linear-gradient(110deg,#071d43,#0b4fae);
@@ -199,10 +532,39 @@ td .acts{display:flex;gap:8px}
 
 <header class="header">
 <div class="header-inner">
-<div class="logo">
-    <img src="favicon.png" alt="Test Markaz Edu">
-</div>
-<div><h1>Ta’lim muassasasi admini</h1></div>
+  <div class="brand">
+    <div class="logo">
+      <img src="favicon.png" alt="Test Markaz Edu">
+    </div>
+    <div class="brand-text">
+      <h1>Ta’lim muassasasi admini</h1>
+    </div>
+  </div>
+
+  <button class="theme-switch" id="themeSwitch" type="button" aria-label="Tungi rejimni yoqish yoki o‘chirish" title="Tungi rejim">
+    <span class="theme-track">
+      <span class="theme-sun" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          <path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="theme-stickman" aria-hidden="true">
+        <span class="stick-head"></span>
+        <span class="stick-body"></span>
+        <span class="stick-arm stick-arm-left"></span>
+        <span class="stick-arm stick-arm-right"></span>
+        <span class="stick-leg stick-leg-left"></span>
+        <span class="stick-leg stick-leg-right"></span>
+      </span>
+      <span class="theme-moon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M20.4 14.8A8.7 8.7 0 0 1 9.2 3.6 8.8 8.8 0 1 0 20.4 14.8Z"/>
+        </svg>
+      </span>
+    </span>
+  </button>
 </div>
 </header>
 
@@ -688,13 +1050,147 @@ $("stBody").addEventListener("click",async e=>{
   }
 });
 
+/* ---------- Dark / Light rejim + harakatlanuvchi odamcha ---------- */
+const THEME_KEY="ma_theme";
+const themeSwitch=$("themeSwitch");
+const themeTrack=themeSwitch ? themeSwitch.querySelector(".theme-track") : null;
+const themePerson=themeSwitch ? themeSwitch.querySelector(".theme-stickman") : null;
+
+let themeDragging=false;
+let themeMoved=false;
+let themeStartX=0;
+let themeStartPos=0;
+let themePos=0;
+let ignoreThemeClickUntil=0;
+
+function clamp(n,min,max){
+  return Math.max(min,Math.min(max,n));
+}
+
+function getThemeRange(){
+  if(!themeTrack) return {min:18,max:96};
+  const w=themeTrack.clientWidth;
+  // Odamcha quyoshning ichki chetiga yaqin nuqtadan oyga yaqin nuqtagacha yuradi.
+  const min=18;
+  const max=Math.max(min+34,w-28);
+  return {min,max};
+}
+
+function setPersonPosition(pos,animate=true){
+  if(!themePerson) return;
+  const range=getThemeRange();
+  themePos=clamp(pos,range.min,range.max);
+  const center=range.max/2;
+  const x=themePos-center;
+  themePerson.style.setProperty("--walk-x",x+"px");
+  themePerson.style.setProperty("--walk-tilt",(x>2? -4 : x<-2 ? 4 : 0)+"deg");
+  if(!animate) themePerson.style.transition="none";
+  else themePerson.style.transition="";
+  requestAnimationFrame(()=>{
+    if(themePerson && !animate) themePerson.style.transition="";
+  });
+}
+
+function setWalking(on){
+  if(themeSwitch) themeSwitch.classList.toggle("walking",on);
+}
+
+function applyTheme(mode,animate=true){
+  document.body.classList.toggle("dark",mode==="dark");
+  if(themeSwitch) themeSwitch.setAttribute("aria-pressed",mode==="dark" ? "true" : "false");
+
+  const range=getThemeRange();
+  // Light = quyosh tomoni, Dark = oy tomoni.
+  setPersonPosition(mode==="dark" ? range.max : range.min,animate);
+}
+
+function setTheme(mode,animate=true){
+  applyTheme(mode,animate);
+  localStorage.setItem(THEME_KEY,mode);
+}
+
+function toggleTheme(){
+  const next=document.body.classList.contains("dark") ? "light" : "dark";
+  setWalking(true);
+  setTheme(next,true);
+  window.setTimeout(()=>setWalking(false),700);
+}
+
+(function initTheme(){
+  const saved=localStorage.getItem(THEME_KEY);
+  const mode=saved || "light";
+  requestAnimationFrame(()=>applyTheme(mode,false));
+})();
+
+/* Odamchani sichqoncha/barmoq bilan sudrash */
+if(themeSwitch){
+  themeSwitch.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse" && e.button!==0) return;
+    themeDragging=true;
+    themeMoved=false;
+    themeStartX=e.clientX;
+    const range=getThemeRange();
+    themeStartPos=themePos || (document.body.classList.contains("dark") ? range.max : range.min);
+    themeSwitch.setPointerCapture?.(e.pointerId);
+    setWalking(true);
+    e.preventDefault();
+  });
+
+  themeSwitch.addEventListener("pointermove",e=>{
+    if(!themeDragging) return;
+    const dx=e.clientX-themeStartX;
+    if(Math.abs(dx)>3) themeMoved=true;
+    const range=getThemeRange();
+    setPersonPosition(themeStartPos+dx,false);
+  });
+
+  themeSwitch.addEventListener("pointerup",e=>{
+    if(!themeDragging) return;
+    themeDragging=false;
+    const range=getThemeRange();
+    const midpoint=(range.min+range.max)/2;
+    const shouldDark=themePos>=midpoint;
+    const shouldLight=themePos<midpoint;
+
+    if(themeMoved){
+      setWalking(true);
+      setTheme(shouldDark ? "dark" : "light",true);
+      ignoreThemeClickUntil=Date.now()+450;
+    }else{
+      ignoreThemeClickUntil=Date.now()+450;
+      toggleTheme();
+    }
+
+    try{themeSwitch.releasePointerCapture?.(e.pointerId);}catch(_){}
+    window.setTimeout(()=>setWalking(false),700);
+  });
+
+  themeSwitch.addEventListener("pointercancel",e=>{
+    themeDragging=false;
+    setWalking(false);
+    applyTheme(document.body.classList.contains("dark") ? "dark" : "light",true);
+    try{themeSwitch.releasePointerCapture?.(e.pointerId);}catch(_){}
+  });
+
+  themeSwitch.addEventListener("click",e=>{
+    if(Date.now()<ignoreThemeClickUntil){
+      e.preventDefault();
+      return;
+    }
+    toggleTheme();
+  });
+
+  window.addEventListener("resize",()=>{
+    applyTheme(document.body.classList.contains("dark") ? "dark" : "light",false);
+  });
+}
+
 /* ---------- Ishga tushirish ---------- */
 if(token){
   $("adminName").textContent=sessionStorage.getItem("ma_name")||"Admin";
   showApp();
   switchTab("subjects");
 }
-</script>
     </script>
 
 <footer class="footer">
@@ -752,7 +1248,5 @@ if(token){
 
 </footer>
 
-</body>
-</html>
 </body>
 </html>
