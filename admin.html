@@ -874,7 +874,7 @@ function initLamp() {
 
   if (!hitArea || !bead || !line) return;
 
-  Draggable.create(hitArea, {
+  const cordDraggable = Draggable.create(hitArea, {
     type: 'y',
     bounds: { minY: 0, maxY: 62 },
 
@@ -890,6 +890,7 @@ function initLamp() {
 
     onRelease() {
       const pulled = Math.abs(this.y - lampDragStart) > 12 || this.y > 22;
+      const draggable = this;
 
       gsap.to(bead, {
         attr: { cy: 180 },
@@ -903,9 +904,14 @@ function initLamp() {
         ease: "power2.out"
       });
 
+      // Draggable ichki Y qiymatini ham nolga qaytaramiz.
+      // Shunda shnur keyingi safar yana tortiladi.
+      gsap.set(hitArea, { y: 0 });
+      draggable.update(true);
+
       if (pulled) toggleLamp();
     }
-  });
+  })[0];
 
   // Klaviaturada lampani boshqarish ham mumkin.
   document.addEventListener('keydown', function(e) {
