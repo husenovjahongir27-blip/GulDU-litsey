@@ -1142,7 +1142,7 @@ function renderTests(){
     box.innerHTML='<div class="empty">Hozircha test yo‘q. “＋ Yangi test” tugmasini bosing.</div>';
     return;
   }
-  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Vaqt (Toshkent)</th><th>Holat</th><th>Savollar</th><th>Sinflar</th><th></th></tr></thead><tbody>'+
+  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Vaqt (Toshkent)</th><th>Holat</th><th>Savollar</th><th>Davomiylik</th><th>Urinish limiti</th><th>Sinflar</th><th></th></tr></thead><tbody>'+
     tests.map(t=>{
       const id=esc(t.id);
       const chips=(t.groups||[]).length?t.groups.map(g=>'<span class="chip">'+esc(g)+'</span>').join(""):'<span class="muted">biriktirilmagan</span>';
@@ -1151,6 +1151,8 @@ function renderTests(){
       return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat)+'</td>'+
         '<td>'+time+'</td><td><span class="stt '+st[1]+'">'+st[0]+'</span></td>'+
         '<td>'+esc(t.count)+' ta</td>'+
+        '<td>'+esc(t.duration||45)+' daq.</td>'+
+        '<td>'+esc(t.attempts||1)+' ta</td>'+
         '<td class="name">'+chips+'</td>'+
         '<td><div class="bar-actions">'+
         '<button class="btn small" type="button" data-act="edit" data-id="'+id+'">Tahrirlash</button>'+
