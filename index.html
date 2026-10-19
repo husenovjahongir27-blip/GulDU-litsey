@@ -158,13 +158,13 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 
 <div class="info-strip" style="grid-column:1/-1">
 <div class="info-item"><div class="info-icon">♙</div><div><b>Nazoratlar</b><span>ustoz tomonidan belgilanadi</span></div></div>
-<div class="info-item"><div class="info-icon">◷</div><div><b>Vaqt</b><span id="infoDuration">Tanlangan nazorat vaqtiga bog‘liq</span></div></div>
-<div class="info-item"><div class="info-icon">✓</div><div><b>Urinishlar</b><span id="infoAttempts">Har bir nazorat uchun limit belgilanadi</span></div></div>
+<div class="info-item"><div class="info-icon">◷</div><div><b>Vaqt</b><span id="durationInfo">Test sozlamasiga muvofiq</span></div></div>
+<div class="info-item"><div class="info-icon">✓</div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
 </div>
 </section>
 
 <section class="card exam hidden" id="exam">
-<div class="exam-head"><div class="exam-title"><span class="circle">▤</span><span id="examTitle">NAZORAT</span></div><div class="timer">◷ <span>Qolgan vaqt</span> <strong id="timer">45:00</strong></div></div>
+<div class="exam-head"><div class="exam-title"><span class="circle">▤</span><span id="examTitle">NAZORAT</span></div><div class="timer">◷ <span>Qolgan vaqt</span> <strong id="timer">--:--</strong></div></div>
 <div class="exam-body">
 <aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
 <div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
@@ -183,7 +183,7 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 
 <script>
 let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false, starting=false;
-let currentTest=null, tests=[], skew=0, listState="idle", availSeq=0, startedAt=null;
+let currentTest=null, tests=[], skew=0, listState="idle", availSeq=0;
 let scopeSeq=0, scopeReady=false;
 const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
 const regionEl=document.getElementById("region"), districtEl=document.getElementById("district"), schoolEl=document.getElementById("school"), districtOtherEl=document.getElementById("districtOther"), schoolOtherEl=document.getElementById("schoolOther");
@@ -191,7 +191,6 @@ const scopeMsg=document.getElementById("scopeMsg");
 const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
 const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
 const testListEl=document.getElementById("testList"), qimgBox=document.getElementById("qimgBox");
-const infoDuration=document.getElementById("infoDuration"), infoAttempts=document.getElementById("infoAttempts");
 
 // Backend manzili. Bot tokenini BU YERGA yozmang.
 const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
@@ -381,7 +380,7 @@ function renderTests(){
     const s=document.createElement("span");s.className="status"+(on?" ok":"");
     s.textContent=on?"Mavjud":(st==="soon"?"Hali boshlanmagan":"Vaqti tugagan");
     c.append(head,h,s);
-    const n=document.createElement("small");n.textContent=(t.count||0)+" ta savol · "+(Number(t.duration)||45)+" daqiqa · "+(Number(t.attempts)||1)+" urinish";c.appendChild(n);
+    const n=document.createElement("small");n.textContent=(t.count||0)+" ta savol · "+(Number(t.duration)||45)+" daq. · "+(Number(t.attempts)||1)+" urinish";c.appendChild(n);
     if(t.start||t.end){
       const w=document.createElement("small");
       w.textContent=(t.start?fmtTk(t.start):"")+" — "+(t.end?fmtTk(t.end):"");
@@ -425,11 +424,6 @@ function valid(){
   if(!groupEl.value){msg.textContent="Avval sinfni tanlang.";groupEl.focus();return false}
   if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}
   if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
-  const previous=localStorage.getItem(key());
-  let used=0;
-  if(previous){try{const parsed=JSON.parse(previous);used=Number(parsed.attempts)||1}catch(_){used=1}}
-  const limit=Math.max(1,Number(currentTest&&currentTest.attempts)||1);
-  if(used>=limit){msg.textContent="Urinishlar limitingiz tugagan ("+used+"/"+limit+").";return false}
   msg.textContent="";return true;
 }
 // Ustoz yuklagan test: savollar va javoblar serverda aralashtirilgan, c — to‘g‘ri javob indeksi
@@ -474,22 +468,26 @@ async function start(t){
   currentTest=t;
   if(!valid())return;
   starting=true;
-  let dur=Math.max(1,Number(t.duration)||45)*60;
+  let dur=2700;
   try{
     msg.textContent="Test yuklanmoqda...";
     const r=await api("pubTest",{id:t.id,group:groupEl.value,student:studentEl.value.trim()});
     if(!r||!r.ok||!Array.isArray(r.questions)||!r.questions.length){const err=new Error("load");err.userMessage=(r&&r.error)||"Testni yuklab bo‘lmadi.";throw err}
     if(r.now){const sv=Date.parse(r.now);if(!isNaN(sv))skew=sv-Date.now()}
+    const durationMinutes=Math.max(1,Number(r.duration)||45);
+    dur=durationMinutes*60;
     if(r.end){const left=Math.floor((Date.parse(r.end)-(Date.now()+skew))/1000);if(!isNaN(left))dur=Math.min(dur,left)}
     if(dur<=0){const err=new Error("late");err.userMessage="Test vaqti tugagan.";throw err}
-    currentTest=Object.assign({},t,{nazorat:r.nazorat||t.nazorat,title:r.title||t.title});
+    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1)});
+    document.getElementById("durationInfo").textContent=durationMinutes+" daqiqa · urinishlar limiti: "+currentTest.attempts;
     prepareRemoteExam(r.questions);
     msg.textContent="";
   }catch(e){
     msg.textContent=(e&&e.userMessage)||"Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.";
     starting=false;refreshTests();return;
   }
-  started=true;starting=false;startedAt=new Date(Date.now()+skew).toISOString();
+  started=true;starting=false;
+  window.testStartedAt=new Date().toISOString();
   document.getElementById("examTitle").textContent=subjectEl.value+" — "+(currentTest.nazorat||"nazorat");
   exam.classList.remove("hidden");testListEl.style.pointerEvents="none";
   buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
@@ -529,9 +527,8 @@ function finish(){
   clearInterval(timerId);
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
   const grade=getGrade(score,examQuestions.length);
-  const data={testId:currentTest.id,subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),startedAt:startedAt,finishedAt:new Date(Date.now()+skew).toISOString(),durationMinutes:Number(currentTest.duration)||45,attemptLimit:Number(currentTest.attempts)||1};
-  let prev={attempts:0};try{prev=JSON.parse(localStorage.getItem(key())||"{}")}catch(_){}
-  localStorage.setItem(key(),JSON.stringify({score,grade,startedAt:data.startedAt,finishedAt:data.finishedAt,attempts:(Number(prev.attempts)||0)+1}));
+  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1};
+  localStorage.setItem(key(),JSON.stringify({score,grade,startedAt:data.startedAt,finishedAt:data.finishedAt}));
   const sent = sendResultToTelegram(data);
   console.log("Telegram natijasi yuborish holati:", sent);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
