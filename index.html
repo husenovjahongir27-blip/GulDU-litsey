@@ -424,6 +424,11 @@ function valid(){
   if(!groupEl.value){msg.textContent="Avval sinfni tanlang.";groupEl.focus();return false}
   if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}
   if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
+  const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
+  let usedAttempts=0;
+  try{const saved=JSON.parse(localStorage.getItem(attemptKey)||"null");usedAttempts=Math.max(0,Number(saved&&saved.attempts)||0)}catch(_){usedAttempts=0}
+  const limit=Math.max(1,Number(currentTest&&currentTest.attempts)||1);
+  if(usedAttempts>=limit){msg.textContent="Urinishlar limitingiz tugagan ("+usedAttempts+"/"+limit+").";return false}
   msg.textContent="";return true;
 }
 // Ustoz yuklagan test: savollar va javoblar serverda aralashtirilgan, c — to‘g‘ri javob indeksi
@@ -528,7 +533,10 @@ function finish(){
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
   const grade=getGrade(score,examQuestions.length);
   const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1};
-  localStorage.setItem(key(),JSON.stringify({score,grade,startedAt:data.startedAt,finishedAt:data.finishedAt}));
+  const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
+  let previousAttempts=0;
+  try{const old=JSON.parse(localStorage.getItem(attemptKey)||"null");previousAttempts=Math.max(0,Number(old&&old.attempts)||0)}catch(_){previousAttempts=0}
+  localStorage.setItem(attemptKey,JSON.stringify({score,grade,attempts:previousAttempts+1,startedAt:data.startedAt,finishedAt:data.finishedAt}));
   const sent = sendResultToTelegram(data);
   console.log("Telegram natijasi yuborish holati:", sent);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
