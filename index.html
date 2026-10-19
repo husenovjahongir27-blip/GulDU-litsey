@@ -541,7 +541,22 @@ function finish(){
   console.log("Telegram natijasi yuborish holati:", sent);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
   // O'quvchiga baho va to'g'ri javoblar ko'rsatilmaydi.
-  document.getElementById("resultText").textContent=`${studentEl.value.trim()} — sinf: ${groupEl.value}. Nazorat muvaffaqiyatli yakunlandi. Natija o‘qituvchiga yuborildi.`;
+  document.getElementById("resultText").innerHTML = `
+  <div style="text-align:center; padding:20px;">
+    <h2>🎉 Test yakunlandi!</h2>
+    <p><b>O‘quvchi:</b> ${studentEl.value.trim()}</p>
+    <p><b>Sinf/guruh:</b> ${groupEl.value}</p>
+    <h2 style="color:#16a34a;">
+      ${score} / ${examQuestions.length}
+    </h2>
+    <p>To‘g‘ri javoblar soni: <b>${score} ta</b></p>
+    <p>Foiz natijasi: 
+      <b>${Math.round(score / examQuestions.length * 100)}%</b>
+    </p>
+    <p>Baho: <b>${grade}</b></p>
+    <p>Natijangiz o‘qituvchiga ham yuborildi.</p>
+  </div>
+`;
   window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
 }
 prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
