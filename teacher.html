@@ -396,8 +396,8 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 <datalist id="nazList"><option value="1-JN"><option value="2-JN"><option value="3-JN"><option value="4-JN"><option value="Oraliq nazorat"><option value="Yakuniy nazorat"></datalist></div>
 </div>
 <div class="ed-grid2">
-<div><label for="edStart">Test boshlanadigan vaqt</label><input id="edStart" type="datetime-local"></div>
-<div><label for="edEnd">Test tugaydigan vaqt</label><input id="edEnd" type="datetime-local"></div>
+<div><label for="edStart">Test boshlanadigan vaqt</label><input id="edStart" type="text" inputmode="numeric" placeholder="dd.mm.yyyy HH:mm" autocomplete="off" maxlength="16"></div>
+<div><label for="edEnd">Test tugaydigan vaqt</label><input id="edEnd" type="text" inputmode="numeric" placeholder="dd.mm.yyyy HH:mm" autocomplete="off" maxlength="16"></div>
 </div>
 <div class="ed-grid2" style="margin-top:12px">
 <div><label for="edDuration">Test davomiyligi (daqiqada)</label><input id="edDuration" type="number" min="1" max="300" step="1" value="45"></div>
@@ -484,21 +484,25 @@ function tk(iso){
   const hh=p.hour==="24"?"00":p.hour;
   return {date:p.year+"-"+p.month+"-"+p.day, full:p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute};
 }
-// ISO → <input type="datetime-local"> qiymati (Toshkent vaqti bilan)
+// Toshkent vaqti: ekranda doim dd.mm.yyyy HH:mm (24 soatlik) format.
 function toTkInput(iso){
   const d=new Date(iso);
   if(!iso||isNaN(d.getTime())) return "";
   const p={};
   dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
   const hh=p.hour==="24"?"00":p.hour;
-  return p.year+"-"+p.month+"-"+p.day+"T"+hh+":"+p.minute;
+  return p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute;
 }
-// <input type="datetime-local"> qiymati (Toshkent vaqti) → ISO (UTC)
+// dd.mm.yyyy HH:mm (Toshkent vaqti) → ISO (UTC)
 function tkToIso(v){
-  const m=/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(String(v||""));
+  const m=/^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/.exec(String(v||"").trim());
   if(!m) return "";
-  const d=new Date(m[1]+"T"+m[2]+":00+05:00");
-  return isNaN(d.getTime())?"":d.toISOString();
+  const day=Number(m[1]), month=Number(m[2]), year=Number(m[3]), hour=Number(m[4]), minute=Number(m[5]);
+  if(month<1||month>12||hour>23||minute>59||day<1||day>31) return "";
+  const local=new Date(Date.UTC(year,month-1,day,hour-5,minute,0));
+  const check=new Date(Date.UTC(year,month-1,day));
+  if(check.getUTCFullYear()!==year||check.getUTCMonth()!==month-1||check.getUTCDate()!==day) return "";
+  return isNaN(local.getTime())?"":local.toISOString();
 }
 
 /* ---------- Serverga so'rov ---------- */
