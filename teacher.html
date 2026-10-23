@@ -407,6 +407,7 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 <div class="ed-grid2" style="margin-top:12px">
 <div><label for="edDuration">Test davomiyligi (daqiqada)</label><input id="edDuration" type="number" min="1" max="300" step="1" value="45"></div>
 <div><label for="edAttempts">Sinf uchun urinishlar limiti</label><input id="edAttempts" type="number" min="1" max="20" step="1" value="1"></div>
+<div><label for="edQuestionCount">Har bir o‘quvchiga beriladigan savollar soni</label><input id="edQuestionCount" type="number" min="1" max="200" step="1" value="30"><small class="muted">Masalan, 100 ta savol bankidan har bir o‘quvchiga tasodifiy 30 ta savol beriladi.</small></div>
 </div>
 <div class="hint" style="margin-top:8px">Vaqt <b>Toshkent vaqti</b> bilan (24 soatlik format). O‘quvchi testni faqat belgilangan oraliqda boshlaydi. Davomiylik har bir urinish uchun daqiqalarda belgilanadi. Urinishlar limiti sinfga bir xil qo‘llanadi; sarflangan urinishlar har bir o‘quvchi bo‘yicha hisoblanishi kerak.</div>
 <div class="field"><label>Qaysi sinflarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
@@ -1260,7 +1261,7 @@ async function openEditor(id){
       const r=await call("testGet",{id:id});
       if(!r.ok) throw new Error(r.error||"Testni olib bo‘lmadi.");
       const t=r.test;
-      editing={id:t.id,title:t.title,nazorat:t.nazorat,start:toTkInput(t.start),end:toTkInput(t.end),duration:Number(t.duration)||45,attempts:Number(t.attempts)||1,groups:t.groups||[],
+      editing={id:t.id,title:t.title,nazorat:t.nazorat,start:toTkInput(t.start),end:toTkInput(t.end),duration:Number(t.duration)||45,attempts:Number(t.attempts)||1,questionCount:Number(t.questionCount)||((t.questions||[]).length),groups:t.groups||[],
         questions:(t.questions||[]).map(x=>({q:x.q,o:x.o.slice(0,4),img:x.img||"",imgUrl:x.imgUrl||""}))};
       m.textContent="";
     }catch(err){
@@ -1269,7 +1270,7 @@ async function openEditor(id){
       return;
     }
   }else{
-    editing={id:"",title:"",nazorat:"",start:"",end:"",duration:45,attempts:1,groups:[],questions:[blankQ()]};
+    editing={id:"",title:"",nazorat:"",start:"",end:"",duration:45,attempts:1,questionCount:30,groups:[],questions:[blankQ()]};
   }
   if(!editing.questions.length) editing.questions=[blankQ()];
   edDirty=false;
@@ -1282,6 +1283,8 @@ async function openEditor(id){
   $("edEnd").value=editing.end;
   $("edDuration").value=editing.duration||45;
   $("edAttempts").value=editing.attempts||1;
+  $("edQuestionCount").value=editing.questionCount||30;
+  $("edQuestionCount").max=MAX_Q;
   renderEdGroups();
   renderQuestions();
   $("edMsg").textContent="";
@@ -1498,6 +1501,7 @@ async function saveTest(){
   editing.end=$("edEnd").value;
   editing.duration=Number($("edDuration").value);
   editing.attempts=Number($("edAttempts").value);
+  editing.questionCount=Number($("edQuestionCount").value);
   editing.groups=Array.from(document.querySelectorAll("#edGroups input:checked")).map(i=>i.value);
   if(!editing.title){ msg.textContent="Test nomini kiriting."; $("edTitle").focus(); return; }
   if(!editing.nazorat){ msg.textContent="Nazorat turini yozing (masalan: 1-JN yoki Oraliq nazorat)."; $("edNazorat").focus(); return; }
@@ -1513,6 +1517,7 @@ async function saveTest(){
     msg.textContent="Kamida bitta savol kiriting.";
     return;
   }
+  if(!Number.isInteger(editing.questionCount)||editing.questionCount<1||editing.questionCount>editing.questions.length){ msg.textContent="Har bir o‘quvchiga beriladigan savollar soni 1 dan jami savollar sonigacha bo‘lishi kerak. Jami savol: "+editing.questions.length+" ta."; $("edQuestionCount").focus(); return; }
   if(editing.questions.length>MAX_Q){ msg.textContent="Bir testda ko‘pi bilan "+MAX_Q+" ta savol bo‘lishi mumkin."; return; }
   renderQuestions(); markBad();
   const bad=editing.questions.findIndex(isBadQ);
@@ -1526,7 +1531,7 @@ async function saveTest(){
   msg.className="msg info"; msg.textContent="Saqlanmoqda...";
   try{
     const r=await call("testSave",{
-      id:editing.id,title:editing.title,nazorat:editing.nazorat,start:startIso,end:endIso,duration:editing.duration,attempts:editing.attempts,groups:editing.groups,
+      id:editing.id,title:editing.title,nazorat:editing.nazorat,start:startIso,end:endIso,duration:editing.duration,attempts:editing.attempts,questionCount:editing.questionCount,groups:editing.groups,
       questions:editing.questions.map(x=>({q:x.q.trim(),o:x.o.map(v=>v.trim()),img:x.img||""}))
     });
     if(!r.ok) throw new Error(r.error||"Saqlab bo‘lmadi.");
