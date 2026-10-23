@@ -401,15 +401,15 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 <datalist id="nazList"><option value="1-JN"><option value="2-JN"><option value="3-JN"><option value="4-JN"><option value="Oraliq nazorat"><option value="Yakuniy nazorat"></datalist></div>
 </div>
 <div class="ed-grid2">
-<div><label for="edStart">Test boshlanadigan vaqt</label><div class="date-time-wrap"><input id="edStart" type="text" inputmode="numeric" placeholder="dd.mm.yyyy HH:mm" autocomplete="off" maxlength="16"><button class="date-time-picker" type="button" data-picker="edStartPicker" aria-label="Boshlanish sanasini tanlash" title="Taqvimdan tanlash">▦</button><input id="edStartPicker" class="native-date-picker" type="datetime-local" tabindex="-1" aria-hidden="true"></div></div>
-<div><label for="edEnd">Test tugaydigan vaqt</label><div class="date-time-wrap"><input id="edEnd" type="text" inputmode="numeric" placeholder="dd.mm.yyyy HH:mm" autocomplete="off" maxlength="16"><button class="date-time-picker" type="button" data-picker="edEndPicker" aria-label="Tugash sanasini tanlash" title="Taqvimdan tanlash">▦</button><input id="edEndPicker" class="native-date-picker" type="datetime-local" tabindex="-1" aria-hidden="true"></div></div>
+<div><label for="edStart">Test boshlanadigan vaqt</label><div class="date-time-wrap"><input id="edStart" type="text" inputmode="numeric" placeholder="kun.oy.yil soat:daq" autocomplete="off" maxlength="16"><button class="date-time-picker" type="button" data-picker="edStartPicker" aria-label="Test boshlanish sanasi va vaqtini tanlash" title="Taqvimdan sana va vaqtni tanlash">▦</button><input id="edStartPicker" class="native-date-picker" type="datetime-local" tabindex="-1" aria-hidden="true"></div></div>
+<div><label for="edEnd">Test tugaydigan vaqt</label><div class="date-time-wrap"><input id="edEnd" type="text" inputmode="numeric" placeholder="kun.oy.yil soat:daq" autocomplete="off" maxlength="16"><button class="date-time-picker" type="button" data-picker="edEndPicker" aria-label="Test tugash sanasi va vaqtini tanlash" title="Taqvimdan sana va vaqtni tanlash">▦</button><input id="edEndPicker" class="native-date-picker" type="datetime-local" tabindex="-1" aria-hidden="true"></div></div>
 </div>
 <div class="ed-grid2" style="margin-top:12px">
 <div><label for="edDuration">Test davomiyligi (daqiqada)</label><input id="edDuration" type="number" min="1" max="300" step="1" value="45"></div>
 <div><label for="edAttempts">Sinf uchun urinishlar limiti</label><input id="edAttempts" type="number" min="1" max="20" step="1" value="1"></div>
 <div><label for="edQuestionCount">Har bir o‘quvchiga beriladigan savollar soni</label><input id="edQuestionCount" type="number" min="1" max="200" step="1" value="30"><small class="muted">Masalan, 100 ta savol bankidan har bir o‘quvchiga tasodifiy 30 ta savol beriladi.</small></div>
 </div>
-<div class="hint" style="margin-top:8px">Vaqt <b>Toshkent vaqti</b> bilan (24 soatlik format). O‘quvchi testni faqat belgilangan oraliqda boshlaydi. Davomiylik har bir urinish uchun daqiqalarda belgilanadi. Urinishlar limiti sinfga bir xil qo‘llanadi; sarflangan urinishlar har bir o‘quvchi bo‘yicha hisoblanishi kerak.</div>
+<div class="hint" style="margin-top:8px">Sana va vaqtni <b>Toshkent vaqti</b> bilan kiriting. Format: <b>kun.oy.yil soat:daqiqa</b>, masalan <b>23.10.2026 14:30</b> (24 soatlik format). O‘quvchi testni faqat belgilangan oraliqda boshlaydi. Davomiylik har bir urinish uchun daqiqalarda belgilanadi. Urinishlar limiti sinfga bir xil qo‘llanadi; sarflangan urinishlar har bir o‘quvchi bo‘yicha hisoblanishi kerak.</div>
 <div class="field"><label>Qaysi sinflarga biriktirilsin</label><div id="edGroups" class="chk-list"></div></div>
 
 <div class="hint">
@@ -490,7 +490,7 @@ function tk(iso){
   const hh=p.hour==="24"?"00":p.hour;
   return {date:p.year+"-"+p.month+"-"+p.day, full:p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute};
 }
-// Toshkent vaqti: ekranda doim dd.mm.yyyy HH:mm (24 soatlik) format.
+// Toshkent vaqti: kun.oy.yil soat:daqiqa tartibi; masalan 23.10.2026 14:30 (24 soatlik format).
 function toTkInput(iso){
   const d=new Date(iso);
   if(!iso||isNaN(d.getTime())) return "";
@@ -499,7 +499,7 @@ function toTkInput(iso){
   const hh=p.hour==="24"?"00":p.hour;
   return p.day+"."+p.month+"."+p.year+" "+hh+":"+p.minute;
 }
-// dd.mm.yyyy HH:mm (Toshkent vaqti) → ISO (UTC)
+// kun.oy.yil soat:daqiqa (Toshkent vaqti) → ISO (UTC)
 function tkToIso(v){
   const m=/^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/.exec(String(v||"").trim());
   if(!m) return "";
@@ -511,7 +511,7 @@ function tkToIso(v){
   return isNaN(local.getTime())?"":local.toISOString();
 }
 
-// Taqvim ikonkasidan tanlangan qiymatni ekrandagi dd.mm.yyyy HH:mm formatiga o'tkazish.
+// Taqvimdan tanlangan qiymatni ekrandagi kun.oy.yil soat:daqiqa formatiga o‘tkazish.
 function pickerValueToText(v){
   if(!v) return "";
   const m=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(v);
