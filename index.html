@@ -484,8 +484,8 @@ async function start(t){
     // Test boshlanganidan keyin taymer r.end bilan qisqartirilmaydi.
     dur=durationMinutes*60;
     if(dur<=0){const err=new Error("late");err.userMessage="Test vaqti tugagan.";throw err}
-    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1)});
-    document.getElementById("durationInfo").textContent=durationMinutes+" daqiqa · urinishlar limiti: "+currentTest.attempts;
+    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1),questionCount:r.questions.length});
+    document.getElementById("durationInfo").textContent=durationMinutes+" daqiqa · "+r.questions.length+" ta savol · urinishlar limiti: "+currentTest.attempts;
     prepareRemoteExam(r.questions);
     msg.textContent="";
   }catch(e){
