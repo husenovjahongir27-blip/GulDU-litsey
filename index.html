@@ -127,6 +127,18 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input{margin-top:10px}
 @media(max-width:900px){.top-card{grid-template-columns:1fr}.exam-body{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid #e0e6ef}}
 @media(max-width:600px){.header-inner{padding:18px 16px;gap:13px}.logo{width:60px;height:60px;font-size:24px}.header h1{font-size:21px}.header p{font-size:13px;margin-top:7px}.container{padding:12px 10px 25px}.top-card{padding:18px;gap:20px}.controls-grid{gap:10px}.test-card{padding:13px;min-height:150px}.info-strip{grid-template-columns:1fr;gap:8px}.info-item{border-right:0;border-bottom:1px solid #e1e7ef;padding:10px 8px}.info-item:last-child{border-bottom:0}.exam-head{padding:15px}.exam-body{min-height:0}.exam-content{padding:20px 16px}.sidebar{padding:18px 16px}.result{padding:20px;align-items:flex-start;flex-direction:column}.exam-actions{flex-wrap:wrap}}
+
+/* Imtihon intizomi: brauzer darajasidagi ogohlantirishlar */
+.exam-guard{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border:1px solid #d8e4f7;border-radius:12px;background:#f4f8ff;color:#173d78;font-size:13px}
+.exam-guard .guard-count{font-weight:800;color:#b42318}
+.guard-overlay{position:fixed;inset:0;z-index:99999;background:rgba(12,24,45,.58);display:flex;align-items:center;justify-content:center;padding:18px}
+.guard-dialog{width:min(460px,100%);background:#fff;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.28);text-align:center;color:#172033}
+.guard-dialog .guard-symbol{width:54px;height:54px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;background:#fff0df;color:#a34b00;font-size:27px;font-weight:800}
+.guard-dialog h2{margin:0 0 8px;font-size:22px}.guard-dialog p{line-height:1.55;color:#526176;margin:0 0 18px}.guard-dialog .btn{min-width:150px}
+.exam-watermark{pointer-events:none;position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:.09;font-size:clamp(20px,3vw,38px);font-weight:900;color:#234c85;transform:rotate(-24deg);text-align:center;overflow-wrap:anywhere;user-select:none}
+.exam-content{position:relative}
+@media print{body{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -173,6 +185,8 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
 <div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
 <div class="exam-content">
+<div class="exam-guard" id="examGuard" role="status"><span aria-hidden="true">🛡️</span><span>Test vaqtida boshqa oynaga o‘tmaslik tavsiya etiladi.</span><span>Ogohlantirishlar: <b class="guard-count" id="guardCount">0</b></span></div>
+<div class="exam-watermark" id="examWatermark" aria-hidden="true"></div>
 <div class="question-no" id="questionNo"></div><div class="question" id="question"></div><div class="qimg-box" id="qimgBox"></div><div id="answers"></div>
 <div class="exam-actions"><button class="btn" id="prevBtn">← Oldingi</button><button class="btn" id="markBtn">♧ Belgilash</button><button class="btn primary" id="nextBtn">Keyingi →</button><button class="btn primary hidden" id="finishBtn">Nazoratni yakunlash</button></div>
 </div></div>
@@ -192,10 +206,14 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
   </div>
 </section>
 </main>
+<div id="guardOverlay" class="guard-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="guardTitle">
+  <div class="guard-dialog"><div class="guard-symbol">!</div><h2 id="guardTitle">Test oynasiga qayting</h2><p id="guardMessage">Test davomida boshqa oynaga o‘tganingiz qayd etildi. Testni davom ettirish uchun davom etish tugmasini bosing.</p><button id="guardContinue" class="btn primary" type="button">Testga qaytish</button></div>
+</div>
 <footer class="footer">© 2026 <strong>Test Markaz Edu</strong> — Barcha huquqlar himoyalangan.</footer>
 
 <script>
 let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false, starting=false;
+let focusLossCount=0, fullscreenExitCount=0, guardDialogOpen=false, lastFocusEventAt=0;
 let currentTest=null, tests=[], skew=0, listState="idle", availSeq=0;
 let scopeSeq=0, scopeReady=false;
 const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
@@ -204,6 +222,7 @@ const scopeMsg=document.getElementById("scopeMsg");
 const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
 const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
 const testListEl=document.getElementById("testList"), qimgBox=document.getElementById("qimgBox");
+const guardOverlay=document.getElementById("guardOverlay"), guardMessage=document.getElementById("guardMessage"), guardCountEl=document.getElementById("guardCount"), examWatermark=document.getElementById("examWatermark");
 
 // Backend manzili. Bot tokenini BU YERGA yozmang.
 const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
@@ -425,6 +444,44 @@ async function refreshTests(){
 setInterval(()=>{if(!started&&!starting&&tests.length)renderTests()},30000);
 renderTests();
 
+function updateGuardUI(){
+  if(guardCountEl)guardCountEl.textContent=String(focusLossCount+fullscreenExitCount);
+  if(examWatermark){const who=studentEl.value.trim()||"O‘QUVCHI";const grp=groupEl.value||"";examWatermark.textContent=(who+" · "+grp+" · TEST MARKAZ EDU").repeat(3)}
+}
+function showGuardWarning(message){
+  if(!started||guardDialogOpen)return;
+  guardDialogOpen=true;
+  if(guardMessage)guardMessage.textContent=message;
+  if(guardOverlay)guardOverlay.classList.remove("hidden");
+  updateGuardUI();
+}
+function hideGuardWarning(){guardDialogOpen=false;if(guardOverlay)guardOverlay.classList.add("hidden")}
+if(guardOverlay){document.getElementById("guardContinue").addEventListener("click",hideGuardWarning)}
+document.addEventListener("visibilitychange",()=>{
+  if(started&&document.visibilityState==="hidden"){
+    const now=Date.now();if(now-lastFocusEventAt<1200)return;lastFocusEventAt=now;
+    focusLossCount++;updateGuardUI();
+    // Tab qayta ko‘ringanda ogohlantirish chiqariladi.
+    window.__pendingGuardWarning="Boshqa tab yoki dasturga o‘tish hodisasi qayd etildi ("+focusLossCount+"). Testni davom ettirish uchun shu oynada qoling.";
+  }else if(started&&document.visibilityState==="visible"&&window.__pendingGuardWarning){
+    const m=window.__pendingGuardWarning;window.__pendingGuardWarning="";showGuardWarning(m);
+  }
+});
+document.addEventListener("fullscreenchange",()=>{
+  if(started&&!document.fullscreenElement){fullscreenExitCount++;updateGuardUI();showGuardWarning("To‘liq ekran rejimidan chiqdingiz. Bu hodisa qayd etildi. Testni davom ettirish uchun shu oynada qoling.")}
+});
+document.addEventListener("contextmenu",e=>{if(started)e.preventDefault()});
+document.addEventListener("copy",e=>{if(started)e.preventDefault()});
+document.addEventListener("keydown",e=>{
+  if(!started)return;
+  const k=String(e.key||"").toLowerCase();
+  if((e.ctrlKey||e.metaKey)&&["c","x","p","s","u"].includes(k)){e.preventDefault()}
+  if(k==="printscreen"){
+    // Brauzer PrintScreen hodisasini ishonchli ushlay olmaydi; bu faqat qo‘shimcha to‘siq.
+    focusLossCount++;updateGuardUI();showGuardWarning("Skrinshot tugmasi bosilgani aniqlangan bo‘lishi mumkin. Brauzer barcha skrinshot usullarini aniqlay olmaydi.");
+  }
+});
+
 function key(){return "t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
 function valid(){
   const name=studentEl.value.trim();
@@ -486,6 +543,8 @@ async function start(t){
   currentTest=t;
   if(!valid())return;
   starting=true;
+  // Brauzer ruxsat bersa, testni to‘liq ekran rejimida boshlashga urinadi.
+  try{if(document.documentElement.requestFullscreen&&!document.fullscreenElement){await document.documentElement.requestFullscreen()}}catch(_){/* Ba’zi brauzer/qurilmalarda ruxsat berilmasligi mumkin. */}
   let dur=2700;
   try{
     msg.textContent="Test yuklanmoqda...";
@@ -506,6 +565,7 @@ async function start(t){
     starting=false;refreshTests();return;
   }
   started=true;starting=false;
+  focusLossCount=0;fullscreenExitCount=0;updateGuardUI();
   window.testStartedAt=new Date().toISOString();
   document.getElementById("examTitle").textContent=subjectEl.value+" — "+(currentTest.nazorat||"nazorat");
   exam.classList.remove("hidden");testListEl.style.pointerEvents="none";
@@ -577,10 +637,12 @@ function renderAnswerReview(selectedIndex){
 function finish(){
   if(!started)return;
   started=false;
+  hideGuardWarning();
   clearInterval(timerId);
+  try{if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{})}catch(_){}
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
   const grade=getGrade(score,examQuestions.length);
-  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1};
+  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1,focusLossCount,fullscreenExitCount,integrityWarnings:focusLossCount+fullscreenExitCount};
   const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
   let previousAttempts=0;
   try{const old=JSON.parse(localStorage.getItem(attemptKey)||"null");previousAttempts=Math.max(0,Number(old&&old.attempts)||0)}catch(_){previousAttempts=0}
