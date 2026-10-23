@@ -84,15 +84,15 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 .test-card.disabled{cursor:not-allowed}
 .test-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:34px;padding:0 11px;border-radius:8px;font-weight:800;background:#0d64d6;color:#fff}
 .test-head .badge{max-width:78%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lock{width:42px;height:42px;border-radius:50%;background:#f1f3f6;color:#58677d;display:grid;place-items:center;font-size:20px;flex:none}
+.lock{width:44px;height:44px;border-radius:15px;background:linear-gradient(145deg,#f4f7fb,#e8eef6);color:#58677d;display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 1px rgba(88,103,125,.08)}
 .test-card h3{font-size:17px;margin:17px 0 12px;color:#1354aa;word-break:break-word}.test-card.locked h3{color:#6b7484}
 .status{display:inline-block;padding:5px 12px;border-radius:7px;background:#e7edf4;color:#26354e;font-size:13px}.status.ok{background:#31a961;color:#fff}
 .test-card small{display:block;margin-top:10px;color:#4d5d75;font-size:13px}
 .info-strip{margin-top:22px;padding:15px 20px;display:grid;grid-template-columns:1fr 1fr 1.15fr;border:1px solid #e2e9f2;border-radius:11px;background:#f9fbfe}
 .info-item{display:flex;align-items:center;gap:14px;padding:3px 22px;border-right:1px solid #dfe6ef}.info-item:last-child{border-right:0}
-.info-icon{width:43px;height:43px;border-radius:50%;background:#e9f3ff;color:var(--blue);display:grid;place-items:center;font-size:20px;flex:none}.info-item b{display:block;font-size:14px;margin-bottom:5px}.info-item span{font-size:13px;color:#526178}
+.info-icon{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#edf5ff,#dceaff);color:var(--blue);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(7,88,201,.06);flex:none}.info-icon svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.info-item b{display:block;font-size:14px;margin-bottom:5px}.info-item span{font-size:13px;color:#526178}
 .exam{margin-top:18px;overflow:hidden}.exam-head{background:linear-gradient(100deg,#08429b,#075bc7);color:#fff;padding:19px 28px;display:flex;align-items:center;justify-content:space-between}
-.exam-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800}.exam-title .circle{width:38px;height:38px;border-radius:50%;background:#1d72dc;display:grid;place-items:center}
+.exam-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800}.exam-title .circle{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.16);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
 .timer{font-size:16px;display:flex;align-items:center;gap:12px}.timer strong{font-size:30px}
 .exam-body{display:grid;grid-template-columns:280px 1fr;min-height:410px}.sidebar{border-right:1px solid #e0e6ef;padding:25px 28px;background:#fbfcfe}.sidebar h4{margin:0 0 18px;font-size:16px}
 .qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.qbtn{height:34px;border:1px solid #ccd7e6;border-radius:6px;background:#fff;color:#15233e;font-weight:600;cursor:pointer}.qbtn.active{background:#0a65d5;color:#fff;border-color:#0a65d5}.qbtn.answered{background:#0a65d5;color:#fff;border-color:#0a65d5}
@@ -101,8 +101,9 @@ select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88
 .qimg-box{margin-bottom:20px;color:#8a94a6;font-size:14px}
 .qimg{display:block;max-width:100%;max-height:340px;border-radius:10px;border:1px solid #e0e6ef;background:#fff;object-fit:contain}
 .answer{display:block;border:1px solid #ccd7e6;border-radius:9px;padding:14px 16px;margin:10px 0;font-size:15px;cursor:pointer;background:#fff}.answer:hover{border-color:#8db7ed;background:#f7fbff}.answer.selected{border-color:#0a65d5;background:#eef6ff}.answer input{width:auto;height:auto;margin-right:10px;vertical-align:middle}
-.exam-actions{display:flex;justify-content:space-between;align-items:center;margin-top:25px;gap:10px}.btn{height:48px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 20px;font-size:15px;font-weight:700;color:#162641;cursor:pointer}.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}.btn:disabled{opacity:.45;cursor:not-allowed}
-.result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:50%;background:#2fa85f;color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
+.exam-actions{display:flex;justify-content:space-between;align-items:center;margin-top:25px;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:background .18s,border-color .18s,transform .18s; height:48px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 20px;font-size:15px;font-weight:700;color:#162641;cursor:pointer}.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}.btn:hover:not(:disabled){transform:translateY(-1px);border-color:#8db7ed}.btn:disabled{opacity:.45;cursor:not-allowed}
+.result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:20px;background:linear-gradient(145deg,#35b96b,#218b4c);color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900;box-shadow:0 8px 18px rgba(47,168,95,.2)}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
+.review-wrap{margin:18px 0 28px}.review-heading{margin:0 0 14px;font-size:22px;color:#15233e}.review-intro{margin:0 0 16px;color:#52647b}.review-item{border:1px solid #d9e1ec;border-radius:12px;background:#fff;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(21,35,62,.04)}.review-item.correct{border-left:5px solid #229653}.review-item.incorrect{border-left:5px solid #d94848}.review-item.unanswered{border-left:5px solid #d69e2e}.review-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.review-status{font-size:13px;font-weight:700;padding:5px 9px;border-radius:999px}.review-status.correct{background:#e8f8ee;color:#176c3a}.review-status.incorrect{background:#fff0f0;color:#a72828}.review-status.unanswered{background:#fff7df;color:#855b00}.review-question{font-weight:700;margin:7px 0 12px;white-space:pre-wrap}.review-answer{margin:6px 0;padding:9px 11px;border-radius:8px;background:#f5f7fa;white-space:pre-wrap;overflow-wrap:anywhere}.review-answer.chosen-wrong{background:#fff0f0;border:1px solid #f2b8b8}.review-answer.correct-answer{background:#e8f8ee;border:1px solid #a6dfb9}.review-meta{font-size:14px;margin-top:8px;color:#42536a}.review-image{max-width:100%;max-height:280px;object-fit:contain;display:block;margin:10px 0;border-radius:8px}
 .footer{
     margin-top:auto;
     background:linear-gradient(110deg,#071d43,#0b4fae);
@@ -139,32 +140,32 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <main class="container">
 <section class="card top-card">
 <div>
-<div class="section-title"><span class="icon">▣</span> O‘QUVCHI MA’LUMOTLARI</div>
+<div class="section-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="3"/><circle cx="12" cy="9" r="2.4"/><path d="M7.5 17c.8-2.1 2.3-3.1 4.5-3.1s3.7 1 4.5 3.1"/></svg></span> O‘QUVCHI MA’LUMOTLARI</div>
 <div class="field"><label>Viloyatni tanlang</label><select id="region"></select></div>
 <div class="field"><label>Tuman yoki shaharni tanlang</label><select id="district" disabled></select><input id="districtOther" class="other-input hidden" type="text" placeholder="Tuman yoki shahar nomini yozing" autocomplete="off"></div>
 <div class="field"><label>Ta’lim muassasasini tanlang</label><select id="school" disabled></select><input id="schoolOther" class="other-input hidden" type="text" placeholder="Ta’lim muassasasi nomini yozing" autocomplete="off"></div>
 <div class="field"><label>Sinfni tanlang</label><select id="group" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
 <div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div>
 <div class="field"><label>Fanni tanlang</label><select id="subject" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
-<div class="notice"><strong>ⓘ Eslatma</strong>Avval viloyat, tuman va ta’lim muassasangizni tanlang — shundan keyin sinf va fan ro‘yxati ochiladi.<br>Nazorat ustoz belgilagan vaqtda ochiladi va o‘sha vaqtda yopiladi.</div>
+<div class="notice"><strong><span class="notice-symbol" style="display:inline-grid;vertical-align:middle;margin-right:7px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg></span>Eslatma</strong>Avval viloyat, tuman va ta’lim muassasangizni tanlang — shundan keyin sinf va fan ro‘yxati ochiladi.<br>Nazorat ustoz belgilagan vaqtda ochiladi va o‘sha vaqtda yopiladi.</div>
 <div id="scopeMsg" class="notice warn hidden"></div>
 <div id="loginMessage" class="login-message"></div>
 </div>
 
 <div>
-<div class="section-title"><span class="icon">⚯</span> NAZORATLAR</div>
+<div class="section-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M7.5 8h9M7.5 12h9M7.5 16h5"/></svg></span> NAZORATLAR</div>
 <div class="controls-grid" id="testList"></div>
 </div>
 
 <div class="info-strip" style="grid-column:1/-1">
-<div class="info-item"><div class="info-icon">♙</div><div><b>Nazoratlar</b><span>ustoz tomonidan belgilanadi</span></div></div>
-<div class="info-item"><div class="info-icon">◷</div><div><b>Vaqt</b><span id="durationInfo">Test sozlamasiga muvofiq</span></div></div>
-<div class="info-item"><div class="info-icon">✓</div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
+<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></div><div><b>Nazoratlar</b><span>ustoz tomonidan belgilanadi</span></div></div>
+<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div><div><b>Vaqt</b><span id="durationInfo">Test sozlamasiga muvofiq</span></div></div>
+<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></svg></div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
 </div>
 </section>
 
 <section class="card exam hidden" id="exam">
-<div class="exam-head"><div class="exam-title"><span class="circle">▤</span><span id="examTitle">NAZORAT</span></div><div class="timer">◷ <span>Qolgan vaqt</span> <strong id="timer">--:--</strong></div></div>
+<div class="exam-head"><div class="exam-title"><span class="circle" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg></span><span id="examTitle">NAZORAT</span></div><div class="timer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Qolgan vaqt</span> <strong id="timer">--:--</strong></div></div>
 <div class="exam-body">
 <aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
 <div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
@@ -175,8 +176,13 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 </section>
 
 <section class="result hidden" id="result">
-<div class="result-left"><div class="check">✓</div><div><h2>Nazorat yakunlandi</h2><p id="resultText"></p></div></div>
-<button class="btn" onclick="window.location.reload()">⌂ &nbsp; Bosh sahifaga qaytish</button>
+<div class="result-left"><div class="check"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></svg></div><div><h2>Nazorat yakunlandi</h2><p id="resultText"></p></div></div>
+<button class="btn" onclick="window.location.reload()"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:6px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="m3 10 9-7 9 7M5.5 9v11h13V9M9 20v-6h6v6"/></svg>Bosh sahifaga qaytish</button>
+</section>
+<section id="answerReview" class="review-wrap hidden" aria-live="polite">
+  <h2 class="review-heading">Javoblar tahlili</h2>
+  <p class="review-intro">Har bir savol bo‘yicha javobingiz, to‘g‘ri javob va natija ko‘rsatilgan.</p>
+  <div id="answerReviewList"></div>
 </section>
 </main>
 <footer class="footer">© 2026 <strong>Test Markaz Edu</strong> — Barcha huquqlar himoyalangan.</footer>
@@ -374,7 +380,7 @@ function renderTests(){
     const head=document.createElement("div");head.className="test-head";
     const b=document.createElement("span");b.className="badge";b.textContent=t.nazorat||"Nazorat";
     if(!on){b.style.background="#c6ced8";b.style.color="#26354b"}
-    const lk=document.createElement("span");lk.className="lock";lk.textContent=on?"▤":"♙";
+    const lk=document.createElement("span");lk.className="lock";lk.innerHTML=on?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>';
     head.append(b,lk);
     const h=document.createElement("h3");h.textContent=t.title||"Test";
     const s=document.createElement("span");s.className="status"+(on?" ok":"");
@@ -465,7 +471,7 @@ function renderQuestion(){
   const isLastQuestion=current===examQuestions.length-1;
   nextBtn.classList.toggle("hidden",isLastQuestion);
   finishBtn.classList.toggle("hidden",!isLastQuestion);
-  markBtn.textContent=marked[current]?"★ Belgilangan":"♧ Belgilash";
+  markBtn.innerHTML=marked[current]?'<svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:5px;stroke:currentColor;fill:none;stroke-width:2"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg> Belgilangan':'<svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:5px;stroke:currentColor;fill:none;stroke-width:2"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg> Belgilash';
 }
 function fmtClock(s){s=Math.max(0,s);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
 async function start(t){
@@ -527,6 +533,33 @@ function sendResultToTelegram(data){
   }
 }
 
+function renderAnswerReview(){
+  const section=document.getElementById("answerReview");
+  const list=document.getElementById("answerReviewList");
+  if(!section||!list)return;
+  list.innerHTML="";
+  examQuestions.forEach((q,i)=>{
+    const chosen=answers[i];
+    const correct=chosen===q.correct;
+    const unanswered=chosen===null||chosen===undefined||chosen==="";
+    const state=correct?"correct":(unanswered?"unanswered":"incorrect");
+    const card=document.createElement("article");
+    card.className="review-item "+state;
+    const top=document.createElement("div");top.className="review-top";
+    const number=document.createElement("strong");number.textContent=(i+1)+"-savol";
+    const badge=document.createElement("span");badge.className="review-status "+state;
+    badge.textContent=correct?"✓ To‘g‘ri":(unanswered?"! Javob belgilanmagan":"✗ Noto‘g‘ri");
+    top.append(number,badge);card.appendChild(top);
+    const questionText=document.createElement("div");questionText.className="review-question";questionText.textContent=q.text||"Savol matni mavjud emas";card.appendChild(questionText);
+    if(q.img){const img=document.createElement("img");img.className="review-image";img.alt="Savol rasmi";img.referrerPolicy="no-referrer";img.src=q.img;img.onerror=()=>img.remove();card.appendChild(img)}
+    if(unanswered){const your=document.createElement("div");your.className="review-meta";your.textContent="Sizning javobingiz: javob belgilanmagan";card.appendChild(your)}
+    else {const your=document.createElement("div");your.className="review-answer "+(correct?"correct-answer":"chosen-wrong");your.textContent="Siz belgilagan javob: "+chosen;card.appendChild(your)}
+    const right=document.createElement("div");right.className="review-answer correct-answer";right.textContent="To‘g‘ri javob: "+q.correct;card.appendChild(right);
+    list.appendChild(card);
+  });
+  section.classList.remove("hidden");
+}
+
 function finish(){
   if(!started)return;
   started=false;
@@ -541,7 +574,6 @@ function finish(){
   const sent = sendResultToTelegram(data);
   console.log("Telegram natijasi yuborish holati:", sent);
   exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
-  // O'quvchiga baho va to'g'ri javoblar ko'rsatilmaydi.
   document.getElementById("resultText").innerHTML = `
   <div style="text-align:center; padding:20px;">
     <h2>🎉 Test yakunlandi!</h2>
@@ -558,6 +590,7 @@ function finish(){
     <p>Natijangiz o‘qituvchiga ham yuborildi.</p>
   </div>
 `;
+  renderAnswerReview();
   window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
 }
 prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
