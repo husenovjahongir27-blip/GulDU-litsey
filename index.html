@@ -135,7 +135,6 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 .guard-dialog{width:min(460px,100%);background:#fff;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.28);text-align:center;color:#172033}
 .guard-dialog .guard-symbol{width:54px;height:54px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;background:#fff0df;color:#a34b00;font-size:27px;font-weight:800}
 .guard-dialog h2{margin:0 0 8px;font-size:22px}.guard-dialog p{line-height:1.55;color:#526176;margin:0 0 18px}.guard-dialog .btn{min-width:150px}
-.exam-watermark{pointer-events:none;position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;opacity:.09;font-size:clamp(20px,3vw,38px);font-weight:900;color:#234c85;transform:rotate(-24deg);text-align:center;overflow-wrap:anywhere;user-select:none}
 .exam-content{position:relative}
 @media print{body{display:none!important}}
 
@@ -186,7 +185,7 @@ select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input
 <div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
 <div class="exam-content">
 <div class="exam-guard" id="examGuard" role="status"><span aria-hidden="true">🛡️</span><span>Test vaqtida boshqa oynaga o‘tmaslik tavsiya etiladi.</span><span>Ogohlantirishlar: <b class="guard-count" id="guardCount">0</b></span></div>
-<div class="exam-watermark" id="examWatermark" aria-hidden="true"></div>
+
 <div class="question-no" id="questionNo"></div><div class="question" id="question"></div><div class="qimg-box" id="qimgBox"></div><div id="answers"></div>
 <div class="exam-actions"><button class="btn" id="prevBtn">← Oldingi</button><button class="btn" id="markBtn">♧ Belgilash</button><button class="btn primary" id="nextBtn">Keyingi →</button><button class="btn primary hidden" id="finishBtn">Nazoratni yakunlash</button></div>
 </div></div>
@@ -222,7 +221,7 @@ const scopeMsg=document.getElementById("scopeMsg");
 const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
 const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
 const testListEl=document.getElementById("testList"), qimgBox=document.getElementById("qimgBox");
-const guardOverlay=document.getElementById("guardOverlay"), guardMessage=document.getElementById("guardMessage"), guardCountEl=document.getElementById("guardCount"), examWatermark=document.getElementById("examWatermark");
+const guardOverlay=document.getElementById("guardOverlay"), guardMessage=document.getElementById("guardMessage"), guardCountEl=document.getElementById("guardCount");
 
 // Backend manzili. Bot tokenini BU YERGA yozmang.
 const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
@@ -446,7 +445,6 @@ renderTests();
 
 function updateGuardUI(){
   if(guardCountEl)guardCountEl.textContent=String(focusLossCount+fullscreenExitCount);
-  if(examWatermark){const who=studentEl.value.trim()||"O‘QUVCHI";const grp=groupEl.value||"";examWatermark.textContent=(who+" · "+grp+" · TEST MARKAZ EDU").repeat(3)}
 }
 function showGuardWarning(message){
   if(!started||guardDialogOpen)return;
@@ -556,7 +554,7 @@ async function start(t){
     // Test boshlanganidan keyin taymer r.end bilan qisqartirilmaydi.
     dur=durationMinutes*60;
     if(dur<=0){const err=new Error("late");err.userMessage="Test vaqti tugagan.";throw err}
-    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1),questionCount:r.questions.length});
+    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1),questionCount:r.questions.length,grading:r.grading||null});
     document.getElementById("durationInfo").textContent=durationMinutes+" daqiqa · "+r.questions.length+" ta savol · urinishlar limiti: "+currentTest.attempts;
     prepareRemoteExam(r.questions);
     msg.textContent="";
@@ -574,7 +572,16 @@ async function start(t){
   seconds=dur;timer.textContent=fmtClock(seconds);
   timerId=setInterval(()=>{seconds=Math.ceil((endAt-Date.now())/1000);timer.textContent=fmtClock(seconds);if(seconds<=0){clearInterval(timerId);finish()}},1000);
 }
-function getGrade(score,total){
+function getGrade(score,total,grading){
+  if(grading){
+    const g5=Number(grading.grade5),g4=Number(grading.grade4),g3=Number(grading.grade3);
+    if([g5,g4,g3].every(n=>Number.isInteger(n)&&n>=1)&&g5>=g4&&g4>=g3){
+      if(score>=g5)return 5;
+      if(score>=g4)return 4;
+      if(score>=g3)return 3;
+      return 2;
+    }
+  }
   const pct = total ? (score/total*100) : 0;
   if(pct>=86)return 5;
   if(pct>=71)return 4;
@@ -641,7 +648,7 @@ function finish(){
   clearInterval(timerId);
   try{if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{})}catch(_){}
   let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
-  const grade=getGrade(score,examQuestions.length);
+  const grade=getGrade(score,examQuestions.length,currentTest&&currentTest.grading);
   const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1,focusLossCount,fullscreenExitCount,integrityWarnings:focusLossCount+fullscreenExitCount};
   const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
   let previousAttempts=0;
