@@ -715,20 +715,56 @@ function lbStudentRender(response){
  let html='';
  if(status==='waiting'||status==='created'||status==='lobby')html='<div class="lb-play"><b>Ustoz bellashuvni boshlashini kuting.</b><p class="lb-msg">Xonaga muvaffaqiyatli qo‘shildingiz. Sahifa avtomatik yangilanadi.</p></div>';
  else if(status==='finished'||status==='ended'||status==='complete'||status==='completed')html='<div class="lb-play"><h3>Bellashuv yakunlandi</h3><p>Yakuniy reyting quyida ko‘rsatilgan.</p></div>';
- else if(qtext){const arr=Array.isArray(opts)?opts:[];html='<div class="lb-play"><div style="color:#0758c9;font-weight:800;margin-bottom:10px">JONLI SAVOL</div><h3 style="line-height:1.5">'+lbSesc(qtext)+'</h3>'+(q&&lbSVal(q,['image','imageUrl','image_url'],'')?'<img src="'+lbSesc(lbSVal(q,['image','imageUrl','image_url'],''))+'" alt="Savol rasmi" style="max-width:100%;max-height:260px;object-fit:contain">':'')+'<div>'+arr.map((o,i)=>{const label=typeof o==='string'?o:lbSVal(o,['text','label','answer','title'],String(o));const value=typeof o==='string'?o:lbSVal(o,['id','value','text','label'],label);return '<button class="lb-option" type="button" data-lb-answer="'+lbSesc(value)+'" data-lb-qid="'+lbSesc(qid)+'">'+String.fromCharCode(65+i)+'. '+lbSesc(label)+'</button>'}).join('')+'</div><div class="lb-msg" id="lbAnswerMsg"></div></div>'}
+ else if(qtext){const arr=Array.isArray(opts)?opts:[];html='<div class="lb-play"><div style="color:#0758c9;font-weight:800;margin-bottom:10px">JONLI SAVOL</div><h3 style="line-height:1.5">'+lbSesc(qtext)+'</h3>'+(q&&lbSVal(q,['image','imageUrl','image_url'],'')?'<img src="'+lbSesc(lbSVal(q,['image','imageUrl','image_url'],''))+'" alt="Savol rasmi" style="max-width:100%;max-height:260px;object-fit:contain">':'')+'<div>'+arr.map((o,i)=>{const label=typeof o==='string'?o:lbSVal(o,['text','label','answer','title'],String(o));const value=typeof o==='string'?o:lbSVal(o,['id','value','text','label'],label);return '<button class="lb-option" type="button" data-lb-answer="'+lbSesc(value)+'" data-lb-choice-index="'+i+'" data-lb-qid="'+lbSesc(qid)+'">'+String.fromCharCode(65+i)+'. '+lbSesc(label)+'</button>'}).join('')+'</div><div class="lb-msg" id="lbAnswerMsg"></div></div>'}
  else html='<div class="lb-play">Ustoz savolni ochishini kuting…</div>';
  const arrp=Array.isArray(players)?players:[];html+='<div class="lb-play"><b>Jonli reyting</b><table class="lb-ranking"><thead><tr><th>№</th><th>Ishtirokchi</th><th>Ball</th></tr></thead><tbody>'+(arrp.length?arrp.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+lbSesc(lbSVal(p,['name','student','studentName'],'Ishtirokchi'))+'</td><td>'+lbSesc(lbSVal(p,['score','points','total'],0))+'</td></tr>').join(''):'<tr><td colspan="3">Reyting hozircha bo‘sh.</td></tr>')+'</tbody></table></div>';
  lbPlayArea.innerHTML=html;lbStudentRoom.playerId=me||lbStudentRoom.playerId||'';
  if(qid&&qid!==lbStudentLastQuestion){lbStudentLastQuestion=qid;}
 }
-async function lbStudentRefresh(){if(!lbStudentRoom||lbStudentBusy)return;try{const r=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuv holatini olib bo‘lmadi.');lbStudentRender(r)}catch(e){lbMessage.textContent=e.message||'Aloqada xatolik.'}}
+async function lbStudentRefresh(){if(!lbStudentRoom||lbStudentBusy||lbAnswerInFlight)return;try{const r=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuv holatini olib bo‘lmadi.');lbStudentRender(r)}catch(e){lbMessage.textContent=e.message||'Aloqada xatolik.'}}
 lbJoinBtn.addEventListener('click',async()=>{
  if(lbStudentBusy)return;const code=(lbCodeEl.value||'').trim().toUpperCase();const name=(studentEl.value||'').trim();const group=groupEl.value;const subject=subjectEl.value;
- if(!code){lbMessage.textContent='Xona kodini kiriting.';lbCodeEl.focus();return}if(!name||!group){lbMessage.textContent='Avval yuqorida ism-familiya va sinfni tanlang.';return}
+ if(!code){lbMessage.textContent='Xona kodini kiriting.';lbCodeEl.focus();return}
  lbStudentBusy=true;lbJoinBtn.disabled=true;lbMessage.textContent='Bellashuvga ulanmoqda…';
- try{const r=await api('lbJoin',{code,name,group,subject,school:schoolEl.value,region:regionEl.value,district:districtEl.value});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuvga qo‘shilib bo‘lmadi.');const d=lbSVal(r,['room','state','data'],r)||{};lbStudentRoom={code:lbSVal(d,['code','roomCode','room_code'],code),roomId:lbSVal(d,['roomId','id'],''),playerId:lbSVal(d,['playerId','participantId','player_id'],'')};lbMessage.textContent='Bellashuvga qo‘shildingiz: '+lbStudentRoom.code;lbCodeEl.disabled=true;lbJoinBtn.textContent='Ulangan';await lbStudentRefresh();if(lbStudentPoll)clearInterval(lbStudentPoll);lbStudentPoll=setInterval(lbStudentRefresh,3000)}catch(e){lbMessage.textContent=e.message||'Xatolik yuz berdi.'}finally{lbStudentBusy=false;lbJoinBtn.disabled=!!lbStudentRoom}
+ try{const liveName=name||('Ishtirokchi-'+Math.random().toString(36).slice(2,6).toUpperCase());const r=await api('lbJoin',{code,name:liveName,group:group||'',subject,school:schoolEl.value,region:regionEl.value,district:districtEl.value});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuvga qo‘shilib bo‘lmadi.');const d=lbSVal(r,['room','state','data'],r)||{};lbStudentRoom={code:lbSVal(d,['code','roomCode','room_code'],code),roomId:lbSVal(d,['roomId','id'],''),playerId:lbSVal(d,['playerId','participantId','player_id'],'')};lbMessage.textContent='Bellashuvga qo‘shildingiz: '+lbStudentRoom.code;lbCodeEl.disabled=true;lbJoinBtn.textContent='Ulangan';await lbStudentRefresh();if(lbStudentPoll)clearInterval(lbStudentPoll);lbStudentPoll=setInterval(lbStudentRefresh,3000)}catch(e){lbMessage.textContent=e.message||'Xatolik yuz berdi.'}finally{lbStudentBusy=false;lbJoinBtn.disabled=!!lbStudentRoom}
 });
-lbPlayArea.addEventListener('click',async e=>{const b=e.target.closest('[data-lb-answer]');if(!b||!lbStudentRoom||b.disabled)return;const buttons=lbPlayArea.querySelectorAll('[data-lb-answer]');buttons.forEach(x=>{x.disabled=true;if(x===b)x.classList.add('chosen')});const box=document.getElementById('lbAnswerMsg');if(box)box.textContent='Javob yuborilmoqda…';try{const r=await api('lbAnswer',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||'',questionId:b.dataset.lbQid||'',answer:b.dataset.lbAnswer});if(!r||r.ok===false)throw new Error(r&&r.error||'Javob saqlanmadi.');if(box)box.textContent='Javob qabul qilindi. Keyingi savolni kuting.'}catch(err){buttons.forEach(x=>x.disabled=false);if(box)box.textContent=err.message||'Javob yuborilmadi.'}});
+let lbAnswerInFlight=false;
+lbPlayArea.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-lb-answer]');
+ if(!b||!lbStudentRoom||b.disabled||lbAnswerInFlight)return;
+ const questionId=b.dataset.lbQid||'';
+ const buttons=[...lbPlayArea.querySelectorAll('[data-lb-answer]')];
+ buttons.forEach(x=>{x.disabled=true;if(x===b)x.classList.add('chosen')});
+ const box=document.getElementById('lbAnswerMsg');
+ lbAnswerInFlight=true;
+ if(box)box.textContent='Javob yuborilmoqda…';
+ try{
+  const r=await api('lbAnswer',{
+   code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',
+   playerId:lbStudentRoom.playerId||'',questionId,
+   answer:b.dataset.lbAnswer,
+   choiceIndex:Number(b.dataset.lbChoiceIndex)
+  });
+  if(!r||r.ok===false)throw new Error(r&&r.error||'Javob saqlanmadi.');
+  if(box)box.textContent='Javob qabul qilindi. +' + (Number(r.points)||0) + ' ball. Keyingi savol avtomatik ochiladi.';
+  // Ball va keyingi savol holatini serverdan qayta olamiz.
+  if(lbStudentPoll){clearInterval(lbStudentPoll);lbStudentPoll=null}
+  const state=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});
+  if(state&&state.ok!==false)lbStudentRender(state);
+ }catch(err){
+  const message=String(err&&err.message||'Javob yuborilmadi.');
+  if(/avval qabul qilingan|already accepted/i.test(message)){
+   if(box)box.textContent='Javob oldin qabul qilingan. Ball holati yangilanmoqda…';
+   try{const state=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});if(state&&state.ok!==false)lbStudentRender(state)}catch(_){}
+  }else{
+   buttons.forEach(x=>x.disabled=false);
+   if(box)box.textContent=message;
+  }
+ }finally{
+  lbAnswerInFlight=false;
+  if(lbStudentRoom&&!lbStudentPoll)lbStudentPoll=setInterval(lbStudentRefresh,3000);
+ }
+});
 lbCodeEl.addEventListener('input',()=>{lbCodeEl.value=lbCodeEl.value.toUpperCase().replace(/[^A-Z0-9-]/g,'')});
 </script>
 </body>
