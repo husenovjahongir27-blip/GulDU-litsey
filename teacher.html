@@ -799,9 +799,14 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("modalBack").cl
 $("modalBody").addEventListener("click",e=>{
   const b=e.target.closest("[data-m]"); if(!b) return;
   const a=b.dataset.m;
-  if(a==="close") closeModal();
+  if(a==="close"){closeModal();if(lbTeacherPoll){clearInterval(lbTeacherPoll);lbTeacherPoll=null;}}
   else if(a==="assign") saveAssign(b.dataset.id,b);
   else if(a==="reshuffle") previewShuffle();
+  else if(a==="lb-copy") { if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(b.dataset.code||'').then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+(b.dataset.code||''))); else alert('Xona kodi: '+(b.dataset.code||'')); }
+  else if(a==="lb-start") lbTeacherAction('lbStart');
+  else if(a==="lb-next") lbTeacherAction('lbNext');
+  else if(a==="lb-finish") { if(confirm('Jonli bellashuvni yakunlaysizmi?')) lbTeacherAction('lbFinish'); }
+  else if(a==="lb-refresh") lbTeacherRefresh();
 });
 
 /* ---------- Parol ko‘zchasi ---------- */
@@ -1202,6 +1207,7 @@ function renderTests(){
         '<td>'+esc(t.attempts||1)+' ta</td>'+
         '<td class="name">'+chips+'</td>'+
         '<td><div class="bar-actions">'+
+        '<button class="btn small primary" type="button" data-act="live" data-id="'+id+'">⚡ Jonli</button>'+
         '<button class="btn small" type="button" data-act="edit" data-id="'+id+'">Tahrirlash</button>'+
         '<button class="btn small" type="button" data-act="assign" data-id="'+id+'">Sinflar</button>'+
         '<button class="btn small danger" type="button" data-act="del" data-id="'+id+'">O‘chirish</button>'+
@@ -1214,7 +1220,39 @@ $("testsList").addEventListener("click",e=>{
   if(a==="edit") openEditor(id);
   else if(a==="assign") openAssign(id);
   else if(a==="del") deleteTest(id);
+  else if(a==="live") openLiveRoom(id);
 });
+/* ================= Jonli bellashuv (mavjud testdan) ================= */
+let lbTeacherRoom=null, lbTeacherPoll=null, lbTeacherBusy=false;
+function lbPick(obj,keys,fallback){for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k]}return fallback}
+function lbTeacherView(data){
+  const room=lbPick(data,['room','state','data'],data)||{};
+  const code=lbPick(room,['code','roomCode','room_code'],lbTeacherRoom&&lbTeacherRoom.code||'');
+  const status=String(lbPick(room,['status','state','phase'],'waiting'));
+  const q=lbPick(room,['currentQuestion','question','current_question'],null);
+  const players=lbPick(room,['players','leaderboard','ranking'],[]);
+  const qtext=typeof q==='string'?q:lbPick(q,['text','question','title'], 'Savol hali ochilmadi');
+  const list=Array.isArray(players)?players:[];
+  const rows=list.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(lbPick(p,['name','student','studentName'],'Ishtirokchi'))+'</td><td>'+esc(lbPick(p,['score','points','total'],0))+'</td></tr>').join('');
+  const qnum=lbPick(room,['questionNumber','questionIndex','currentIndex','current_question_number'], '—');
+  openModal('<h3>⚡ Jonli bellashuv</h3><p><b>Test:</b> '+esc(lbTeacherRoom.title)+'</p><div style="padding:18px;border-radius:12px;background:#eef6ff;text-align:center"><div style="font-size:13px;color:#526178">O‘quvchilarga beriladigan xona kodi</div><div style="font-size:36px;letter-spacing:5px;font-weight:900;color:#0758c9;margin:6px 0">'+esc(code||'—')+'</div><button class="btn small" type="button" data-m="lb-copy" data-code="'+esc(code)+'">Kodni nusxalash</button></div><p><b>Holat:</b> '+esc(status)+' &nbsp; <b>Savol:</b> '+esc(qnum)+'</p><div style="padding:12px;background:#f7f9fc;border-radius:10px;margin:12px 0"><b>Joriy savol</b><p>'+esc(qtext)+'</p></div><div class="modal-actions"><button class="btn primary" type="button" data-m="lb-start">Boshlash</button><button class="btn primary" type="button" data-m="lb-next">Keyingi savol</button><button class="btn danger" type="button" data-m="lb-finish">Yakunlash</button><button class="btn" type="button" data-m="lb-refresh">Yangilash</button><button class="btn" type="button" data-m="close">Yopish</button></div><h3 style="margin-top:22px">Jonli reyting</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>O‘quvchi</th><th>Ball</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="3">Hali ishtirokchilar yo‘q</td></tr>')+'</tbody></table></div>');
+}
+async function lbTeacherAction(action){
+  if(!lbTeacherRoom)return;
+  if(lbTeacherBusy)return;lbTeacherBusy=true;
+  try{const r=await call(action,{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.id||'',testId:lbTeacherRoom.testId});if(!r||r.ok===false)throw new Error(r&&r.error||'Jonli bellashuv so‘rovi bajarilmadi.');await lbTeacherRefresh(false)}
+  catch(e){if(!e.auth)alert(e.message||'Xatolik yuz berdi.')}finally{lbTeacherBusy=false}
+}
+async function lbTeacherRefresh(showError=true,known){
+  if(!lbTeacherRoom)return;
+  try{const r=known||await call('lbState',{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.id||'',testId:lbTeacherRoom.testId});if(!r||r.ok===false)throw new Error(r&&r.error||'Xona holatini olib bo‘lmadi.');const d=lbPick(r,['room','state','data'],r)||{};lbTeacherRoom.code=lbPick(d,['code','roomCode','room_code'],lbTeacherRoom.code);lbTeacherRoom.roomId=lbPick(d,['roomId','id'],lbTeacherRoom.roomId);lbTeacherView(r)}catch(e){if(showError)alert(e.message||'Xona holatini olib bo‘lmadi.')}}
+async function openLiveRoom(id){
+  const t=tests.find(x=>String(x.id)===String(id));if(!t)return;
+  lbTeacherRoom={testId:t.id,title:t.title,code:'',roomId:''};
+  openModal('<h3>⚡ Jonli bellashuv</h3><p>“'+esc(t.title)+'” testi uchun xona yaratilmoqda…</p>');
+  try{const r=await call('lbCreate',{testId:t.id});if(!r||r.ok===false)throw new Error(r&&r.error||'Xona yaratilmadi.');const d=lbPick(r,['room','state','data'],r)||{};lbTeacherRoom.code=lbPick(d,['code','roomCode','room_code'],lbPick(r,['code','roomCode','room_code'],''));lbTeacherRoom.roomId=lbPick(d,['roomId','id'],lbPick(r,['roomId','id'],''));if(!lbTeacherRoom.code&&!lbTeacherRoom.roomId)throw new Error('Server xona kodini qaytarmadi. Apps Script’dagi lbCreate javobini tekshirish kerak.');await lbTeacherRefresh(false,r);if(lbTeacherPoll)clearInterval(lbTeacherPoll);lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),4000)}catch(e){openModal('<h3>Jonli bellashuvni yaratib bo‘lmadi</h3><p>'+esc(e.message||'Noma’lum xatolik')+'</p><div class="modal-actions"><button class="btn" type="button" data-m="close">Yopish</button></div>')}
+}
+
 async function deleteTest(id){
   const t=tests.find(x=>x.id===id); if(!t) return;
   if(!confirm("“"+t.title+"” testini o‘chirmoqchimisiz?\n\nTestning barcha savollari o‘chadi. Bu amalni qaytarib bo‘lmaydi.")) return;
