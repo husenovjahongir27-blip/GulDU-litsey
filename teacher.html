@@ -351,6 +351,7 @@ td.chk input,th.chk input{width:18px;height:18px;cursor:pointer}
 <button class="tab" type="button" data-tab="groups">Sinflar bo‘yicha</button>
 <button class="tab" type="button" data-tab="tests">Testlar</button>
 <button class="tab" type="button" data-tab="manage">Sinflarni boshqarish</button>
+<button class="tab" type="button" data-tab="live">⚡ Jonli bellashuv</button>
 </div>
 
 <!-- Natijalar jadvali -->
@@ -463,6 +464,19 @@ Rasmlar Word’dan ko‘chmaydi. Rasm kerak bo‘lsa, savolni qo‘shgach, shu s
 <div id="manageMsg" class="msg info"></div>
 <div id="groupsManage" class="grp-list"></div>
 </div>
+</div>
+
+<!-- Jonli bellashuv: yangi alohida bo‘lim, mavjud bo‘limlar saqlanadi -->
+<div class="card table-card hidden" id="tabLive">
+  <div class="pane-head">
+    <div>
+      <div class="bar-title">⚡ Jonli bellashuv</div>
+      <div class="bar-sub">Mavjud testlardan birini tanlang. Xona kodi yaratiladi; ishtirokchilar shu kod orqali kiradi.</div>
+    </div>
+    <button class="btn" id="liveRefreshBtn" type="button">Testlarni yangilash</button>
+  </div>
+  <div id="liveTestsList"></div>
+  <div class="note">Eslatma: bu bo‘lim yangi qo‘shildi. Oddiy test topshirish, natijalar va sinflarni boshqarish bo‘limlari o‘zgartirilmagan.</div>
 </div>
 
 </section>
@@ -771,7 +785,7 @@ $("clearBtn").addEventListener("click",()=>{
   $("fFrom").value="";$("fTo").value="";$("fDup").checked=false;
   render();
 });
-const PANES={results:"tabResults",groups:"tabGroups",tests:"tabTests",manage:"tabManage"};
+const PANES={results:"tabResults",groups:"tabGroups",tests:"tabTests",manage:"tabManage",live:"tabLive"};
 function setTab(name){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
   Object.keys(PANES).forEach(k=>$(PANES[k]).classList.toggle("hidden",k!==name));
@@ -1179,6 +1193,7 @@ async function loadTests(){
     m.className="msg error"; m.textContent=err.message;
   }
   renderTests();
+  renderLiveTests();
 }
 function winState(t){
   const now=Date.now();
@@ -1222,6 +1237,26 @@ $("testsList").addEventListener("click",e=>{
   else if(a==="del") deleteTest(id);
   else if(a==="live") openLiveRoom(id);
 });
+function renderLiveTests(){
+  const box=$("liveTestsList");
+  if(!box) return;
+  if(!tests.length){
+    box.innerHTML='<div class="empty">Hozircha test yo‘q. Avval “Testlar” bo‘limida yangi test yarating.</div>';
+    return;
+  }
+  box.innerHTML='<div class="table-wrap"><table><thead><tr><th>Test nomi</th><th>Nazorat</th><th>Savollar</th><th>Sinflar</th><th>Amal</th></tr></thead><tbody>'+
+    tests.map(t=>{
+      const id=esc(t.id);
+      const chips=(t.groups||[]).length?t.groups.map(g=>'<span class="chip">'+esc(g)+'</span>').join(""):'<span class="muted">biriktirilmagan</span>';
+      return '<tr><td class="name">'+esc(t.title)+'</td><td>'+esc(t.nazorat||'—')+'</td><td>'+esc(t.count||0)+' ta</td><td>'+chips+'</td><td><button class="btn primary small" type="button" data-live-start="'+id+'">⚡ Xona yaratish</button></td></tr>';
+    }).join('')+'</tbody></table></div>';
+}
+$("liveTestsList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-live-start]");
+  if(b) openLiveRoom(b.dataset.liveStart);
+});
+$("liveRefreshBtn").addEventListener("click",loadTests);
+
 /* ================= Jonli bellashuv (mavjud testdan) ================= */
 let lbTeacherRoom=null, lbTeacherPoll=null, lbTeacherBusy=false;
 function lbPick(obj,keys,fallback){for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k]}return fallback}
