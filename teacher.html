@@ -478,7 +478,8 @@ Rasmlar Word’dan ko‘chmaydi. Rasm kerak bo‘lsa, savolni qo‘shgach, shu s
       <p class="muted" style="margin:7px 0 0;line-height:1.55">O‘yin nomi va savollarni kiriting, to‘g‘ri javobni belgilang. Tizim alohida xona kodi yaratadi. O‘quvchilar xona kodi va ismi bilan kiradi.</p>
     </div>
     <div id="liveGameStatus" class="msg info" role="status"></div>
-    <div id="liveGamesList" class="empty">Saqlangan o‘yinlar yuklanmoqda…</div><div id="liveActiveRoom"></div>
+    <div id="liveGamesList" class="empty">Saqlangan o‘yinlar yuklanmoqda...</div>
+    <div id="lbCurrentRoom"></div>
   </div>
 </div>
 
@@ -632,7 +633,6 @@ $("loginForm").addEventListener("submit",async e=>{
     loadGroups();
     loadTests();
     await loadResults();
-    lbLoadSavedGames();
   }catch(err){
     $("loginMsg").textContent=err.message;
   }finally{
@@ -796,8 +796,9 @@ function setTab(name){
   $("resultsTop").classList.toggle("hidden",name!=="results"&&name!=="groups");
   const pm=$("panelMsg");
   if(pm.className.indexOf("error")===-1) pm.textContent="";
+  if(name==="live") lbLoadSavedGames();
 }
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{setTab(b.dataset.tab);if(b.dataset.tab==="live")lbLoadSavedGames();}));
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
 
 /* ---------- Sessiya bilan so‘rov ---------- */
 async function call(action,payload){
@@ -1283,8 +1284,39 @@ async function lbCreateStandaloneGame(){
     if(!lbTeacherRoom.code)throw new Error('Server xona kodini qaytarmadi. Apps Script kodini tekshiring.');
     await lbTeacherRefresh(false,r);
     await lbLoadSavedGames();
-    if(lbTeacherPoll)clearInterval(lbTeacherPoll);lbTeacherPoll=setInterval(()=>{lbTeacherRefresh(false);lbLoadSavedGames(false)},4000);
+    if(lbTeacherPoll)clearInterval(lbTeacherPoll);lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),4000);
   }catch(e){alert(e.message||'O‘yin yaratishda xatolik yuz berdi.');if(btn)btn.disabled=false;}
+}
+
+async function lbLoadSavedGames(){
+  const box=$('liveGamesList');
+  if(!box)return;
+  box.innerHTML='<div class="empty">Saqlangan o‘yinlar yuklanmoqda...</div>';
+  try{
+    const r=await call('lbList',{});
+    if(!r||r.ok===false)throw new Error(r&&r.error||'Saqlangan o‘yinlarni olib bo‘lmadi.');
+    const rooms=Array.isArray(r.rooms)?r.rooms:[];
+    if(!rooms.length){
+      box.innerHTML='<div class="empty">Hozircha saqlangan jonli o‘yin yo‘q. «Yangi o‘yin yaratish» tugmasini bosing.</div>';
+      return;
+    }
+    box.innerHTML='<div class="table-wrap"><table><thead><tr><th>O‘yin</th><th>Xona kodi</th><th>Savollar</th><th>Holat</th><th>Yaratilgan</th><th></th></tr></thead><tbody>'+
+      rooms.map(x=>'<tr><td class="name">'+esc(x.title||'Jonli o‘yin')+'</td><td><b style="letter-spacing:2px">'+esc(x.code||'')+'</b></td><td>'+esc(x.questionCount||0)+'</td><td>'+esc(x.status||'waiting')+'</td><td>'+esc(x.createdAt||'')+'</td><td><button class="btn small primary" type="button" data-m="lb-open-saved" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">Ochish</button></td></tr>').join('')+
+      '</tbody></table></div>';
+  }catch(e){
+    box.innerHTML='<div class="msg error">Saqlangan o‘yinlarni yuklab bo‘lmadi: '+esc(e.message||'Noma’lum xato')+'</div>';
+  }
+}
+async function lbOpenSavedRoom(code,title){
+  if(!code)return;
+  lbTeacherRoom={title:title||'Jonli o‘yin',code:code,roomId:code,testId:''};
+  try{
+    const r=await call('lbState',{code:code,roomId:code});
+    if(!r||r.ok===false)throw new Error(r&&r.error||'Xona holatini olib bo‘lmadi.');
+    lbTeacherRefresh(false,r);
+    if(lbTeacherPoll)clearInterval(lbTeacherPoll);
+    lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),4000);
+  }catch(e){alert(e.message||'Xonani ochib bo‘lmadi.');}
 }
 function lbTeacherView(data){
   const room=lbPick(data,['room','state','data'],data)||{};
@@ -1297,13 +1329,14 @@ function lbTeacherView(data){
   const rows=list.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(lbPick(p,['name','student','studentName'],'Ishtirokchi'))+'</td><td>'+esc(lbPick(p,['score','points','total'],0))+'</td></tr>').join('');
   const qnum=lbPick(room,['questionNumber','questionIndex','currentIndex','current_question_number'],'—');
   const qcount=lbPick(room,['questionCount'],'—');
-  const games=$('liveActiveRoom');
-  if(games)games.innerHTML='<div class="card" style="padding:18px;margin-top:12px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><b>'+esc(lbTeacherRoom.title)+'</b><div class="muted" style="margin-top:5px">Holat: '+esc(status)+' · Savol: '+esc(qnum)+' / '+esc(qcount)+'</div></div><div style="font-size:28px;font-weight:900;letter-spacing:4px;color:#0758c9">'+esc(code)+'</div></div><div class="modal-actions"><button class="btn" type="button" data-m="lb-copy" data-code="'+esc(code)+'">Kodni nusxalash</button><button class="btn primary" type="button" data-m="lb-start" '+(status==='active'||status==='finished'?'disabled':'')+'>Boshlash</button><button class="btn danger" type="button" data-m="lb-finish" '+(status==='finished'?'disabled':'')+'>Yakunlash</button><button class="btn" type="button" data-m="lb-refresh">Yangilash</button></div><div style="margin-top:14px;padding:14px;background:#f7f9fc;border-radius:10px"><b>Joriy savol</b><p style="margin-bottom:0">'+esc(qtext)+'</p><small class="muted">Keyingi savol barcha ishtirokchilar javob bergach yoki vaqt tugagach avtomatik ochiladi.</small></div><h3 style="margin-top:20px;color:#0d2a5b">Jonli reyting</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>O‘quvchi</th><th>Ball</th></tr></thead><tbody>'+(rows||'<tr><td colspan="3">Hali ishtirokchilar yo‘q</td></tr>')+'</tbody></table></div></div>';
+  const games=$('lbCurrentRoom');
+  if(games)games.innerHTML='<div class="card" style="padding:18px;margin-top:12px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><b>'+esc(lbTeacherRoom.title)+'</b><div class="muted" style="margin-top:5px">Holat: '+esc(status)+' · Savol: '+esc(qnum)+' / '+esc(qcount)+'</div></div><div style="font-size:28px;font-weight:900;letter-spacing:4px;color:#0758c9">'+esc(code)+'</div></div><div class="modal-actions"><button class="btn" type="button" data-m="lb-copy" data-code="'+esc(code)+'">Kodni nusxalash</button><button class="btn primary" type="button" data-m="lb-start">Boshlash</button><button class="btn danger" type="button" data-m="lb-finish">Yakunlash</button><button class="btn" type="button" data-m="lb-refresh">Yangilash</button></div><div style="margin-top:14px;padding:14px;background:#f7f9fc;border-radius:10px"><b>Joriy savol</b><p style="margin-bottom:0">'+esc(qtext)+'</p></div><h3 style="margin-top:20px;color:#0d2a5b">Jonli reyting</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>O‘quvchi</th><th>Ball</th></tr></thead><tbody>'+(rows||'<tr><td colspan="3">Hali ishtirokchilar yo‘q</td></tr>')+'</tbody></table></div></div>';
 }
 $('liveGamesList').addEventListener('click',function(e){
   const b=e.target.closest('[data-m]'); if(!b)return;
   const a=b.dataset.m;
-  if(a==='lb-copy'){
+  if(a==='lb-open-saved'){lbOpenSavedRoom(b.dataset.code,b.dataset.title);}
+  else if(a==='lb-copy'){
     const code=b.dataset.code||'';
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+code));else alert('Xona kodi: '+code);
   }else if(a==='lb-start')lbTeacherAction('lbStart');
@@ -1311,43 +1344,6 @@ $('liveGamesList').addEventListener('click',function(e){
   else if(a==='lb-finish'){if(confirm('Jonli bellashuvni yakunlaysizmi?'))lbTeacherAction('lbFinish');}
   else if(a==='lb-refresh')lbTeacherRefresh();
 });
-
-async function lbLoadSavedGames(showError=true){
-  if(!token)return;
-  try{
-    const r=await call('lbList',{});
-    if(!r||r.ok===false)throw new Error(r&&r.error||'Saqlangan o‘yinlarni yuklab bo‘lmadi.');
-    lbRenderSavedGames(Array.isArray(r.games)?r.games:[]);
-  }catch(e){if(showError&&!e.auth){const el=$('liveGameStatus');if(el)el.textContent=e.message||'Saqlangan o‘yinlar yuklanmadi.';}}
-}
-function lbRenderSavedGames(games){
-  const el=$('liveGamesList');if(!el)return;
-  if(!games.length){el.className='empty';el.textContent='Hozircha saqlangan jonli o‘yin yo‘q. «Yangi o‘yin yaratish» tugmasini bosing.';return;}
-  el.className='';
-  el.innerHTML='<h3 style="color:#0d2a5b;margin:18px 0 10px">Saqlangan o‘yinlar</h3>'+games.map(g=>'<div class="card" style="padding:14px 16px;margin:10px 0;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap"><div><b>'+esc(g.title||'Jonli o‘yin')+'</b><div class="muted" style="font-size:13px;margin-top:5px">Xona kodi: <b>'+esc(g.code)+'</b> · Holat: '+esc(g.status||'waiting')+' · '+esc(g.playerCount||0)+' ishtirokchi</div></div><button class="btn" type="button" data-lb-open="'+esc(g.code)+'">O‘yinni ochish</button></div>').join('');
-}
-$('liveGamesList').addEventListener('click',async function(e){
-  const open=e.target.closest('[data-lb-open]');
-  if(open){
-    const code=open.dataset.lbOpen;
-    const found=await call('lbState',{code:code,token:token});
-    if(!found||found.ok===false){alert(found&&found.error||'O‘yin ochilmadi.');return;}
-    const d=lbPick(found,['room','state','data'],found)||{};
-    lbTeacherRoom={code:lbPick(d,['code','roomId'],code),roomId:lbPick(d,['roomId','code'],code),title:lbPick(d,['title'],'Jonli o‘yin'),testId:''};
-    await lbTeacherRefresh();
-    if(lbTeacherPoll)clearInterval(lbTeacherPoll);lbTeacherPoll=setInterval(()=>{lbTeacherRefresh(false);lbLoadSavedGames(false)},4000);
-    return;
-  }
-});
-$('liveActiveRoom').addEventListener('click',function(e){
-  const b=e.target.closest('[data-m]'); if(!b)return;
-  const a=b.dataset.m;
-  if(a==='lb-copy'){const code=b.dataset.code||'';if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+code));else alert('Xona kodi: '+code);}
-  else if(a==='lb-start')lbTeacherAction('lbStart');
-  else if(a==='lb-finish'){if(confirm('Jonli bellashuvni yakunlaysizmi?'))lbTeacherAction('lbFinish');}
-  else if(a==='lb-refresh')lbTeacherRefresh();
-});
-
 async function lbTeacherAction(action){
   if(!lbTeacherRoom||lbTeacherBusy)return;lbTeacherBusy=true;
   try{const r=await call(action,{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});if(!r||r.ok===false)throw new Error(r&&r.error||'Jonli bellashuv so‘rovi bajarilmadi.');await lbTeacherRefresh(false,r)}
