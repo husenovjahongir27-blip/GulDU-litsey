@@ -24,6 +24,6 @@ if(s.status==='finished'&&pollTimer){clearInterval(pollTimer);pollTimer=null}
 async function startGame(){try{await api('lbStart',{code,token});document.getElementById('startBtn').classList.add('hide');lastQuestion=-999;await refresh()}catch(e){say('hostMsg',e.message)}}
 async function sendAnswer(choice){if(answered||mode!=='player')return;answered=true;disableOptions();try{const r=await api('lbAnswer',{code,playerId,choice});say('feedback',r.correct?'✅ To‘g‘ri! +'+r.points+' ball':'❌ Bu javob noto‘g‘ri. '+r.points+' ball')}catch(e){answered=false;say('feedback',e.message)}}
 function disableOptions(){document.querySelectorAll('#options button').forEach(b=>b.disabled=true)}
-async function nextStep(){try{const s=await api('lbState',{code});const r=await api('lbNext',{code,token});if(r.status==='finished'){await refresh()}else{lastQuestion=-999;await refresh()}}catch(e){say('feedback',e.message)}}
+async function nextStep(){try{const r=await api('lbNext',{code,token});if(r.status==='finished'){await refresh()}else{lastQuestion=-999;await refresh()}}catch(e){say('feedback',e.message)}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 </script></body></html>
