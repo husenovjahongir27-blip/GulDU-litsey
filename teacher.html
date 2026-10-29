@@ -1301,11 +1301,22 @@ async function lbLoadSavedGames(){
       return;
     }
     box.innerHTML='<div class="table-wrap"><table><thead><tr><th>O‘yin</th><th>Xona kodi</th><th>Savollar</th><th>Holat</th><th>Yaratilgan</th><th></th></tr></thead><tbody>'+
-      rooms.map(x=>'<tr><td class="name">'+esc(x.title||'Jonli o‘yin')+'</td><td><b style="letter-spacing:2px">'+esc(x.code||'')+'</b></td><td>'+esc(x.questionCount||0)+'</td><td>'+esc(x.status||'waiting')+'</td><td>'+esc(x.createdAt||'')+'</td><td><button class="btn small primary" type="button" data-m="lb-open-saved" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">Ochish</button></td></tr>').join('')+
+      rooms.map(x=>'<tr><td class="name">'+esc(x.title||'Jonli o‘yin')+'</td><td><b style="letter-spacing:2px">'+esc(x.code||'')+'</b></td><td>'+esc(x.questionCount||0)+'</td><td>'+esc(x.status||'waiting')+'</td><td>'+esc(x.createdAt||'')+'</td><td style="white-space:nowrap"><button class="btn small primary" type="button" data-m="lb-open-saved" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">Ochish</button> <button class="btn small danger" type="button" data-m="lb-delete-room" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">O‘chirish</button></td></tr>').join('')+
       '</tbody></table></div>';
   }catch(e){
     box.innerHTML='<div class="msg error">Saqlangan o‘yinlarni yuklab bo‘lmadi: '+esc(e.message||'Noma’lum xato')+'</div>';
   }
+}
+async function lbDeleteSavedRoom(code,title){
+  if(!code)return;
+  if(!confirm('“'+(title||'Jonli o‘yin')+'” ('+code+') xonasini butunlay o‘chirasizmi? Ishtirokchilar, javoblar va savollar ham o‘chadi. Bu amalni ortga qaytarib bo‘lmaydi.'))return;
+  try{
+    const r=await call('lbDelete',{code:code,roomId:code});
+    if(!r||r.ok===false)throw new Error(r&&r.error||'Xonani o‘chirib bo‘lmadi.');
+    if(lbTeacherRoom&&lbTeacherRoom.code===code){lbTeacherRoom=null;if(lbTeacherPoll){clearInterval(lbTeacherPoll);lbTeacherPoll=null;}const current=$('lbCurrentRoom');if(current)current.innerHTML='';}
+    await lbLoadSavedGames();
+    alert('Jonli bellashuv xonasi o‘chirildi.');
+  }catch(e){if(!e.auth)alert(e.message||'Xonani o‘chirishda xatolik yuz berdi.');}
 }
 async function lbOpenSavedRoom(code,title){
   if(!code)return;
@@ -1336,6 +1347,7 @@ $('liveGamesList').addEventListener('click',function(e){
   const b=e.target.closest('[data-m]'); if(!b)return;
   const a=b.dataset.m;
   if(a==='lb-open-saved'){lbOpenSavedRoom(b.dataset.code,b.dataset.title);}
+  else if(a==='lb-delete-room'){lbDeleteSavedRoom(b.dataset.code,b.dataset.title);}
   else if(a==='lb-copy'){
     const code=b.dataset.code||'';
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+code));else alert('Xona kodi: '+code);
