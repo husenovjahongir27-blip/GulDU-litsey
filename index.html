@@ -1,772 +1,405 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Markaz Edu — O‘quvchi nazorat platformasi</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Jonli bellashuv — o‘quvchi bo‘limi</title>
+<style>body{margin:0;padding:18px;background:#eef3fb;font-family:system-ui,-apple-system,Segoe UI,sans-serif}</style></head><body>
+
+<!-- ===== JONLI BELLASHUV (O‘QUVCHI) — BOSHLANISH =====
+     Shu qatordan "TUGASH" qatorigacha bo‘lgan qismni index.html ga ko‘chiring.
+     Hech qanday boshqa kodga bog‘liq emas (barcha nomlar kh/.khl bilan boshlanadi). -->
 <style>
-:root{--blue:#0758c9;--dark:#0d2a5b;--green:#2fa85f;--shadow:0 8px 28px rgba(13,42,91,.10)}
-*{box-sizing:border-box}
-body{
-    margin:0;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    font-family:Arial,Helvetica,sans-serif;
-    background:linear-gradient(180deg,#f3f7fc 0,#fff 420px);
-    color:#12203b;
-}
-.header{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff;min-height:142px;position:relative;overflow:hidden}
-.header:after{content:"";position:absolute;right:-80px;top:-110px;width:430px;height:300px;border-radius:50%;border:45px solid rgba(255,255,255,.05)}
-.header-inner{max-width:1180px;margin:auto;min-height:142px;display:flex;align-items:center;gap:24px;padding:22px 28px}
-.logo{
-    width:88px;
-    height:88px;
-    min-width:88px;
-    max-width:88px;
-    min-height:88px;
-    max-height:88px;
-    border-radius:50%;
-    border:3px solid rgba(255,255,255,.75);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(255,255,255,.08);
-    flex:none;
-    overflow:hidden;
-}
-
-.logo img{
-    width:100%;
-    height:100%;
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-    display:block;
-}
-
-.header h1{
-    margin:0;
-    font-size:30px;
-    line-height:1.12;
-    letter-spacing:-.4px
-}
-
-.header p{
-    margin:12px 0 0;
-    font-size:16px
-}
-
-.container{
-    max-width:1180px;
-    width:100%;
-    margin:0 auto;
-    padding:22px 24px 40px;
-    flex:1;
-}
-
-.card{background:#fff;border:1px solid #e3eaf3;border-radius:15px;box-shadow:var(--shadow)}
-.top-card{padding:28px;display:grid;grid-template-columns:42% 58%;gap:30px}
-.section-title{display:flex;align-items:center;gap:12px;color:var(--dark);font-size:22px;font-weight:800;margin:4px 0 24px}
-.icon{width:34px;height:34px;border-radius:10px;background:#eaf3ff;color:var(--blue);display:grid;place-items:center;font-weight:900}
-.icon svg,.lock svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.icon svg rect,.icon svg circle,.lock svg rect,.lock svg circle{fill:none}
-.icon svg,.lock svg,.exam-title .circle svg,.check svg{fill:none!important;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.icon svg path,.lock svg path,.exam-title .circle svg path{fill:none!important;stroke:currentColor}.check svg{width:34px;height:34px;stroke:#fff!important;stroke-width:2.8!important}.check svg path{fill:none!important;stroke:#fff!important}.exam-title .circle svg{width:23px;height:23px;stroke:#fff!important}.exam-title .circle svg rect,.exam-title .circle svg path{fill:none!important;stroke:#fff!important}
-label{display:block;font-size:16px;font-weight:600;margin:0 0 9px}
-select,input{width:100%;height:54px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;padding:0 15px;font-size:16px;color:#172744;outline:none}
-select:focus,input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(7,88,201,.10)}
-.field{margin-bottom:22px}
-.notice{margin-top:10px;padding:17px 18px;border-radius:10px;border:1px solid #cce0ff;background:#eef6ff;color:#153b78;line-height:1.65;font-size:14px}
-.notice strong{display:block;font-size:16px;margin-bottom:4px}
-.notice.warn{border-color:#f3d38a;background:#fff8ea;color:#7a5a00}
-.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-content:start}
-.list-msg{grid-column:1/-1;padding:18px;border:1px dashed #cbd6e5;border-radius:12px;color:#526178;font-size:15px;line-height:1.6}
-.test-card{border:1px solid #d5deea;border-radius:12px;padding:18px;min-height:168px;position:relative;background:#fff;transition:.2s}
-.test-card.available{border-color:#1268df;box-shadow:0 4px 14px rgba(7,88,201,.10);cursor:pointer}.test-card.available:hover{transform:translateY(-2px)}
-.test-card.disabled{cursor:not-allowed}
-.test-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:34px;padding:0 11px;border-radius:8px;font-weight:800;background:#0d64d6;color:#fff}
-.test-head .badge{max-width:78%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lock{width:44px;height:44px;border-radius:15px;background:linear-gradient(145deg,#f4f7fb,#e8eef6);color:#58677d;display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 1px rgba(88,103,125,.08)}
-.test-card h3{font-size:17px;margin:17px 0 12px;color:#1354aa;word-break:break-word}.test-card.locked h3{color:#6b7484}
-.status{display:inline-block;padding:5px 12px;border-radius:7px;background:#e7edf4;color:#26354e;font-size:13px}.status.ok{background:#31a961;color:#fff}
-.test-card small{display:block;margin-top:10px;color:#4d5d75;font-size:13px}
-.info-strip{margin-top:22px;padding:15px 20px;display:grid;grid-template-columns:1fr 1fr 1.15fr;border:1px solid #e2e9f2;border-radius:11px;background:#f9fbfe}
-.info-item{display:flex;align-items:center;gap:14px;padding:3px 22px;border-right:1px solid #dfe6ef}.info-item:last-child{border-right:0}
-.info-icon{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#edf5ff,#dceaff);color:var(--blue);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(7,88,201,.06);flex:none}.info-icon svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.info-item b{display:block;font-size:14px;margin-bottom:5px}.info-item span{font-size:13px;color:#526178}
-.exam{margin-top:18px;overflow:hidden}.exam-head{background:linear-gradient(100deg,#08429b,#075bc7);color:#fff;padding:19px 28px;display:flex;align-items:center;justify-content:space-between}
-.exam-title{display:flex;align-items:center;gap:13px;font-size:20px;font-weight:800}.exam-title .circle{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.16);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
-.timer{font-size:16px;display:flex;align-items:center;gap:12px}.timer strong{font-size:30px}
-.exam-body{display:grid;grid-template-columns:280px 1fr;min-height:410px}.sidebar{border-right:1px solid #e0e6ef;padding:25px 28px;background:#fbfcfe}.sidebar h4{margin:0 0 18px;font-size:16px}
-.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.qbtn{height:34px;border:1px solid #ccd7e6;border-radius:6px;background:#fff;color:#15233e;font-weight:600;cursor:pointer}.qbtn.active{background:#0a65d5;color:#fff;border-color:#0a65d5}.qbtn.answered{background:#0a65d5;color:#fff;border-color:#0a65d5}
-.legend{margin-top:28px;font-size:12px;color:#3f4e64;line-height:2.4}.dot{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:-3px;margin-right:7px;border:1px solid #ccd7e6}.dot.blue{background:#0a65d5;border-color:#0a65d5}.dot.yellow{background:#ffb53c;border-color:#ffb53c}
-.exam-content{padding:30px}.question-no{color:#0b5dca;font-weight:800;font-size:17px;margin-bottom:22px}.question{font-size:18px;font-weight:700;line-height:1.5;margin-bottom:22px}
-.qimg-box{margin-bottom:20px;color:#8a94a6;font-size:14px}
-.qimg{display:block;max-width:100%;max-height:340px;border-radius:10px;border:1px solid #e0e6ef;background:#fff;object-fit:contain}
-.answer{display:block;border:1px solid #ccd7e6;border-radius:9px;padding:14px 16px;margin:10px 0;font-size:15px;cursor:pointer;background:#fff}.answer:hover{border-color:#8db7ed;background:#f7fbff}.answer.selected{border-color:#0a65d5;background:#eef6ff}.answer input{width:auto;height:auto;margin-right:10px;vertical-align:middle}
-.exam-actions{display:flex;justify-content:space-between;align-items:center;margin-top:25px;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:background .18s,border-color .18s,transform .18s; height:48px;border:1px solid #cbd6e5;border-radius:8px;background:#fff;padding:0 20px;font-size:15px;font-weight:700;color:#162641;cursor:pointer}.btn.primary{background:#075fc9;color:#fff;border-color:#075fc9}.btn:hover:not(:disabled){transform:translateY(-1px);border-color:#8db7ed}.btn:disabled{opacity:.45;cursor:not-allowed}
-.result{margin-top:18px;padding:26px 30px;border:1px solid #cde4d5;border-radius:14px;background:#f2fbf5;display:flex;align-items:center;justify-content:space-between;gap:20px}.result-left{display:flex;align-items:center;gap:18px}.check{width:64px;height:64px;border-radius:20px;background:linear-gradient(145deg,#35b96b,#218b4c);color:#fff;display:grid;place-items:center;font-size:35px;font-weight:900;box-shadow:0 8px 18px rgba(47,168,95,.2)}.result h2{margin:0 0 7px;color:#188044;font-size:22px}.result p{margin:0;color:#30485e}
-.review-wrap{margin:18px 0 28px}.review-heading{margin:0 0 8px;font-size:22px;color:#15233e}.review-intro{margin:0 0 16px;color:#52647b}.review-summary{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}.review-pill{padding:8px 12px;border-radius:9px;font-weight:700;font-size:13px}.review-pill.correct{background:#e8f8ee;color:#176c3a}.review-pill.incorrect{background:#fff0f0;color:#a72828}.review-pill.unanswered{background:#fff7df;color:#855b00}.review-layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px;align-items:start}.review-nav{border:1px solid #d9e1ec;border-radius:12px;background:#fbfcfe;padding:16px}.review-nav h3{font-size:15px;margin:0 0 12px}.review-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.review-qbtn{height:39px;border:1px solid #ccd7e6;border-radius:8px;background:#fff;color:#172744;font-weight:800;cursor:pointer;transition:.15s}.review-qbtn:hover{transform:translateY(-1px);border-color:#7eafea}.review-qbtn.correct{background:#e8f8ee;border-color:#91d4a8;color:#176c3a}.review-qbtn.incorrect{background:#fff0f0;border-color:#efa7a7;color:#a72828}.review-qbtn.unanswered{background:#fff7df;border-color:#e8cb70;color:#855b00}.review-qbtn.active{outline:3px solid rgba(7,88,201,.22);border-color:#0758c9}.review-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:12px;color:#526178}.review-legend span{display:inline-flex;align-items:center;gap:5px}.review-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}.review-legend .lgc{background:#31a961}.review-legend .lgi{background:#d94848}.review-legend .lgu{background:#e8b43f}.review-item{border:1px solid #d9e1ec;border-radius:12px;background:#fff;padding:20px;box-shadow:0 2px 8px rgba(21,35,62,.04);min-width:0}.review-item.correct{border-top:4px solid #229653}.review-item.incorrect{border-top:4px solid #d94848}.review-item.unanswered{border-top:4px solid #d69e2e}.review-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.review-status{font-size:13px;font-weight:700;padding:6px 10px;border-radius:999px}.review-status.correct{background:#e8f8ee;color:#176c3a}.review-status.incorrect{background:#fff0f0;color:#a72828}.review-status.unanswered{background:#fff7df;color:#855b00}.review-question{font-weight:700;margin:12px 0;white-space:pre-wrap;line-height:1.55}.review-answer{margin:8px 0;padding:11px 13px;border-radius:8px;background:#f5f7fa;white-space:pre-wrap;overflow-wrap:anywhere}.review-answer.chosen-wrong{background:#fff0f0;border:1px solid #f2b8b8}.review-answer.correct-answer{background:#e8f8ee;border:1px solid #a6dfb9}.review-meta{font-size:14px;margin-top:8px;color:#42536a}.review-image{max-width:100%;max-height:280px;object-fit:contain;display:block;margin:10px 0;border-radius:8px}.review-nav-arrow{display:flex;justify-content:space-between;gap:8px;margin-top:14px}.review-nav-arrow button{height:38px;padding:0 12px;font-size:13px}@media(max-width:760px){.review-layout{grid-template-columns:1fr}.review-nav{order:0}.review-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.review-item{order:1}}
-.footer{
-    margin-top:auto;
-    background:linear-gradient(110deg,#071d43,#0b4fae);
-    color:rgba(255,255,255,.9);
-    padding:20px 18px;
-    text-align:center;
-    font-size:13px;
-    letter-spacing:.2px;
-    border-top:1px solid rgba(255,255,255,.12);
-    width:100%;
-}
-
-.footer strong{
-    color:#fff;
-    font-weight:700;
-}
-.hidden{display:none!important}.login-message{margin-top:12px;color:#c0392b;font-size:14px;font-weight:600;min-height:18px}
-select:disabled{background:#f3f5f8;color:#8a94a6;cursor:not-allowed}.other-input{margin-top:10px}
-@media(max-width:900px){.top-card{grid-template-columns:1fr}.exam-body{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid #e0e6ef}}
-@media(max-width:600px){.header-inner{padding:18px 16px;gap:13px}.logo{width:60px;height:60px;font-size:24px}.header h1{font-size:21px}.header p{font-size:13px;margin-top:7px}.container{padding:12px 10px 25px}.top-card{padding:18px;gap:20px}.controls-grid{gap:10px}.test-card{padding:13px;min-height:150px}.info-strip{grid-template-columns:1fr;gap:8px}.info-item{border-right:0;border-bottom:1px solid #e1e7ef;padding:10px 8px}.info-item:last-child{border-bottom:0}.exam-head{padding:15px}.exam-body{min-height:0}.exam-content{padding:20px 16px}.sidebar{padding:18px 16px}.result{padding:20px;align-items:flex-start;flex-direction:column}.exam-actions{flex-wrap:wrap}}
-
-/* Imtihon intizomi: brauzer darajasidagi ogohlantirishlar */
-.exam-guard{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border:1px solid #d8e4f7;border-radius:12px;background:#f4f8ff;color:#173d78;font-size:13px}
-.exam-guard .guard-count{font-weight:800;color:#b42318}
-.guard-overlay{position:fixed;inset:0;z-index:99999;background:rgba(12,24,45,.58);display:flex;align-items:center;justify-content:center;padding:18px}
-.guard-dialog{width:min(460px,100%);background:#fff;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.28);text-align:center;color:#172033}
-.guard-dialog .guard-symbol{width:54px;height:54px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;background:#fff0df;color:#a34b00;font-size:27px;font-weight:800}
-.guard-dialog h2{margin:0 0 8px;font-size:22px}.guard-dialog p{line-height:1.55;color:#526176;margin:0 0 18px}.guard-dialog .btn{min-width:150px}
-.exam-content{position:relative}
-@media print{body{display:none!important}}
-
-
-/* Jonli bellashuv */
-.lb-card{margin-top:18px;padding:22px 26px;border:1px solid #c9ddfa;border-radius:14px;background:linear-gradient(120deg,#f1f7ff,#fff);box-shadow:var(--shadow)}
-.lb-head{display:flex;align-items:center;gap:12px;color:var(--dark);font-size:20px;font-weight:800;margin-bottom:12px}.lb-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}.lb-grid input{height:48px}.lb-btn{height:48px;border:0;border-radius:9px;background:#075fc9;color:#fff;padding:0 20px;font-weight:800;font-size:15px;cursor:pointer}.lb-btn:disabled{opacity:.5;cursor:not-allowed}.lb-msg{margin-top:10px;color:#526178;font-size:14px;line-height:1.5}.lb-play{margin-top:16px;padding:18px;border-radius:12px;background:#fff;border:1px solid #dce6f4}.lb-option{display:block;width:100%;text-align:left;padding:13px 15px;border:1px solid #ccd7e6;border-radius:9px;background:#fff;margin:9px 0;cursor:pointer;font-size:15px}.lb-option:disabled{cursor:default}.lb-option.chosen{border-color:#075fc9;background:#eef6ff}.lb-ranking{width:100%;border-collapse:collapse;margin-top:10px}.lb-ranking td,.lb-ranking th{padding:9px;border-bottom:1px solid #e8edf4;text-align:left}.lb-code{max-width:220px;text-transform:uppercase;letter-spacing:2px}
-@media(max-width:600px){.lb-card{padding:17px}.lb-grid{grid-template-columns:1fr}.lb-btn{width:100%}}
-
+.khl{--kh-ink:#0f2146;--kh-muted:#5b6b88;--kh-line:#d6e2f7;--kh-blue:#1368ce;--kh-red:#e21b3c;--kh-yel:#d89e00;--kh-grn:#26890c;--kh-pur:#46178f;position:relative;box-sizing:border-box;margin:0 0 20px;padding:20px;border:1px solid #cfe0fb;border-radius:20px;background:linear-gradient(180deg,#f3f8ff,#fff);color:var(--kh-ink);font-family:inherit;font-size:16px;line-height:1.45;overflow:hidden}
+.khl *,.khl *::before,.khl *::after{box-sizing:border-box}
+.khl [hidden]{display:none!important}
+.khl button,.khl input{all:unset;box-sizing:border-box;font:inherit;color:inherit}
+.khl .kh-head{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+.khl .kh-head h2{margin:0;font-size:22px;font-weight:800;color:var(--kh-ink)}
+.khl .kh-sub{margin:0 0 14px;color:var(--kh-muted)}
+.khl .kh-input{display:block;width:100%;padding:14px 16px;margin:0 0 12px;border:2px solid #c3d3ee;border-radius:14px;background:#fff;font-size:18px;color:var(--kh-ink);cursor:text}
+.khl .kh-input:focus{border-color:var(--kh-blue);box-shadow:0 0 0 3px #1368ce22}
+.khl .kh-code{text-align:center;letter-spacing:.35em;font-weight:800;font-size:26px;text-transform:uppercase}
+.khl .kh-btn{display:block;width:100%;padding:14px 18px;border-radius:14px;background:var(--kh-pur);color:#fff;font-weight:800;text-align:center;cursor:pointer;box-shadow:0 4px 0 #2b0d58;user-select:none}
+.khl .kh-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #2b0d58}
+.khl .kh-btn[disabled]{opacity:.5;cursor:not-allowed}
+.khl .kh-link{display:inline-block;margin-top:10px;color:var(--kh-blue);font-weight:700;cursor:pointer;text-decoration:underline}
+.khl .kh-note{margin-top:12px;min-height:1.2em;color:#b42318;font-weight:600;text-align:center}
+.khl .kh-roominfo{margin:0 0 12px;padding:10px 14px;border-radius:12px;background:#eaf1ff;color:var(--kh-ink)}
+.khl .kh-center{text-align:center}
+.khl .kh-pin{display:inline-block;padding:6px 16px;border-radius:12px;background:var(--kh-ink);color:#fff;font-weight:800;letter-spacing:.25em;font-size:22px}
+.khl .kh-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
+.khl .kh-chip{padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--kh-line);font-weight:700;font-size:14px}
+.khl .kh-chip.me{background:var(--kh-pur);color:#fff;border-color:var(--kh-pur)}
+.khl .kh-qmeta{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:8px}
+.khl .kh-pill{display:inline-block;padding:4px 12px;border-radius:999px;background:#e5edff;color:#23409a;font-weight:700;font-size:14px}
+.khl .kh-timer{display:flex;align-items:center;justify-content:center;min-width:46px;height:46px;border-radius:50%;background:var(--kh-pur);color:#fff;font-weight:800;font-size:20px}
+.khl .kh-bar{height:10px;border-radius:999px;background:#dbe5f8;overflow:hidden;margin-bottom:14px}
+.khl .kh-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#46178f,#1368ce);transition:width .25s linear}
+.khl .kh-count{text-align:center;font-size:84px;font-weight:900;color:var(--kh-pur);line-height:1;margin:6px 0 10px}
+.khl .kh-qtext{margin:0 0 14px;text-align:center;font-size:clamp(20px,3.6vw,28px);font-weight:800;color:var(--kh-ink);line-height:1.3;word-break:break-word}
+.khl .kh-qimg{display:block;max-width:100%;max-height:240px;margin:0 auto 14px;border-radius:12px}
+.khl .kh-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.khl .kh-opt{display:flex;align-items:center;gap:10px;min-height:84px;padding:12px 14px;border-radius:14px;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);word-break:break-word}
+.khl .kh-opt:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.khl .kh-opt[disabled]{opacity:.55;cursor:not-allowed}
+.khl .kh-shape{flex:none;width:28px;text-align:center;font-size:26px}
+.khl .kh-o0{background:var(--kh-red)}.khl .kh-o1{background:var(--kh-blue)}.khl .kh-o2{background:var(--kh-yel)}.khl .kh-o3{background:var(--kh-grn)}
+.khl .kh-typebox{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.khl .kh-typebox .kh-input{flex:1 1 220px;width:auto;margin:0}
+.khl .kh-typebox .kh-btn{flex:0 0 auto;width:auto}
+.khl .kh-wait{padding:24px 12px;border-radius:16px;background:#fff;border:2px dashed var(--kh-line);text-align:center;color:var(--kh-muted)}
+.khl .kh-wait b{display:block;font-size:22px;color:var(--kh-pur);margin-bottom:4px}
+.khl .kh-res{border-radius:18px;padding:18px;text-align:center;color:#fff;margin-bottom:12px}
+.khl .kh-res.ok{background:var(--kh-grn)}.khl .kh-res.bad{background:var(--kh-red)}.khl .kh-res.none{background:#5b6b88}
+.khl .kh-res h3{margin:0;font-size:28px;font-weight:900;color:#fff}
+.khl .kh-res p{margin:4px 0 0;font-size:18px;font-weight:700;color:#fff}
+.khl .kh-ans{margin:0 0 12px;padding:12px 14px;border-radius:14px;background:#fff;border:1px solid var(--kh-line)}
+.khl .kh-ans small{display:block;color:var(--kh-muted);font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em}
+.khl .kh-ans strong{font-size:20px;font-weight:800}
+.khl .kh-dist{display:grid;gap:6px;margin:0 0 12px}
+.khl .kh-dr{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
+.khl .kh-dr .l{flex:none;width:26px;text-align:center}
+.khl .kh-dr .t{flex:1;height:22px;border-radius:8px;background:#e9eefb;overflow:hidden}
+.khl .kh-dr .t i{display:block;height:100%;min-width:3px}
+.khl .kh-dr .c{flex:none;min-width:48px}
+.khl .kh-lbh{margin:12px 0 6px;font-weight:800}
+.khl .kh-row{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;background:#fff;border:1px solid var(--kh-line);margin-bottom:6px;font-weight:700}
+.khl .kh-row.me{background:#f1e9ff;border-color:#c9b0f5}
+.khl .kh-row .n{flex:none;width:26px;text-align:center;color:var(--kh-muted)}
+.khl .kh-row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.khl .kh-row .sc{flex:none;font-variant-numeric:tabular-nums}
+.khl .kh-next{text-align:center;color:var(--kh-muted);font-weight:700;margin-top:8px}
+.khl .kh-podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:14px 0}
+.khl .kh-pod{flex:1;max-width:150px;text-align:center}
+.khl .kh-pod .nm{font-weight:800;font-size:14px;word-break:break-word;margin-bottom:4px}
+.khl .kh-pod .blk{border-radius:12px 12px 0 0;color:#fff;font-weight:900;font-size:28px;padding-top:8px}
+.khl .kh-pod.p1 .blk{height:120px;background:#d89e00}
+.khl .kh-pod.p2 .blk{height:90px;background:#7b8aa6}
+.khl .kh-pod.p3 .blk{height:70px;background:#b4682e}
+.khl .kh-pod .sc{font-size:13px;color:var(--kh-muted);font-weight:700;margin-top:4px}
+@media(max-width:520px){.khl{padding:14px}.khl .kh-opt{min-height:72px;font-size:16px}.khl .kh-count{font-size:68px}}
+@media(prefers-reduced-motion:reduce){.khl .kh-bar i{transition:none}}
 </style>
-</head>
-<body>
 
-<header class="header">
-<div class="header-inner">
-<div class="logo">
-    <img src="favicon.png" alt="Test Markaz Edu">
-</div>
-<div><h1>Test Markaz Edu</h1><p>Dasturchi: <b>Husenov Jahongir</b></p></div>
-</div>
-</header>
+<section id="khLive" class="khl" aria-live="polite">
+  <div class="kh-head"><span aria-hidden="true">⚡</span><h2>Jonli bellashuv</h2></div>
 
-<main class="container">
-<section class="card top-card">
-<div>
-<div class="section-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="3"/><circle cx="12" cy="9" r="2.4"/><path d="M7.5 17c.8-2.1 2.3-3.1 4.5-3.1s3.7 1 4.5 3.1"/></svg></span> O‘QUVCHI MA’LUMOTLARI</div>
-<div class="field"><label>Viloyatni tanlang</label><select id="region"></select></div>
-<div class="field"><label>Tuman yoki shaharni tanlang</label><select id="district" disabled></select><input id="districtOther" class="other-input hidden" type="text" placeholder="Tuman yoki shahar nomini yozing" autocomplete="off"></div>
-<div class="field"><label>Ta’lim muassasasini tanlang</label><select id="school" disabled></select><input id="schoolOther" class="other-input hidden" type="text" placeholder="Ta’lim muassasasi nomini yozing" autocomplete="off"></div>
-<div class="field"><label>Sinfni tanlang</label><select id="group" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
-<div class="field"><label>Ism-familiyangizni kiriting</label><input id="student" type="text" placeholder="Masalan: Aliyev Vali"></div>
-<div class="field"><label>Fanni tanlang</label><select id="subject" disabled><option value="">Avval ta’lim muassasasini tanlang</option></select></div>
-<div class="notice"><strong><span class="notice-symbol" style="display:inline-grid;vertical-align:middle;margin-right:7px"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg></span>Eslatma</strong>Avval viloyat, tuman va ta’lim muassasangizni tanlang — shundan keyin sinf va fan ro‘yxati ochiladi.<br>Nazorat ustoz belgilagan vaqtda ochiladi va o‘sha vaqtda yopiladi.</div>
-<div id="scopeMsg" class="notice warn hidden"></div>
-<div id="loginMessage" class="login-message"></div>
-</div>
-
-<div>
-<div class="section-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M7.5 8h9M7.5 12h9M7.5 16h5"/></svg></span> NAZORATLAR</div>
-<div class="controls-grid" id="testList"></div>
-</div>
-
-<div class="info-strip" style="grid-column:1/-1">
-<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></div><div><b>Nazoratlar</b><span>ustoz tomonidan belgilanadi</span></div></div>
-<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div><div><b>Vaqt</b><span id="durationInfo">Test sozlamasiga muvofiq</span></div></div>
-<div class="info-item"><div class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></svg></div><div><b>Nazoratni topshirgandan keyin</b><span>qayta ishlash imkoni yo‘q</span></div></div>
-</div>
-</section>
-
-<section class="lb-card" id="liveBellashuv">
-  <div class="lb-head"><span aria-hidden="true">⚡</span> Jonli bellashuv</div>
-  <p style="margin:0 0 14px;color:#526178;line-height:1.55">Ustoz bergan xona kodini kiriting. Ism-familiya va sinf yuqoridagi ma’lumotlardan olinadi.</p>
-  <div class="lb-grid"><div><label for="lbRoomCode">Xona kodi</label><input id="lbRoomCode" class="lb-code" type="text" maxlength="12" autocomplete="off" placeholder="Masalan: A7K2Q"></div><button class="lb-btn" id="lbJoinBtn" type="button">Bellashuvga qo‘shilish</button></div>
-  <div class="lb-msg" id="lbMessage" role="status"></div><div id="lbPlayArea"></div>
-</section>
-
-<section class="card exam hidden" id="exam">
-<div class="exam-head"><div class="exam-title"><span class="circle" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg></span><span id="examTitle">NAZORAT</span></div><div class="timer"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Qolgan vaqt</span> <strong id="timer">--:--</strong></div></div>
-<div class="exam-body">
-<aside class="sidebar"><h4>Savollar</h4><div class="qgrid" id="qgrid"></div>
-<div class="legend"><div><span class="dot blue"></span>Javoblangan</div><div><span class="dot"></span>Javoblanmagan</div><div><span class="dot yellow"></span>Belgilangan</div></div></aside>
-<div class="exam-content">
-<div class="exam-guard" id="examGuard" role="status"><span aria-hidden="true">🛡️</span><span>Test vaqtida boshqa oynaga o‘tmaslik tavsiya etiladi.</span><span>Ogohlantirishlar: <b class="guard-count" id="guardCount">0</b></span></div>
-
-<div class="question-no" id="questionNo"></div><div class="question" id="question"></div><div class="qimg-box" id="qimgBox"></div><div id="answers"></div>
-<div class="exam-actions"><button class="btn" id="prevBtn">← Oldingi</button><button class="btn" id="markBtn">♧ Belgilash</button><button class="btn primary" id="nextBtn">Keyingi →</button><button class="btn primary hidden" id="finishBtn">Nazoratni yakunlash</button></div>
-</div></div>
-</section>
-
-<section class="result hidden" id="result">
-<div class="result-left"><div class="check"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></svg></div><div><h2>Nazorat yakunlandi</h2><p id="resultText"></p></div></div>
-<button class="btn" onclick="window.location.reload()"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:6px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="m3 10 9-7 9 7M5.5 9v11h13V9M9 20v-6h6v6"/></svg>Bosh sahifaga qaytish</button>
-</section>
-<section id="answerReview" class="review-wrap hidden" aria-live="polite">
-  <h2 class="review-heading">Javoblar tahlili</h2>
-  <p class="review-intro">Savol raqamini bosing: yashil — to‘g‘ri, qizil — noto‘g‘ri, sariq — javob belgilanmagan.</p>
-  <div class="review-summary" id="reviewSummary"></div>
-  <div class="review-layout">
-    <aside class="review-nav"><h3>Savollar</h3><div id="answerReviewGrid" class="review-grid"></div><div class="review-legend"><span><i class="lgc"></i>To‘g‘ri</span><span><i class="lgi"></i>Noto‘g‘ri</span><span><i class="lgu"></i>Javobsiz</span></div></aside>
-    <div id="answerReviewList"></div>
+  <div id="khJ1">
+    <p class="kh-sub">Ustoz bergan xona kodini kiriting va bellashuvga qo‘shiling.</p>
+    <input id="khCode" class="kh-input kh-code" type="text" maxlength="6" placeholder="XONA KODI" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button id="khGo1" class="kh-btn" type="button">Davom etish</button>
   </div>
+
+  <div id="khJ2" hidden>
+    <div class="kh-roominfo">Xona: <b id="khRoomCode"></b><span id="khRoomTitle"></span></div>
+    <input id="khName" class="kh-input" type="text" maxlength="50" placeholder="Ism va familiyangiz" autocomplete="name">
+    <button id="khGo2" class="kh-btn" type="button">Bellashuvga qo‘shilish</button>
+    <button id="khBack" class="kh-link" type="button">← Kodni o‘zgartirish</button>
+  </div>
+
+  <div id="khLobby" class="kh-center" hidden>
+    <p class="kh-sub">Siz bellashuvga qo‘shildingiz!</p>
+    <div>Xona kodi: <span class="kh-pin" id="khLobCode"></span></div>
+    <h3 id="khLobName" class="kh-qtext" style="margin-top:14px"></h3>
+    <div id="khLobCount" class="kh-pill"></div>
+    <div id="khChips" class="kh-chips"></div>
+    <div class="kh-wait"><b>O‘yin boshlanishini kuting…</b><span>Ustoz boshlagach, savollar o‘zi ketma-ket chiqadi.</span></div>
+    <button id="khLeave" class="kh-link" type="button">Chiqish</button>
+  </div>
+
+  <div id="khPlay" hidden>
+    <div class="kh-qmeta"><span id="khQn" class="kh-pill"></span><span id="khScore" class="kh-pill"></span><span id="khTime" class="kh-timer">0</span></div>
+    <div class="kh-bar"><i id="khBar"></i></div>
+    <div id="khCount" class="kh-count" hidden></div>
+    <h3 id="khQtext" class="kh-qtext"></h3>
+    <img id="khQimg" class="kh-qimg" alt="" hidden>
+    <div id="khOpts" class="kh-opts"></div>
+    <div id="khAnswered" class="kh-wait" hidden><b id="khWaitT"></b><span id="khWaitS"></span></div>
+  </div>
+
+  <div id="khReveal" hidden>
+    <div id="khRes" class="kh-res none"><h3 id="khResT"></h3><p id="khResS"></p></div>
+    <div class="kh-ans"><small>To‘g‘ri javob</small><strong id="khCorrect"></strong></div>
+    <div id="khDist" class="kh-dist"></div>
+    <div class="kh-center"><span id="khMyRank" class="kh-pill"></span></div>
+    <div class="kh-lbh">🏆 Reyting</div>
+    <div id="khTop"></div>
+    <div id="khNext" class="kh-next"></div>
+  </div>
+
+  <div id="khEnd" hidden>
+    <h3 class="kh-qtext">🏆 Bellashuv yakunlandi!</h3>
+    <div id="khPodium" class="kh-podium"></div>
+    <div class="kh-center"><span id="khEndMe" class="kh-pill"></span></div>
+    <div class="kh-lbh">Yakuniy reyting</div>
+    <div id="khFinal"></div>
+    <button id="khAgain" class="kh-btn" type="button" style="margin-top:14px">Boshqa bellashuvga kirish</button>
+  </div>
+
+  <div id="khNote" class="kh-note"></div>
 </section>
-</main>
-<div id="guardOverlay" class="guard-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="guardTitle">
-  <div class="guard-dialog"><div class="guard-symbol">!</div><h2 id="guardTitle">Test oynasiga qayting</h2><p id="guardMessage">Test davomida boshqa oynaga o‘tganingiz qayd etildi. Testni davom ettirish uchun davom etish tugmasini bosing.</p><button id="guardContinue" class="btn primary" type="button">Testga qaytish</button></div>
-</div>
-<footer class="footer">© 2026 <strong>Test Markaz Edu</strong> — Barcha huquqlar himoyalangan.</footer>
 
 <script>
-let current=0, examQuestions=[], answers=[], marked=[], seconds=2700, timerId=null, started=false, starting=false;
-let focusLossCount=0, fullscreenExitCount=0, guardDialogOpen=false, lastFocusEventAt=0;
-let currentTest=null, tests=[], skew=0, listState="idle", availSeq=0;
-let scopeSeq=0, scopeReady=false;
-const groupEl=document.getElementById("group"), studentEl=document.getElementById("student"), subjectEl=document.getElementById("subject"), msg=document.getElementById("loginMessage");
-const regionEl=document.getElementById("region"), districtEl=document.getElementById("district"), schoolEl=document.getElementById("school"), districtOtherEl=document.getElementById("districtOther"), schoolOtherEl=document.getElementById("schoolOther");
-const scopeMsg=document.getElementById("scopeMsg");
-const exam=document.getElementById("exam"), qgrid=document.getElementById("qgrid"), questionNo=document.getElementById("questionNo"), question=document.getElementById("question"), answersBox=document.getElementById("answers");
-const timer=document.getElementById("timer"), prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn"), finishBtn=document.getElementById("finishBtn"), markBtn=document.getElementById("markBtn");
-const testListEl=document.getElementById("testList"), qimgBox=document.getElementById("qimgBox");
-const guardOverlay=document.getElementById("guardOverlay"), guardMessage=document.getElementById("guardMessage"), guardCountEl=document.getElementById("guardCount");
+(function(){
+'use strict';
+// Apps Script veb-ilova manzili (testmarkazedu.uz dagi RESULT_API_URL bilan bir xil).
+var API='https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec';
+var LS_KEY='khLiveSession';
+var SCREENS=['khJ1','khJ2','khLobby','khPlay','khReveal','khEnd'];
+var SHAPES=['▲','◆','●','■'];
+var COLORS=['#e21b3c','#1368ce','#d89e00','#26890c'];
+var root=document.getElementById('khLive');
+if(!root)return;
+var S={pending:'',code:'',pid:'',name:'',offset:0,timer:null,tick:null,last:null,phase:'',sig:'',answered:false,busy:false,timeup:false,myAns:null,fails:0};
 
-// Backend manzili. Bot tokenini BU YERGA yozmang.
-const RESULT_API_URL="https://script.google.com/macros/s/AKfycbwhAIWrqNJPK-tTajCs7Cj-dE7Hc0qVs6w0_qPrpLjHS5ZYOr9kIoeE6GN9Cx4WhFE/exec";
+function $(id){return document.getElementById(id)}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function empty(n){while(n.firstChild)n.removeChild(n.firstChild)}
+function nowS(){return Date.now()+S.offset}
+function note(m){$('khNote').textContent=m||''}
+function screen(id){SCREENS.forEach(function(k){$(k).hidden=(k!==id)})}
+function busyBtn(id,v){if(v)$(id).setAttribute('disabled','');else $(id).removeAttribute('disabled')}
+function save(v){try{if(v)localStorage.setItem(LS_KEY,JSON.stringify(v));else localStorage.removeItem(LS_KEY)}catch(e){}}
+function loadSaved(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'null')}catch(e){return null}}
 
-/* ================= Hudud: viloyat → tuman/shahar =================
-   Tuman ro'yxati shu yerda tahrirlanadi. Ta'lim muassasalari esa
-   ENDI serverdan (Super Admin ro'yxatidan) olinadi — ro'yxatda
-   yo'q bo'lsa, o'quvchi "Boshqa" ni tanlab nomini o'zi yozadi
-   (lekin bunday holda sinf va fan ro'yxati ochilmaydi, chunki
-   bu muassasa tizimda ro'yxatdan o'tmagan). */
-const OTHER_OPT="Boshqa (ro‘yxatda yo‘q)";
-const UZBEKISTAN  = {
-"Qoraqalpog‘iston Respublikasi":["Nukus shahri","Taxiatosh shahri","Amudaryo tumani","Beruniy tumani","Bo‘zatov tumani","Chimboy tumani","Ellikqal‘a tumani","Kegeyli tumani","Mo‘ynoq tumani","Nukus tumani","Qanliko‘l tumani","Qo‘ng‘irot tumani","Qorao‘zak tumani","Shumanay tumani","Taxtako‘pir tumani","To‘rtko‘l tumani","Xo‘jayli tumani"],
-"Andijon viloyati":["Andijon shahri","Xonobod shahri","Andijon tumani","Asaka tumani","Baliqchi tumani","Bo‘ston tumani","Buloqboshi tumani","Izboskan tumani","Jalaquduq tumani","Marhamat tumani","Oltinko‘l tumani","Paxtaobod tumani","Qo‘rg‘ontepa tumani","Shahrixon tumani","Ulug‘nor tumani","Xo‘jaobod tumani"],
-"Buxoro viloyati":["Buxoro shahri","Kogon shahri","Buxoro tumani","G‘ijduvon tumani","Jondor tumani","Kogon tumani","Olot tumani","Peshku tumani","Qorako‘l tumani","Qorovulbozor tumani","Romitan tumani","Shofirkon tumani","Vobkent tumani"],
-"Farg‘ona viloyati":["Farg‘ona shahri","Marg‘ilon shahri","Qo‘qon shahri","Quvasoy shahri","Bag‘dod tumani","Beshariq tumani","Buvayda tumani","Dang‘ara tumani","Farg‘ona tumani","Furqat tumani","Oltiariq tumani","O‘zbekiston tumani","Qo‘shtepa tumani","Quva tumani","Rishton tumani","So‘x tumani","Toshloq tumani","Uchko‘prik tumani","Yozyovon tumani"],
-"Jizzax viloyati":["Jizzax shahri","Arnasoy tumani","Baxmal tumani","Do‘stlik tumani","Forish tumani","G‘allaorol tumani","Mirzacho‘l tumani","Paxtakor tumani","Sharof Rashidov tumani","Yangiobod tumani","Zafarobod tumani","Zarbdor tumani","Zomin tumani"],
-"Namangan viloyati":["Namangan shahri","Chortoq tumani","Chust tumani","Davlatobod tumani","Kosonsoy tumani","Mingbuloq tumani","Namangan tumani","Norin tumani","Pop tumani","To‘raqo‘rg‘on tumani","Uchqo‘rg‘on tumani","Uychi tumani","Yangiqo‘rg‘on tumani"],
-"Navoiy viloyati":["Navoiy shahri","Zarafshon shahri","Karmana tumani","Konimex tumani","Navbahor tumani","Nurota tumani","Qiziltepa tumani","Tomdi tumani","Uchquduq tumani","Xatirchi tumani"],
-"Qashqadaryo viloyati":["Qarshi shahri","Shahrisabz shahri","Chiroqchi tumani","Dehqonobod tumani","G‘uzor tumani","Kasbi tumani","Kitob tumani","Koson tumani","Ko‘kdala tumani","Mirishkor tumani","Muborak tumani","Nishon tumani","Qamashi tumani","Qarshi tumani","Shahrisabz tumani","Yakkabog‘ tumani"],
-"Samarqand viloyati":["Samarqand shahri","Kattaqo‘rg‘on shahri","Bulung‘ur tumani","Ishtixon tumani","Jomboy tumani","Kattaqo‘rg‘on tumani","Narpay tumani","Nurobod tumani","Oqdaryo tumani","Pastdarg‘om tumani","Paxtachi tumani","Payariq tumani","Qo‘shrabot tumani","Samarqand tumani","Toyloq tumani","Urgut tumani"],
-"Sirdaryo viloyati":["Guliston shahri","Shirin shahri","Yangiyer shahri","Boyovut tumani","Guliston tumani","Mirzaobod tumani","Oqoltin tumani","Sardoba tumani","Sayxunobod tumani","Sirdaryo tumani","Xovos tumani"],
-"Surxondaryo viloyati":["Termiz shahri","Angor tumani","Bandixon tumani","Boysun tumani","Denov tumani","Jarqo‘rg‘on tumani","Muzrabot tumani","Oltinsoy tumani","Qiziriq tumani","Qumqo‘rg‘on tumani","Sariosiyo tumani","Sherobod tumani","Sho‘rchi tumani","Termiz tumani","Uzun tumani"],
-"Toshkent viloyati":["Nurafshon shahri","Angren shahri","Bekobod shahri","Chirchiq shahri","Ohangaron shahri","Olmaliq shahri","Yangiyo‘l shahri","Bekobod tumani","Bo‘ka tumani","Bo‘stonliq tumani","Chinoz tumani","Ohangaron tumani","Oqqo‘rg‘on tumani","O‘rta Chirchiq tumani","Parkent tumani","Piskent tumani","Quyi Chirchiq tumani","Qibray tumani","Toshkent tumani","Yangiyo‘l tumani","Yuqori Chirchiq tumani","Zangiota tumani"],
-"Toshkent shahri":["Bektemir tumani","Chilonzor tumani","Mirobod tumani","Mirzo Ulug‘bek tumani","Olmazor tumani","Sergeli tumani","Shayxontohur tumani","Uchtepa tumani","Yakkasaroy tumani","Yangihayot tumani","Yashnobod tumani","Yunusobod tumani"],
-"Xorazm viloyati":["Urganch shahri","Xiva shahri","Bog‘ot tumani","Gurlan tumani","Hazorasp tumani","Qo‘shko‘pir tumani","Shovot tumani","Tuproqqal‘a tumani","Urganch tumani","Xiva tumani","Xonqa tumani","Yangiariq tumani","Yangibozor tumani"]
-};
-function fillSelect(sel,placeholder,items,withOther){
-  sel.innerHTML="";
-  const first=document.createElement("option");first.value="";first.textContent=placeholder;sel.appendChild(first);
-  items.forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=t;sel.appendChild(o)});
-  if(withOther){const o=document.createElement("option");o.value=OTHER_OPT;o.textContent=OTHER_OPT;sel.appendChild(o)}
-}
-function pick(sel,other){return sel.value===OTHER_OPT?other.value.trim():sel.value}
-function initRegions(){
-  fillSelect(regionEl,"Viloyatni tanlang",Object.keys(UZBEKISTAN),false);
-  fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true;
-  resetSchool("Avval tumanni tanlang");
-}
-function resetSchool(placeholder){
-  fillSelect(schoolEl,placeholder,[],false);
-  schoolEl.disabled=true;
-  schoolOtherEl.classList.add("hidden");schoolOtherEl.value="";
-  disableScope("Avval ta’lim muassasasini tanlang");
-}
-function disableScope(placeholder){
-  scopeReady=false;
-  fillSelect(groupEl,placeholder,[],false);groupEl.disabled=true;
-  fillSelect(subjectEl,placeholder,[],false);subjectEl.disabled=true;
-  tests=[];listState="idle";renderTests();
-  scopeMsg.classList.add("hidden");
-}
-regionEl.onchange=()=>{
-  msg.textContent="";
-  districtOtherEl.classList.add("hidden");districtOtherEl.value="";
-  if(!regionEl.value){fillSelect(districtEl,"Avval viloyatni tanlang",[],false);districtEl.disabled=true}
- else{fillSelect(districtEl,"Tuman yoki shaharni tanlang",UZBEKISTAN[regionEl.value]||[],true);districtEl.disabled=false}
-  resetSchool("Avval tumanni tanlang");
-};
-districtEl.onchange=()=>{
-  msg.textContent="";
-  const other=districtEl.value===OTHER_OPT;
-  districtOtherEl.classList.toggle("hidden",!other);if(!other)districtOtherEl.value="";
-  if(!districtEl.value){resetSchool("Avval tumanni tanlang");return}
-  if(other){
-    // Ro'yxatda yo'q tuman — muassasa ro'yxati ham bo'lmaydi
-    fillSelect(schoolEl,"",[],false);
-    schoolEl.innerHTML='<option value="'+OTHER_OPT+'" selected>'+OTHER_OPT+'</option>';
-    schoolEl.disabled=true;
-    schoolOtherEl.classList.remove("hidden");
-    disableScope("Avval ta’lim muassasasini tanlang");
-    return;
-  }
-  loadSchools();
-};
-async function loadSchools(){
-  fillSelect(schoolEl,"Yuklanmoqda...",[],false);schoolEl.disabled=true;
-  disableScope("Avval ta’lim muassasasini tanlang");
-  try{
-    const r=await api("maPubInstitutions",{region:regionEl.value,district:districtEl.value});
-    const list=(r&&r.ok&&Array.isArray(r.schools))?r.schools:[];
-    fillSelect(schoolEl,"Ta’lim muassasasini tanlang",list,true);
-    schoolEl.disabled=false;
-  }catch(e){
-    console.warn("Muassasalar ro‘yxatini olib bo‘lmadi:",e);
-    fillSelect(schoolEl,"Ta’lim muassasasini tanlang",[],true);
-    schoolEl.disabled=false;
-  }
-}
-schoolEl.onchange=()=>{
-  msg.textContent="";
-  const other=schoolEl.value===OTHER_OPT;
-  schoolOtherEl.classList.toggle("hidden",!other);if(!other)schoolOtherEl.value="";
-  if(other){
-    scopeMsg.textContent="Bu ta’lim muassasasi tizimda ro‘yxatdan o‘tmagan. Sinf va fan ro‘yxati faqat ro‘yxatdan o‘tgan muassasalar uchun ochiladi. Iltimos, maktab administratoringizga murojaat qiling.";
-    scopeMsg.classList.remove("hidden");
-    disableScope("Muassasa ro‘yxatdan o‘tmagan");
-    return;
-  }
-  if(!schoolEl.value){disableScope("Avval ta’lim muassasasini tanlang");return}
-  refreshScope();
-};
-districtOtherEl.oninput=()=>{msg.textContent=""};
-schoolOtherEl.oninput=()=>{msg.textContent=""};
-initRegions();
-
-/* ================= Serverga so‘rov ================= */
-async function api(action,payload){
-  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
-  try{
-    const res=await fetch(RESULT_API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action:action},payload||{})),signal:ctl.signal});
-    const data=JSON.parse(await res.text());
-    if(data&&data.source==="doPost")throw new Error("Server yangi so‘rovlarni qabul qilmayapti.");
-    return data;
-  }finally{clearTimeout(tm)}
+function api(action,payload){
+  var body=JSON.stringify(Object.assign({action:action},payload||{}));
+  return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body})
+    .then(function(r){return r.text()})
+    .then(function(t){var d;try{d=JSON.parse(t)}catch(e){throw new Error('Server javobi noto‘g‘ri')}
+      if(!d||d.ok===false)throw new Error((d&&d.error)||'Server xatosi');return d});
 }
 
-/* ================= Muassasa tanlangach: shu maktabning sinf va fanlarini yuklash ================= */
-async function refreshScope(){
-  const seq=++scopeSeq;
-  scopeMsg.classList.add("hidden");
-  fillSelect(groupEl,"Yuklanmoqda...",[],false);groupEl.disabled=true;
-  fillSelect(subjectEl,"Yuklanmoqda...",[],false);subjectEl.disabled=true;
-  const region=regionEl.value, district=districtEl.value, school=schoolEl.value;
-  try{
-    const [rs,rc]=await Promise.all([
-      api("maPubSubjects",{region,district,school}),
-      api("maPubClasses",{region,district,school})
-    ]);
-    if(seq!==scopeSeq)return;
-    const subjects=(rs&&rs.ok&&Array.isArray(rs.subjects))?rs.subjects:[];
-    const classes=(rc&&rc.ok&&Array.isArray(rc.classes))?rc.classes:[];
-    if(!subjects.length&&!classes.length){
-      scopeMsg.textContent="Bu ta’lim muassasasi uchun hali fan yoki sinf kiritilmagan. Maktab administratoringizga murojaat qiling.";
-      scopeMsg.classList.remove("hidden");
-      fillSelect(groupEl,"Sinf mavjud emas",[],false);
-      fillSelect(subjectEl,"Fan mavjud emas",[],false);
-      scopeReady=false;
-      return;
-    }
-    fillSelect(groupEl,"Sinfni tanlang",classes,false);groupEl.disabled=false;
-    fillSelect(subjectEl,"Fanni tanlang",subjects,false);subjectEl.disabled=false;
-    scopeReady=true;
-    refreshTests();
-  }catch(e){
-    if(seq!==scopeSeq)return;
-    console.warn("Sinf/fan ro‘yxatini olib bo‘lmadi:",e);
-    scopeMsg.textContent="Sinf va fan ro‘yxatini olib bo‘lmadi. Internetni tekshirib, muassasani qayta tanlang.";
-    scopeMsg.classList.remove("hidden");
-  }
+/* ---------- Kirish: 1) xona kodi, 2) ism-familiya ---------- */
+function step1(){
+  var code=$('khCode').value.trim().toUpperCase();
+  if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){note('Xona kodi 6 ta belgidan iborat bo‘lishi kerak.');return}
+  note('');busyBtn('khGo1',true);
+  api('lbState',{code:code}).then(function(s){
+    if(s.status!=='lobby')throw new Error('Bu bellashuv allaqachon boshlangan yoki yakunlangan.');
+    S.pending=code;$('khRoomCode').textContent=code;$('khRoomTitle').textContent=s.title?(' · '+s.title):'';
+    screen('khJ2');setTimeout(function(){$('khName').focus()},50);
+  }).catch(function(e){note(e.message)}).then(function(){busyBtn('khGo1',false)});
+}
+function step2(){
+  var name=$('khName').value.trim().replace(/\s+/g,' ');
+  if(name.length<2){note('Ism-familiyangizni kiriting.');return}
+  note('');busyBtn('khGo2',true);
+  api('lbJoin',{code:S.pending,name:name}).then(function(r){
+    S.code=S.pending;S.pid=r.playerId;S.name=r.name||name;save({code:S.code,pid:S.pid,name:S.name});begin();
+  }).catch(function(e){note(e.message)}).then(function(){busyBtn('khGo2',false)});
+}
+function begin(){S.phase='';S.sig='';S.last=null;S.fails=0;stopLoops();S.tick=setInterval(tick,150);poll()}
+function stopLoops(){clearTimeout(S.timer);clearInterval(S.tick);S.timer=null;S.tick=null}
+function leave(msg){
+  stopLoops();S.code='';S.pid='';S.pending='';S.last=null;S.phase='';S.sig='';save(null);
+  $('khCode').value='';$('khName').value='';screen('khJ1');note(msg||'');
 }
 
-/* ================= Nazoratlar ro‘yxati (ustoz biriktirgan testlar) ================= */
-const dtf=new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Tashkent",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false});
-function fmtTk(iso){
-  const d=new Date(iso);
-  if(!iso||isNaN(d.getTime()))return "";
-  const p={};dtf.formatToParts(d).forEach(x=>{p[x.type]=x.value});
-  return p.day+"."+p.month+"."+p.year+" "+(p.hour==="24"?"00":p.hour)+":"+p.minute;
-}
-function stateOf(t){
-  const now=Date.now()+skew;
-  const s=t.start?Date.parse(t.start):NaN, e=t.end?Date.parse(t.end):NaN;
-  if(!isNaN(s)&&now<s)return "soon";
-  if(!isNaN(e)&&now>e)return "closed";
-  return "open";
-}
-function note(text){
-  const d=document.createElement("div");d.className="list-msg";d.textContent=text;testListEl.appendChild(d);
-}
-function renderTests(){
-  testListEl.innerHTML="";
-  if(!scopeReady){note("Avval viloyat, tuman va ta’lim muassasangizni tanlang.");return}
-  if(!groupEl.value||!subjectEl.value){note("Sinf va fanni tanlang — mavjud nazoratlar shu yerda ko‘rinadi.");return}
-  if(listState==="loading"){note("Nazoratlar yuklanmoqda...");return}
-  if(listState==="error"){note("Nazoratlar ro‘yxatini olib bo‘lmadi. Internetni tekshiring va sinf yoki fanni qayta tanlang.");return}
-  if(!tests.length){note("Bu sinf va fan uchun nazorat hali biriktirilmagan.");return}
-  tests.forEach(t=>{
-    const st=stateOf(t), on=st==="open";
-    const c=document.createElement("div");c.className="test-card "+(on?"available":"disabled locked");
-    const head=document.createElement("div");head.className="test-head";
-    const b=document.createElement("span");b.className="badge";b.textContent=t.nazorat||"Nazorat";
-    if(!on){b.style.background="#c6ced8";b.style.color="#26354b"}
-    const lk=document.createElement("span");lk.className="lock";lk.innerHTML=on?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>';
-    head.append(b,lk);
-    const h=document.createElement("h3");h.textContent=t.title||"Test";
-    const s=document.createElement("span");s.className="status"+(on?" ok":"");
-    s.textContent=on?"Mavjud":(st==="soon"?"Hali boshlanmagan":"Vaqti tugagan");
-    c.append(head,h,s);
-    const n=document.createElement("small");n.textContent=(t.count||0)+" ta savol · "+(Number(t.duration)||45)+" daq. · "+(Number(t.attempts)||1)+" urinish";c.appendChild(n);
-    if(t.start||t.end){
-      const w=document.createElement("small");
-      w.textContent=(t.start?fmtTk(t.start):"")+" — "+(t.end?fmtTk(t.end):"");
-      c.appendChild(w);
-    }
-    if(on)c.onclick=()=>start(t);
-    testListEl.appendChild(c);
+/* ---------- Serverdan holatni olish ---------- */
+function poll(){
+  if(!S.code)return;
+  var t0=Date.now();
+  api('lbState',{code:S.code,playerId:S.pid}).then(function(s){
+    if(!S.code)return;
+    S.offset=s.serverNow-(t0+Date.now())/2;S.fails=0;note('');apply(s);
+  }).catch(function(e){
+    if(!S.code)return;
+    if(/Xona topilmadi/.test(e.message)){leave('Xona topilmadi yoki yopilgan.');return}
+    S.fails++;note('Aloqa uzildi, qayta ulanmoqda…');
+  }).then(function(){
+    if(!S.code||(S.last&&S.last.status==='finished'))return;
+    clearTimeout(S.timer);S.timer=setTimeout(poll,nextDelay());
   });
 }
-async function refreshTests(){
-  const seq=++availSeq;
-  if(!scopeReady||!groupEl.value||!subjectEl.value){tests=[];listState="idle";renderTests();return}
-  listState="loading";renderTests();
-  try{
-    const r=await api("pubTests",{subject:subjectEl.value,group:groupEl.value});
-    if(seq!==availSeq)return;
-    if(r&&r.ok&&Array.isArray(r.tests)){
-      tests=r.tests;
-      if(r.now){const sv=Date.parse(r.now);if(!isNaN(sv))skew=sv-Date.now()}
-      listState="ok";
-    }else{tests=[];listState="error"}
-  }catch(e){
-    if(seq!==availSeq)return;
-    console.warn("Testlar ro‘yxatini olib bo‘lmadi:",e);
-    tests=[];listState="error";
+function nextDelay(){
+  var base=2000+Math.random()*400,s=S.last,b=0;
+  if(s){
+    if(s.status==='question'&&s.question)b=s.question.endsAt;
+    else if(s.status==='reveal')b=s.revealEndsAt;
   }
-  renderTests();
-}
-setInterval(()=>{if(!started&&!starting&&tests.length)renderTests()},30000);
-renderTests();
-
-function updateGuardUI(){
-  if(guardCountEl)guardCountEl.textContent=String(focusLossCount+fullscreenExitCount);
-}
-function showGuardWarning(message){
-  if(!started||guardDialogOpen)return;
-  guardDialogOpen=true;
-  if(guardMessage)guardMessage.textContent=message;
-  if(guardOverlay)guardOverlay.classList.remove("hidden");
-  updateGuardUI();
-}
-function hideGuardWarning(){guardDialogOpen=false;if(guardOverlay)guardOverlay.classList.add("hidden")}
-if(guardOverlay){document.getElementById("guardContinue").addEventListener("click",hideGuardWarning)}
-document.addEventListener("visibilitychange",()=>{
-  if(started&&document.visibilityState==="hidden"){
-    const now=Date.now();if(now-lastFocusEventAt<1200)return;lastFocusEventAt=now;
-    focusLossCount++;updateGuardUI();
-    // Tab qayta ko‘ringanda ogohlantirish chiqariladi.
-    window.__pendingGuardWarning="Boshqa tab yoki dasturga o‘tish hodisasi qayd etildi ("+focusLossCount+"). Testni davom ettirish uchun shu oynada qoling.";
-  }else if(started&&document.visibilityState==="visible"&&window.__pendingGuardWarning){
-    const m=window.__pendingGuardWarning;window.__pendingGuardWarning="";showGuardWarning(m);
-  }
-});
-document.addEventListener("fullscreenchange",()=>{
-  if(started&&!document.fullscreenElement){fullscreenExitCount++;updateGuardUI();showGuardWarning("To‘liq ekran rejimidan chiqdingiz. Bu hodisa qayd etildi. Testni davom ettirish uchun shu oynada qoling.")}
-});
-document.addEventListener("contextmenu",e=>{if(started)e.preventDefault()});
-document.addEventListener("copy",e=>{if(started)e.preventDefault()});
-document.addEventListener("keydown",e=>{
-  if(!started)return;
-  const k=String(e.key||"").toLowerCase();
-  if((e.ctrlKey||e.metaKey)&&["c","x","p","s","u"].includes(k)){e.preventDefault()}
-  if(k==="printscreen"){
-    // Brauzer PrintScreen hodisasini ishonchli ushlay olmaydi; bu faqat qo‘shimcha to‘siq.
-    focusLossCount++;updateGuardUI();showGuardWarning("Skrinshot tugmasi bosilgani aniqlangan bo‘lishi mumkin. Brauzer barcha skrinshot usullarini aniqlay olmaydi.");
-  }
-});
-
-function key(){return "t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase()}
-function valid(){
-  const name=studentEl.value.trim();
-  if(!regionEl.value){msg.textContent="Avval viloyatni tanlang.";regionEl.focus();return false}
-  if(!districtEl.value){msg.textContent="Avval tuman yoki shaharni tanlang.";districtEl.focus();return false}
-  if(districtEl.value===OTHER_OPT&&districtOtherEl.value.trim().length<3){msg.textContent="Tuman yoki shahar nomini yozing.";districtOtherEl.focus();return false}
-  if(!schoolEl.value){msg.textContent="Avval ta’lim muassasasini tanlang.";schoolEl.focus();return false}
-  if(schoolEl.value===OTHER_OPT){msg.textContent="Bu ta’lim muassasasi tizimda ro‘yxatdan o‘tmagan, shuning uchun nazorat topshirib bo‘lmaydi.";return false}
-  if(!scopeReady){msg.textContent="Sinf va fan ro‘yxati hali yuklanmadi. Muassasani qayta tanlang.";return false}
-  if(!groupEl.value){msg.textContent="Avval sinfni tanlang.";groupEl.focus();return false}
-  if(name.length<3){msg.textContent="Avval ism-familiyangizni kiriting.";studentEl.focus();return false}
-  if(!subjectEl.value){msg.textContent="Avval fanni tanlang.";subjectEl.focus();return false}
-  const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
-  let usedAttempts=0;
-  try{const saved=JSON.parse(localStorage.getItem(attemptKey)||"null");usedAttempts=Math.max(0,Number(saved&&saved.attempts)||0)}catch(_){usedAttempts=0}
-  const limit=Math.max(1,Number(currentTest&&currentTest.attempts)||1);
-  if(usedAttempts>=limit){msg.textContent="Urinishlar limitingiz tugagan ("+usedAttempts+"/"+limit+").";return false}
-  msg.textContent="";return true;
-}
-// Ustoz yuklagan test: savollar va javoblar serverda aralashtirilgan, c — to‘g‘ri javob indeksi
-function prepareRemoteExam(list){
-  examQuestions=list.map(q=>({text:q.q,img:q.img||"",correct:q.o[q.c],options:q.o}));
-  answers=Array(examQuestions.length).fill(null);marked=Array(examQuestions.length).fill(false);current=0;
-}
-function buildGrid(){
-  qgrid.innerHTML="";
-  examQuestions.forEach((_,i)=>{
-    const b=document.createElement("button");b.className="qbtn";b.textContent=i+1;
-    b.onclick=()=>{current=i;renderQuestion()};qgrid.appendChild(b);
-  });
-}
-function renderQuestion(){
-  const q=examQuestions[current];
-  questionNo.textContent=(current+1)+"-savol / "+examQuestions.length;
-  question.textContent=q.text;
-  qimgBox.innerHTML="";
-  if(q.img){
-    const im=new Image();im.className="qimg";im.alt="Savol rasmi";im.referrerPolicy="no-referrer";
-    im.onerror=()=>{qimgBox.textContent="Rasm yuklanmadi."};
-    im.src=q.img;qimgBox.appendChild(im);
-  }
-  answersBox.innerHTML="";
-  q.options.forEach((opt,i)=>{
-    const label=document.createElement("label");label.className="answer"+(answers[current]===opt?" selected":"");
-    const radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.value=opt;radio.checked=answers[current]===opt;
-    radio.onchange=()=>{answers[current]=opt;renderQuestion()};
-    label.append(radio,document.createTextNode(String.fromCharCode(65+i)+") "+opt));answersBox.appendChild(label);
-  });
-  [...qgrid.children].forEach((b,i)=>{b.classList.toggle("active",i===current);b.classList.toggle("answered",answers[i]!==null)});
-  prevBtn.disabled=current===0;
-  const isLastQuestion=current===examQuestions.length-1;
-  nextBtn.classList.toggle("hidden",isLastQuestion);
-  finishBtn.classList.toggle("hidden",!isLastQuestion);
-  markBtn.innerHTML=marked[current]?'<svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:5px;stroke:currentColor;fill:none;stroke-width:2"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg> Belgilangan':'<svg viewBox="0 0 24 24" aria-hidden="true" style="width:17px;height:17px;vertical-align:-3px;margin-right:5px;stroke:currentColor;fill:none;stroke-width:2"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg> Belgilash';
-}
-function fmtClock(s){s=Math.max(0,s);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
-async function start(t){
-  if(starting||started)return;
-  currentTest=t;
-  if(!valid())return;
-  starting=true;
-  // Brauzer ruxsat bersa, testni to‘liq ekran rejimida boshlashga urinadi.
-  try{if(document.documentElement.requestFullscreen&&!document.fullscreenElement){await document.documentElement.requestFullscreen()}}catch(_){/* Ba’zi brauzer/qurilmalarda ruxsat berilmasligi mumkin. */}
-  let dur=2700;
-  try{
-    msg.textContent="Test yuklanmoqda...";
-    const r=await api("pubTest",{id:t.id,group:groupEl.value,student:studentEl.value.trim()});
-    if(!r||!r.ok||!Array.isArray(r.questions)||!r.questions.length){const err=new Error("load");err.userMessage=(r&&r.error)||"Testni yuklab bo‘lmadi.";throw err}
-    if(r.now){const sv=Date.parse(r.now);if(!isNaN(sv))skew=sv-Date.now()}
-    const durationMinutes=Math.max(1,Number(r.duration)||45);
-    // Har bir o‘quvchiga test boshlangan paytdan to‘liq belgilangan vaqt beriladi.
-    // Test boshlanganidan keyin taymer r.end bilan qisqartirilmaydi.
-    dur=durationMinutes*60;
-    if(dur<=0){const err=new Error("late");err.userMessage="Test vaqti tugagan.";throw err}
-    currentTest=Object.assign({},t,{id:r.id||t.id,nazorat:r.nazorat||t.nazorat,title:r.title||t.title,duration:durationMinutes,attempts:Math.max(1,Number(r.attempts)||1),questionCount:r.questions.length,grading:r.grading||null});
-    document.getElementById("durationInfo").textContent=durationMinutes+" daqiqa · "+r.questions.length+" ta savol · urinishlar limiti: "+currentTest.attempts;
-    prepareRemoteExam(r.questions);
-    msg.textContent="";
-  }catch(e){
-    msg.textContent=(e&&e.userMessage)||"Testni yuklab bo‘lmadi. Internetni tekshirib, qayta urinib ko‘ring.";
-    starting=false;refreshTests();return;
-  }
-  started=true;starting=false;
-  focusLossCount=0;fullscreenExitCount=0;updateGuardUI();
-  window.testStartedAt=new Date().toISOString();
-  document.getElementById("examTitle").textContent=subjectEl.value+" — "+(currentTest.nazorat||"nazorat");
-  exam.classList.remove("hidden");testListEl.style.pointerEvents="none";
-  buildGrid();renderQuestion();window.scrollTo({top:document.getElementById("exam").offsetTop-10,behavior:"smooth"});
-  const endAt=Date.now()+dur*1000;
-  seconds=dur;timer.textContent=fmtClock(seconds);
-  timerId=setInterval(()=>{seconds=Math.ceil((endAt-Date.now())/1000);timer.textContent=fmtClock(seconds);if(seconds<=0){clearInterval(timerId);finish()}},1000);
-}
-function getGrade(score,total,grading){
-  if(grading){
-    const g5=Number(grading.grade5),g4=Number(grading.grade4),g3=Number(grading.grade3);
-    if([g5,g4,g3].every(n=>Number.isInteger(n)&&n>=1)&&g5>=g4&&g4>=g3){
-      if(score>=g5)return 5;
-      if(score>=g4)return 4;
-      if(score>=g3)return 3;
-      return 2;
-    }
-  }
-  const pct = total ? (score/total*100) : 0;
-  if(pct>=86)return 5;
-  if(pct>=71)return 4;
-  if(pct>=55)return 3;
-  return 2;
+  if(b){var d=b-nowS()+250+Math.random()*350;if(d<base)return Math.max(400,d)}
+  return base;
 }
 
-function sendResultToTelegram(data){
-  if(!RESULT_API_URL){
-    console.error("RESULT_API_URL mavjud emas");
-    return false;
+function me(s){var r=null;(s.players||[]).forEach(function(p){if(p.id===S.pid)r=p});return r}
+function rankOf(s){var m=me(s);if(!m)return 0;var r=1;s.players.forEach(function(p){if(p.score>m.score)r++});return r}
+
+function apply(s){
+  S.last=s;
+  var key=s.status+':'+s.questionIndex,m=me(s);
+  $('khScore').textContent='Ball: '+(m?m.score:0);
+  if(s.status==='lobby'){S.phase=key;renderLobby(s);screen('khLobby')}
+  else if(s.status==='question'&&s.question){
+    if(S.phase!==key){S.phase=key;renderQuestion(s)}
+    else if(s.answered&&!S.answered){S.answered=true}
+    screen('khPlay');tick();
   }
-  try{
-    const url = RESULT_API_URL + "?payload=" + encodeURIComponent(JSON.stringify(data));
-    console.log("Telegram backendga GET natija yuborilmoqda:", data);
-    fetch(url, { method: "GET", mode: "no-cors", keepalive: true })
-      .then(() => console.log("So'rov yuborildi"))
-      .catch(err => console.error("So'rov xatosi:", err));
-    return true;
-  }catch(e){
-    console.error("Telegramga natija yuborishda xato:", e);
-    return false;
+  else if(s.status==='reveal'&&s.reveal){
+    var sig=JSON.stringify([key,s.players.map(function(p){return p.score}),s.reveal.dist||null,s.mine||null]);
+    if(S.phase!==key||S.sig!==sig){S.phase=key;S.sig=sig;renderReveal(s)}
+    screen('khReveal');tick();
   }
+  else if(s.status==='finished'){S.phase=key;renderEnd(s);screen('khEnd');stopLoops();save(null)}
 }
 
-let reviewCurrent=0;
-function renderAnswerReview(selectedIndex){
-  const section=document.getElementById("answerReview");
-  const list=document.getElementById("answerReviewList");
-  const grid=document.getElementById("answerReviewGrid");
-  const summary=document.getElementById("reviewSummary");
-  if(!section||!list||!grid||!summary)return;
-  if(Number.isInteger(selectedIndex))reviewCurrent=Math.max(0,Math.min(selectedIndex,examQuestions.length-1));
-  let rightCount=0,wrongCount=0,emptyCount=0;
-  examQuestions.forEach((q,i)=>{const chosen=answers[i];if(chosen===null||chosen===undefined||chosen==="")emptyCount++;else if(chosen===q.correct)rightCount++;else wrongCount++});
-  summary.innerHTML=`<span class="review-pill correct">✓ To‘g‘ri: ${rightCount}</span><span class="review-pill incorrect">✕ Noto‘g‘ri: ${wrongCount}</span><span class="review-pill unanswered">! Javobsiz: ${emptyCount}</span>`;
-  grid.innerHTML="";
-  examQuestions.forEach((q,i)=>{
-    const chosen=answers[i];const empty=chosen===null||chosen===undefined||chosen==="";
-    const state=empty?"unanswered":(chosen===q.correct?"correct":"incorrect");
-    const b=document.createElement("button");b.type="button";b.className="review-qbtn "+state+(i===reviewCurrent?" active":"");b.textContent=i+1;b.title=(i+1)+"-savol: "+(state==="correct"?"to‘g‘ri":state==="incorrect"?"noto‘g‘ri":"javobsiz");b.setAttribute("aria-label",b.title);b.setAttribute("aria-pressed",String(i===reviewCurrent));
-    b.onclick=()=>renderAnswerReview(i);grid.appendChild(b);
-  });
-  list.innerHTML="";
-  const q=examQuestions[reviewCurrent];if(!q)return;
-  const chosen=answers[reviewCurrent];const empty=chosen===null||chosen===undefined||chosen==="";const correct=chosen===q.correct;const state=empty?"unanswered":(correct?"correct":"incorrect");
-  const card=document.createElement("article");card.className="review-item "+state;
-  const top=document.createElement("div");top.className="review-top";
-  const number=document.createElement("strong");number.textContent=(reviewCurrent+1)+"-savol / "+examQuestions.length;
-  const badge=document.createElement("span");badge.className="review-status "+state;badge.textContent=correct?"✓ To‘g‘ri":(empty?"! Javob belgilanmagan":"✗ Noto‘g‘ri");top.append(number,badge);card.appendChild(top);
-  const questionText=document.createElement("div");questionText.className="review-question";questionText.textContent=q.text||"Savol matni mavjud emas";card.appendChild(questionText);
-  if(q.img){const img=document.createElement("img");img.className="review-image";img.alt="Savol rasmi";img.referrerPolicy="no-referrer";img.src=q.img;img.onerror=()=>img.remove();card.appendChild(img)}
-  const your=document.createElement("div");your.className="review-answer "+(empty?"":(correct?"correct-answer":"chosen-wrong"));your.textContent="Siz belgilagan javob: "+(empty?"javob belgilanmagan":chosen);card.appendChild(your);
-  const right=document.createElement("div");right.className="review-answer correct-answer";right.textContent="To‘g‘ri javob: "+q.correct;card.appendChild(right);
-  const nav=document.createElement("div");nav.className="review-nav-arrow";
-  const prev=document.createElement("button");prev.type="button";prev.className="btn";prev.textContent="← Oldingi savol";prev.disabled=reviewCurrent===0;prev.onclick=()=>renderAnswerReview(reviewCurrent-1);
-  const next=document.createElement("button");next.type="button";next.className="btn primary";next.textContent="Keyingi savol →";next.disabled=reviewCurrent>=examQuestions.length-1;next.onclick=()=>renderAnswerReview(reviewCurrent+1);
-  nav.append(prev,next);card.appendChild(nav);list.appendChild(card);section.classList.remove("hidden");
+/* ---------- Kutish zali ---------- */
+function renderLobby(s){
+  $('khLobCode').textContent=S.code;$('khLobName').textContent=S.name;
+  $('khLobCount').textContent=s.players.length+' ta ishtirokchi';
+  var box=$('khChips');empty(box);
+  s.players.forEach(function(p){box.appendChild(el('span','kh-chip'+(p.id===S.pid?' me':''),p.name))});
 }
-function finish(){
-  if(!started)return;
-  started=false;
-  hideGuardWarning();
-  clearInterval(timerId);
-  try{if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{})}catch(_){}
-  let score=0;examQuestions.forEach((q,i)=>{if(answers[i]===q.correct)score++});
-  const grade=getGrade(score,examQuestions.length,currentTest&&currentTest.grading);
-  const data={subject:subjectEl.value,group:groupEl.value,student:studentEl.value.trim(),assessment:currentTest.nazorat,correct:score,total:examQuestions.length,percent:Math.round(score/examQuestions.length*100),grade,region:regionEl.value,district:pick(districtEl,districtOtherEl),school:pick(schoolEl,schoolOtherEl),finishedAt:new Date().toISOString(),startedAt:window.testStartedAt||new Date().toISOString(),testId:currentTest.id,attemptLimit:currentTest.attempts||1,focusLossCount,fullscreenExitCount,integrityWarnings:focusLossCount+fullscreenExitCount};
-  const attemptKey="t_"+(currentTest?currentTest.id:"")+"_"+groupEl.value+"_"+studentEl.value.trim().toLowerCase();
-  let previousAttempts=0;
-  try{const old=JSON.parse(localStorage.getItem(attemptKey)||"null");previousAttempts=Math.max(0,Number(old&&old.attempts)||0)}catch(_){previousAttempts=0}
-  localStorage.setItem(attemptKey,JSON.stringify({score,grade,attempts:previousAttempts+1,startedAt:data.startedAt,finishedAt:data.finishedAt}));
-  const sent = sendResultToTelegram(data);
-  console.log("Telegram natijasi yuborish holati:", sent);
-  exam.classList.add("hidden");document.getElementById("result").classList.remove("hidden");
-  document.getElementById("resultText").innerHTML = `
-  <div style="text-align:center; padding:20px;">
-    <h2>🎉 Test yakunlandi!</h2>
-    <p><b>O‘quvchi:</b> ${studentEl.value.trim()}</p>
-    <p><b>Sinf/guruh:</b> ${groupEl.value}</p>
-    <h2 style="color:#16a34a;">
-      ${score} / ${examQuestions.length}
-    </h2>
-    <p>To‘g‘ri javoblar soni: <b>${score} ta</b></p>
-    <p>Foiz natijasi: 
-      <b>${Math.round(score / examQuestions.length * 100)}%</b>
-    </p>
-    <p>Baho: <b>${grade}</b></p>
-    <p>Natijangiz o‘qituvchiga ham yuborildi.</p>
-  </div>
-`;
-  renderAnswerReview();
-  window.scrollTo({top:document.getElementById("result").offsetTop-10,behavior:"smooth"});
-}
-prevBtn.onclick=()=>{if(current>0){current--;renderQuestion()}};
-nextBtn.onclick=()=>{
-  if(current<examQuestions.length-1){
-    current++;
-    renderQuestion();
-  }
-};
-finishBtn.onclick=()=>{if(confirm("Nazoratni yakunlashni xohlaysizmi?"))finish()};
-markBtn.onclick=()=>{marked[current]=!marked[current];renderQuestion()};
-groupEl.onchange=()=>{msg.textContent="";refreshTests()};
-studentEl.oninput=()=>{msg.textContent=""};
-subjectEl.onchange=()=>{msg.textContent="";refreshTests()};
 
-/* ================= O‘quvchi: jonli bellashuv ================= */
-let lbStudentRoom=null,lbStudentPoll=null,lbStudentBusy=false,lbStudentLastQuestion='';
-const lbCodeEl=document.getElementById('lbRoomCode'),lbJoinBtn=document.getElementById('lbJoinBtn'),lbMessage=document.getElementById('lbMessage'),lbPlayArea=document.getElementById('lbPlayArea');
-function lbSVal(o,keys,fallback){for(const k of keys){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return fallback}
-function lbSesc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function lbStudentRender(response){
- const d=lbSVal(response,['room','state','data'],response)||{};const status=String(lbSVal(d,['status','state','phase'],'waiting')).toLowerCase();
- const q=lbSVal(d,['currentQuestion','question','current_question'],null);const qid=String(lbSVal(d,['questionId','currentQuestionId','questionIndex','currentIndex'],q&&lbSVal(q,['id','index','number'],'')||''));
- const qtext=typeof q==='string'?q:lbSVal(q,['q','text','question','title'],'');const opts=lbSVal(q,['options','answers','choices'],lbSVal(d,['options','answers','choices'],[]));
- const players=lbSVal(d,['players','leaderboard','ranking'],[]);const me=String(lbSVal(d,['playerId','participantId','myId'],lbStudentRoom&&lbStudentRoom.playerId||''));
- let html='';
- if(status==='waiting'||status==='created'||status==='lobby')html='<div class="lb-play"><b>Ustoz bellashuvni boshlashini kuting.</b><p class="lb-msg">Xonaga muvaffaqiyatli qo‘shildingiz. Sahifa avtomatik yangilanadi.</p></div>';
- else if(status==='finished'||status==='ended'||status==='complete'||status==='completed')html='<div class="lb-play"><h3>Bellashuv yakunlandi</h3><p>Yakuniy reyting quyida ko‘rsatilgan.</p></div>';
- else if(status==='reveal'){const rev=lbSVal(d,['reveal'],{});const ci=Number(lbSVal(rev,['correctIndex'],'-1'));const cq=lbSVal(d,['question'],{});const oa=lbSVal(cq,['options'],[]);const ct=lbSVal(rev,['correctText'],Array.isArray(oa)&&ci>=0?oa[ci]:'');html='<div class="lb-play"><div style="color:#15803d;font-weight:800">TO‘G‘RI JAVOB</div><h3>'+lbSesc(ct||'Javob ko‘rsatilmadi')+'</h3><p class="lb-msg">Ustoz keyingi savolni ochishini kuting.</p></div>';}
- else if(qtext){const arr=Array.isArray(opts)?opts:[];html='<div class="lb-play"><div style="color:#0758c9;font-weight:800;margin-bottom:10px">JONLI SAVOL</div><h3 style="line-height:1.5">'+lbSesc(qtext)+'</h3>'+(q&&lbSVal(q,['image','imageUrl','image_url'],'')?'<img src="'+lbSesc(lbSVal(q,['image','imageUrl','image_url'],''))+'" alt="Savol rasmi" style="max-width:100%;max-height:260px;object-fit:contain">':'')+'<div>'+arr.map((o,i)=>{const label=typeof o==='string'?o:lbSVal(o,['text','label','answer','title'],String(o));const value=typeof o==='string'?o:lbSVal(o,['id','value','text','label'],label);return '<button class="lb-option" type="button" data-lb-answer="'+lbSesc(value)+'" data-lb-choice-index="'+i+'" data-lb-qid="'+lbSesc(qid)+'">'+String.fromCharCode(65+i)+'. '+lbSesc(label)+'</button>'}).join('')+'</div><div class="lb-msg" id="lbAnswerMsg"></div></div>'}
- else html='<div class="lb-play">Ustoz savolni ochishini kuting…</div>';
- const arrp=Array.isArray(players)?players:[];html+='<div class="lb-play"><b>Jonli reyting</b><table class="lb-ranking"><thead><tr><th>№</th><th>Ishtirokchi</th><th>Ball</th></tr></thead><tbody>'+(arrp.length?arrp.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+lbSesc(lbSVal(p,['name','student','studentName'],'Ishtirokchi'))+'</td><td>'+lbSesc(lbSVal(p,['score','points','total'],0))+'</td></tr>').join(''):'<tr><td colspan="3">Reyting hozircha bo‘sh.</td></tr>')+'</tbody></table></div>';
- lbPlayArea.innerHTML=html;lbStudentRoom.playerId=me||lbStudentRoom.playerId||'';
- if(qid&&qid!==lbStudentLastQuestion){lbStudentLastQuestion=qid;}
-}
-async function lbStudentRefresh(){if(!lbStudentRoom||lbStudentBusy||lbAnswerInFlight)return;try{const r=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuv holatini olib bo‘lmadi.');lbStudentRender(r)}catch(e){lbMessage.textContent=e.message||'Aloqada xatolik.'}}
-lbJoinBtn.addEventListener('click',async()=>{
- if(lbStudentBusy)return;const code=(lbCodeEl.value||'').trim().toUpperCase();const name=(studentEl.value||'').trim();const group=groupEl.value;const subject=subjectEl.value;
- if(!code){lbMessage.textContent='Xona kodini kiriting.';lbCodeEl.focus();return}
- lbStudentBusy=true;lbJoinBtn.disabled=true;lbMessage.textContent='Bellashuvga ulanmoqda…';
- try{const liveName=name||('Ishtirokchi-'+Math.random().toString(36).slice(2,6).toUpperCase());const r=await api('lbJoin',{code,name:liveName,group:group||'',subject,school:schoolEl.value,region:regionEl.value,district:districtEl.value});if(!r||r.ok===false)throw new Error(r&&r.error||'Bellashuvga qo‘shilib bo‘lmadi.');const d=lbSVal(r,['room','state','data'],r)||{};lbStudentRoom={code:lbSVal(d,['code','roomCode','room_code'],code),roomId:lbSVal(d,['roomId','id'],''),playerId:lbSVal(d,['playerId','participantId','player_id'],'')};lbMessage.textContent='Bellashuvga qo‘shildingiz: '+lbStudentRoom.code;lbCodeEl.disabled=true;lbJoinBtn.textContent='Ulangan';await lbStudentRefresh();if(lbStudentPoll)clearInterval(lbStudentPoll);lbStudentPoll=setInterval(lbStudentRefresh,3000)}catch(e){lbMessage.textContent=e.message||'Xatolik yuz berdi.'}finally{lbStudentBusy=false;lbJoinBtn.disabled=!!lbStudentRoom}
-});
-let lbAnswerInFlight=false;
-lbPlayArea.addEventListener('click',async e=>{
- const b=e.target.closest('[data-lb-answer]');
- if(!b||!lbStudentRoom||b.disabled||lbAnswerInFlight)return;
- const questionId=b.dataset.lbQid||'';
- const buttons=[...lbPlayArea.querySelectorAll('[data-lb-answer]')];
- buttons.forEach(x=>{x.disabled=true;if(x===b)x.classList.add('chosen')});
- const box=document.getElementById('lbAnswerMsg');
- lbAnswerInFlight=true;
- if(box)box.textContent='Javob yuborilmoqda…';
- try{
-  const r=await api('lbAnswer',{
-   code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',
-   playerId:lbStudentRoom.playerId||'',questionId,
-   answer:b.dataset.lbAnswer,
-   choiceIndex:Number(b.dataset.lbChoiceIndex)
-  });
-  if(!r||r.ok===false)throw new Error(r&&r.error||'Javob saqlanmadi.');
-  if(box)box.textContent='Javob qabul qilindi. +' + (Number(r.points)||0) + ' ball. Keyingi savol avtomatik ochiladi.';
-  // Ball va keyingi savol holatini serverdan qayta olamiz.
-  if(lbStudentPoll){clearInterval(lbStudentPoll);lbStudentPoll=null}
-  const state=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});
-  if(state&&state.ok!==false)lbStudentRender(state);
- }catch(err){
-  const message=String(err&&err.message||'Javob yuborilmadi.');
-  if(/avval qabul qilingan|already accepted/i.test(message)){
-   if(box)box.textContent='Javob oldin qabul qilingan. Ball holati yangilanmoqda…';
-   try{const state=await api('lbState',{code:lbStudentRoom.code,roomId:lbStudentRoom.roomId||'',playerId:lbStudentRoom.playerId||''});if(state&&state.ok!==false)lbStudentRender(state)}catch(_){}
+/* ---------- Savol ---------- */
+function renderQuestion(s){
+  var q=s.question;
+  S.answered=!!s.answered;S.busy=false;S.timeup=false;S.myAns=null;
+  $('khQn').textContent='Savol '+q.number+' / '+s.questionCount;
+  $('khQtext').textContent=q.q;
+  var im=$('khQimg');
+  if(q.img){im.src=q.img;im.hidden=false}else{im.removeAttribute('src');im.hidden=true}
+  var box=$('khOpts');empty(box);
+  if(q.type==='type'){
+    var w=el('div','kh-typebox'),inp=el('input','kh-input'),b=el('button','kh-btn','Yuborish');
+    inp.type='text';inp.id='khType';inp.maxLength=100;inp.placeholder='Javobingizni yozing';inp.autocomplete='off';
+    b.type='button';
+    var go=function(){var v=inp.value.trim();if(!v){note('Javobni yozing.');return}submit({text:v})};
+    b.onclick=go;inp.onkeydown=function(e){if(e.key==='Enter')go()};
+    w.appendChild(inp);w.appendChild(b);box.appendChild(w);
   }else{
-   buttons.forEach(x=>x.disabled=false);
-   if(box)box.textContent=message;
+    q.options.forEach(function(t,i){
+      var tf=q.type==='tf',cls=tf?(i===0?'kh-o1':'kh-o0'):('kh-o'+i),shape=tf?(i===0?'✔':'✖'):SHAPES[i];
+      var b=el('button','kh-opt '+cls);b.type='button';
+      b.appendChild(el('span','kh-shape',shape));b.appendChild(el('span','',t));
+      b.onclick=function(){submit({choice:i})};box.appendChild(b);
+    });
   }
- }finally{
-  lbAnswerInFlight=false;
-  if(lbStudentRoom&&!lbStudentPoll)lbStudentPoll=setInterval(lbStudentRefresh,3000);
- }
-});
-lbCodeEl.addEventListener('input',()=>{lbCodeEl.value=lbCodeEl.value.toUpperCase().replace(/[^A-Z0-9-]/g,'')});
+}
+function setDisabled(v){[].forEach.call($('khOpts').querySelectorAll('button,input'),function(n){if(v)n.setAttribute('disabled','');else n.removeAttribute('disabled')})}
+function submit(payload){
+  if(S.answered||S.busy)return;
+  S.busy=true;note('');setDisabled(true);
+  api('lbAnswer',Object.assign({code:S.code,playerId:S.pid},payload)).then(function(r){
+    S.answered=true;S.myAns={correct:r.correct,points:r.points};tick();
+  }).catch(function(e){
+    var m=e.message||'Xatolik';
+    if(/Vaqt tugadi|qabul qilinmayapti/.test(m)){S.answered=true;S.timeup=true;tick()}
+    else{setDisabled(false);note(m)}
+  }).then(function(){S.busy=false});
+}
+
+/* ---------- Taymer va holat (har 150 ms, serverga so‘rov yubormaydi) ---------- */
+function tick(){
+  var s=S.last;if(!s)return;
+  var now=nowS();
+  if(s.status==='question'&&s.question){
+    var q=s.question,cnt=$('khCount'),opts=$('khOpts'),ans=$('khAnswered');
+    if(now<q.startedAt){
+      cnt.hidden=false;cnt.textContent=Math.max(1,Math.ceil((q.startedAt-now)/1000));
+      opts.hidden=true;ans.hidden=true;$('khBar').style.width='100%';$('khTime').textContent=q.time;
+    }else{
+      cnt.hidden=true;
+      var left=Math.max(0,q.endsAt-now);
+      $('khBar').style.width=(left/(q.time*1000)*100)+'%';$('khTime').textContent=Math.ceil(left/1000);
+      if(S.answered){
+        opts.hidden=true;ans.hidden=false;
+        $('khWaitT').textContent=S.timeup?'⏱ Vaqt tugadi':'✓ Javob yuborildi';
+        $('khWaitS').textContent=(s.answerCount||0)+' / '+s.players.length+' ishtirokchi javob berdi';
+      }else if(left<=0){
+        opts.hidden=true;ans.hidden=false;
+        $('khWaitT').textContent='⏱ Vaqt tugadi';$('khWaitS').textContent='Natijalar hisoblanmoqda…';
+      }else{opts.hidden=false;ans.hidden=true}
+    }
+  }else if(s.status==='reveal'&&s.reveal){
+    var r=Math.max(0,Math.ceil((s.revealEndsAt-now)/1000));
+    $('khNext').textContent=(s.questionIndex+1>=s.questionCount?'Yakuniy natijalar ':'Keyingi savol ')+r+' soniyadan keyin';
+  }
+}
+
+/* ---------- Natija ---------- */
+function rowEl(i,p,isMe){
+  var r=el('div','kh-row'+(isMe?' me':''));
+  r.appendChild(el('span','n',String(i)));r.appendChild(el('span','nm',p.name));r.appendChild(el('span','sc',p.score+' ball'));
+  return r;
+}
+function renderReveal(s){
+  var r=s.reveal,mine=s.mine,res=null;
+  if(mine)res={c:!!mine[1],p:Number(mine[2])||0};
+  else if(S.myAns)res={c:!!S.myAns.correct,p:Number(S.myAns.points)||0};
+  $('khRes').className='kh-res '+(res?(res.c?'ok':'bad'):'none');
+  $('khResT').textContent=res?(res.c?'✓ To‘g‘ri!':'✗ Noto‘g‘ri'):'⏱ Javob berilmadi';
+  $('khResS').textContent=res&&res.c?('+'+res.p+' ball'):'0 ball';
+  var corr=$('khCorrect');
+  if(r.type==='type'){
+    corr.textContent=r.correctText+((r.accepted&&r.accepted.length>1)?'  (yoki: '+r.accepted.slice(1).join(', ')+')':'');corr.style.color='';
+  }else{
+    var ci=r.correctIndex,tf=r.type==='tf';
+    corr.textContent=(tf?(ci===0?'✔ ':'✖ '):SHAPES[ci]+' ')+r.correctText;
+    corr.style.color=tf?(ci===0?COLORS[1]:COLORS[0]):COLORS[ci];
+  }
+  var dist=$('khDist');empty(dist);
+  if(r.dist){
+    var mx=Math.max.apply(null,r.dist.concat([1]));
+    r.options.forEach(function(t,i){
+      var tf=r.type==='tf',col=tf?(i===0?COLORS[1]:COLORS[0]):COLORS[i];
+      var row=el('div','kh-dr'),bar=el('span','t'),fill=el('i');
+      fill.style.width=(r.dist[i]/mx*100)+'%';fill.style.background=col;bar.appendChild(fill);
+      row.appendChild(el('span','l',tf?(i===0?'✔':'✖'):SHAPES[i]));row.appendChild(bar);
+      row.appendChild(el('span','c',(i===r.correctIndex?'✓ ':'')+r.dist[i]));dist.appendChild(row);
+    });
+  }
+  var rk=rankOf(s),m=me(s);
+  $('khMyRank').textContent=rk?('Sizning o‘rningiz: '+rk+' · '+(m?m.score:0)+' ball'):'';
+  var top=$('khTop');empty(top);
+  s.players.slice(0,5).forEach(function(p,i){top.appendChild(rowEl(i+1,p,p.id===S.pid))});
+  if(rk>5&&m)top.appendChild(rowEl(rk,m,true));
+}
+
+/* ---------- Yakun ---------- */
+function renderEnd(s){
+  var pod=$('khPodium');empty(pod);
+  var order=[1,0,2];
+  order.forEach(function(idx){
+    var p=s.players[idx];if(!p)return;
+    var d=el('div','kh-pod p'+(idx+1));
+    d.appendChild(el('div','nm',p.name));d.appendChild(el('div','blk',['🥇','🥈','🥉'][idx]));d.appendChild(el('div','sc',p.score+' ball'));
+    pod.appendChild(d);
+  });
+  var rk=rankOf(s),m=me(s);
+  $('khEndMe').textContent=rk?('Sizning o‘rningiz: '+rk+' · '+(m?m.score:0)+' ball'):'';
+  var f=$('khFinal');empty(f);
+  s.players.slice(0,10).forEach(function(p,i){f.appendChild(rowEl(i+1,p,p.id===S.pid))});
+  if(rk>10&&m)f.appendChild(rowEl(rk,m,true));
+}
+
+/* ---------- Hodisalar ---------- */
+$('khCode').addEventListener('input',function(){this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')});
+$('khCode').addEventListener('keydown',function(e){if(e.key==='Enter')step1()});
+$('khName').addEventListener('keydown',function(e){if(e.key==='Enter')step2()});
+$('khGo1').addEventListener('click',step1);
+$('khGo2').addEventListener('click',step2);
+$('khBack').addEventListener('click',function(){note('');screen('khJ1')});
+$('khLeave').addEventListener('click',function(){leave('')});
+$('khAgain').addEventListener('click',function(){leave('')});
+
+/* ---------- Nazorat (imtihon) boshlanganda bu bo‘lim yashiriladi; index.html kodiga tegilmaydi ---------- */
+function watchExam(){
+  var ex=document.getElementById('exam');
+  if(!ex||!window.MutationObserver)return;
+  var sync=function(){root.style.display=ex.classList.contains('hidden')?'':'none'};
+  new MutationObserver(sync).observe(ex,{attributes:true,attributeFilter:['class']});
+  sync();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watchExam);else watchExam();
+
+/* ---------- Sahifa yangilansa o‘yinni davom ettirish ---------- */
+var sv=loadSaved();
+if(sv&&sv.code&&sv.pid){
+  api('lbState',{code:sv.code,playerId:sv.pid}).then(function(s){
+    var inRoom=(s.players||[]).some(function(p){return p.id===sv.pid});
+    if(!inRoom||s.status==='finished'){save(null);return}
+    S.code=sv.code;S.pid=sv.pid;S.name=sv.name||'';begin();
+  }).catch(function(e){if(/Xona topilmadi/.test(e.message))save(null)});
+}
+})();
 </script>
-</body>
-</html>
+<!-- ===== TUGASH ===== -->
+</body></html>
