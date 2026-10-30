@@ -380,6 +380,16 @@ $('khBack').addEventListener('click',function(){note('');screen('khJ1')});
 $('khLeave').addEventListener('click',function(){leave('')});
 $('khAgain').addEventListener('click',function(){leave('')});
 
+/* ---------- Nazorat (imtihon) boshlanganda bu bo‘lim yashiriladi; index.html kodiga tegilmaydi ---------- */
+function watchExam(){
+  var ex=document.getElementById('exam');
+  if(!ex||!window.MutationObserver)return;
+  var sync=function(){root.style.display=ex.classList.contains('hidden')?'':'none'};
+  new MutationObserver(sync).observe(ex,{attributes:true,attributeFilter:['class']});
+  sync();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watchExam);else watchExam();
+
 /* ---------- Sahifa yangilansa o‘yinni davom ettirish ---------- */
 var sv=loadSaved();
 if(sv&&sv.code&&sv.pid){
