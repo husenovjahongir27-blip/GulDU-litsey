@@ -1242,52 +1242,211 @@ $("testsList").addEventListener("click",e=>{
   else if(a==="del") deleteTest(id);
 });
 /* ================= Alohida Kahoot uslubidagi jonli bellashuv ================= */
-let lbTeacherRoom=null, lbTeacherPoll=null, lbTeacherBusy=false, lbQuestionCount=0;
+/* teacher.html ichida shu blokni almashtiring: izoh qatoridan boshlab, "async function deleteTest(id){" dan OLDINGI qatorgacha */
+let lbTeacherRoom=null, lbTeacherPoll=null, lbTeacherBusy=false, lbQuestionCount=0, lbTick=null, lbOffset=0, lbLastState=null;
+const LB_COLORS=['#e21b3c','#1368ce','#d89e00','#26890c'];
+const LB_SHAPES=['▲','◆','●','■'];
+const LB_TIMES=[5,10,15,20,30,45,60,90,120];
+const LB_MAX_Q=40;
+const LB_STATUS={lobby:'Kutish zali',question:'Savol davom etmoqda',reveal:'Natija ko‘rsatilmoqda',finished:'Yakunlangan'};
+
 function lbPick(obj,keys,fallback){for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k]}return fallback}
-function lbOpenGameEditor(){
-  lbQuestionCount=0;
-  openModal('<h3>⚡ Yangi jonli o‘yin</h3><p class="muted">Bu o‘yin mavjud JN/ON testlariga ulanmaydi va ulardan mustaqil saqlanadi.</p><div class="field"><label for="lbGameTitle">O‘yin nomi</label><input id="lbGameTitle" type="text" maxlength="120" placeholder="Masalan: Geografiya bilimdonlari"></div><div class="field"><label for="lbQuestionSeconds">Har bir savol uchun vaqt (soniya)</label><select id="lbQuestionSeconds"><option value="10">10 soniya</option><option value="15" selected>15 soniya</option><option value="20">20 soniya</option><option value="30">30 soniya</option><option value="45">45 soniya</option><option value="60">60 soniya</option></select></div><div id="lbQuestionEditor"></div><div class="modal-actions"><button class="btn" type="button" data-m="lb-add-question">＋ Savol qo‘shish</button><button class="btn primary" type="button" data-m="lb-create-game">Xona yaratish</button><button class="btn" type="button" data-m="close">Bekor qilish</button></div><div class="muted" style="font-size:12px;margin-top:10px">Har bir savolga 4 ta variant kiriting va to‘g‘ri javobni belgilang. Kamida 1 ta savol kerak.</div>');
-  lbAddQuestion();
+
+function lbInjectCss(){
+  if(document.getElementById('lbCss'))return;
+  const s=document.createElement('style'); s.id='lbCss';
+  s.textContent=
+  '.lbq{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fbfcfe}'+
+  '.lbq-top{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}'+
+  '.lbq-top select{width:auto;height:38px;font-size:14px}'+
+  '.lbq-top .grow{flex:1;font-weight:800;color:var(--dark)}'+
+  '.lbopt{display:flex;align-items:center;gap:8px;margin-top:8px}'+
+  '.lbopt .shape{flex:none;width:38px;height:42px;border-radius:8px;color:#fff;display:grid;place-items:center;font-size:16px}'+
+  '.lbopt input[type=text]{flex:1;height:42px}'+
+  '.lbopt input[type=radio]{width:20px;height:20px;flex:none;cursor:pointer}'+
+  '.lbtf{display:grid;grid-template-columns:1fr 1fr;gap:10px}'+
+  '.lbtf label{margin:0;display:flex;align-items:center;justify-content:center;gap:8px;height:64px;border-radius:10px;color:#fff;font-weight:800;cursor:pointer}'+
+  '.lbtf input{width:20px;height:20px}'+
+  '.lbimg{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0}'+
+  '.lbhint{font-size:12px;color:#6b7484;margin-top:6px}'+
+  '.lbhost{padding:18px;margin-top:12px}'+
+  '.lbcode{font-size:30px;font-weight:900;letter-spacing:4px;color:#0758c9}'+
+  '.lbtimer{display:inline-grid;place-items:center;min-width:64px;height:64px;border-radius:50%;background:#46178f;color:#fff;font-size:28px;font-weight:900}'+
+  '.lbqbox{margin-top:14px;padding:16px;background:#f7f9fc;border-radius:10px}'+
+  '.lbans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}'+
+  '.lbans div{display:flex;align-items:center;gap:8px;padding:12px;border-radius:10px;color:#fff;font-weight:700;min-height:52px}'+
+  '.lbans div.wrong{opacity:.35}'+
+  '.lbans div b{margin-left:auto;font-size:18px}'+
+  '.lbpod{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:18px 0}'+
+  '.lbpod div{flex:1;max-width:170px;text-align:center;color:#fff;border-radius:10px 10px 0 0;padding:10px 6px;font-weight:800}'+
+  '@media(max-width:700px){.lbans,.lbtf{grid-template-columns:1fr}}';
+  document.head.appendChild(s);
 }
-function lbAddQuestion(){
+
+/* ---------- Savol muharriri ---------- */
+function lbBodyHtml(n,type){
+  if(type==='tf'){
+    return '<div class="lbtf"><label style="background:#26890c"><input type="radio" name="lbc'+n+'" value="0" checked> ✔ To‘g‘ri</label>'+
+           '<label style="background:#e21b3c"><input type="radio" name="lbc'+n+'" value="1"> ✖ Noto‘g‘ri</label></div>'+
+           '<div class="lbhint">To‘g‘ri javob bo‘lgan tomonni belgilang.</div>';
+  }
+  if(type==='type'){
+    return '<label>To‘g‘ri javob(lar)</label><textarea data-lb-ans rows="2" placeholder="Masalan: Toshkent"></textarea>'+
+           '<div class="lbhint">Bir nechta to‘g‘ri variant bo‘lsa, har birini yangi qatorga yozing (katta-kichik harf va ortiqcha bo‘shliq hisobga olinmaydi).</div>';
+  }
+  return [0,1,2,3].map(i=>
+    '<div class="lbopt"><span class="shape" style="background:'+LB_COLORS[i]+'">'+LB_SHAPES[i]+'</span>'+
+    '<input type="text" data-lb-opt="'+i+'" maxlength="100" placeholder="'+String.fromCharCode(65+i)+' javob varianti" autocomplete="off">'+
+    '<input type="radio" name="lbc'+n+'" value="'+i+'" title="To‘g‘ri javob"'+(i===0?' checked':'')+'></div>'
+  ).join('')+'<div class="lbhint">To‘g‘ri javob yonidagi doirani belgilang.</div>';
+}
+function lbRenumber(){
+  document.querySelectorAll('#lbQuestionEditor [data-lb-q]').forEach((el,i)=>{const h=el.querySelector('[data-lb-title]');if(h)h.textContent='Savol '+(i+1);});
+}
+function lbOpenGameEditor(){
+  lbInjectCss();
+  lbQuestionCount=0;
+  openModal('<h3>⚡ Yangi jonli o‘yin</h3>'+
+    '<p class="muted" style="margin-top:-6px">Bu o‘yin JN/ON testlaridan mustaqil. Har bir savolga alohida tur va vaqt belgilanadi.</p>'+
+    '<div class="field"><label for="lbGameTitle">O‘yin nomi</label><input id="lbGameTitle" type="text" maxlength="120" placeholder="Masalan: Geografiya bilimdonlari"></div>'+
+    '<div id="lbQuestionEditor"></div>'+
+    '<div class="modal-actions" style="margin-top:6px">'+
+      '<button class="btn small" type="button" data-lb-add="quiz">＋ Test (4 variant)</button>'+
+      '<button class="btn small" type="button" data-lb-add="tf">＋ To‘g‘ri / Noto‘g‘ri</button>'+
+      '<button class="btn small" type="button" data-lb-add="type">＋ Yozma javob</button>'+
+    '</div>'+
+    '<div class="modal-actions"><button class="btn primary" type="button" data-m="lb-create-game">Xona yaratish</button><button class="btn" type="button" data-m="close">Bekor qilish</button></div>'+
+    '<div class="lbhint">Kamida 1 ta, ko‘pi bilan '+LB_MAX_Q+' ta savol. Rasm ixtiyoriy.</div>');
+  lbAddQuestion('quiz');
+}
+function lbAddQuestion(type){
+  type=(typeof type==='string')?type:'quiz';
   const box=$('lbQuestionEditor'); if(!box)return;
+  if(box.querySelectorAll('[data-lb-q]').length>=LB_MAX_Q){alert('Bir o‘yinda ko‘pi bilan '+LB_MAX_Q+' ta savol bo‘lishi mumkin.');return;}
   const n=++lbQuestionCount;
-  box.insertAdjacentHTML('beforeend','<div class="qcard" data-lb-q="'+n+'"><div class="qhead"><b>Savol '+n+'</b><button class="btn small danger" type="button" data-lb-remove="'+n+'">O‘chirish</button></div><div class="field"><label>Savol matni</label><textarea data-lb-text rows="2" placeholder="Savolni yozing..."></textarea></div>'+[0,1,2,3].map(i=>'<div class="orow '+(i===0?'ok':'')+'"><span class="olab">'+String.fromCharCode(65+i)+'</span><input type="text" data-lb-opt="'+i+'" placeholder="'+(String.fromCharCode(65+i))+' javob varianti" '+(i===0?'':'')+'></div>').join('')+'<div class="field" style="margin-top:10px"><label>To‘g‘ri javob</label><select data-lb-correct><option value="0">A varianti</option><option value="1">B varianti</option><option value="2">C varianti</option><option value="3">D varianti</option></select></div></div>');
+  box.insertAdjacentHTML('beforeend',
+    '<div class="lbq" data-lb-q="'+n+'" data-img="">'+
+      '<div class="lbq-top"><span class="grow" data-lb-title>Savol</span>'+
+        '<select data-lb-type aria-label="Savol turi"><option value="quiz"'+(type==='quiz'?' selected':'')+'>Test (4 variant)</option><option value="tf"'+(type==='tf'?' selected':'')+'>To‘g‘ri / Noto‘g‘ri</option><option value="type"'+(type==='type'?' selected':'')+'>Yozma javob</option></select>'+
+        '<select data-lb-time aria-label="Vaqt">'+LB_TIMES.map(t=>'<option value="'+t+'"'+(t===20?' selected':'')+'>'+t+' soniya</option>').join('')+'</select>'+
+        '<button class="btn small danger" type="button" data-lb-remove="'+n+'">O‘chirish</button></div>'+
+      '<textarea data-lb-text rows="2" maxlength="300" placeholder="Savolni yozing..."></textarea>'+
+      '<div class="lbimg" data-lb-imgbox></div>'+
+      '<div data-lb-body>'+lbBodyHtml(n,type)+'</div>'+
+    '</div>');
+  const card=box.querySelector('[data-lb-q="'+n+'"]');
+  lbRenderImg(card);
+  lbRenumber();
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function lbRenderImg(card){
+  const box=card.querySelector('[data-lb-imgbox]'); if(!box)return;
+  if(card.dataset.uploading==='1'){box.innerHTML='<span class="muted">Rasm yuklanmoqda...</span>';return;}
+  if(card.dataset.img){
+    box.innerHTML='<img class="qthumb" src="'+esc(card._thumb||'')+'" alt="Savol rasmi"><button class="btn small danger" type="button" data-lb-imgdel="1">Rasmni olib tashlash</button>';
+  }else{
+    box.innerHTML='<label class="btn small file-btn">🖼 Rasm qo‘shish<input type="file" accept="image/*" data-lb-img hidden></label><span class="muted">ixtiyoriy</span>';
+  }
 }
 document.addEventListener('click',function(e){
-  const b=e.target.closest('[data-lb-remove]'); if(!b)return;
-  const card=document.querySelector('[data-lb-q="'+b.dataset.lbRemove+'"]'); if(card)card.remove();
-  document.querySelectorAll('#lbQuestionEditor [data-lb-q]').forEach((el,i)=>{const h=el.querySelector('.qhead b');if(h)h.textContent='Savol '+(i+1)});
+  const add=e.target.closest('[data-lb-add]');
+  if(add){lbAddQuestion(add.dataset.lbAdd);return;}
+  const rm=e.target.closest('[data-lb-remove]');
+  if(rm){
+    const card=rm.closest('[data-lb-q]'); if(card)card.remove();
+    lbRenumber();
+    return;
+  }
+  const idel=e.target.closest('[data-lb-imgdel]');
+  if(idel){
+    const card=idel.closest('[data-lb-q]'); if(!card)return;
+    card.dataset.img=''; card._thumb=''; lbRenderImg(card);
+  }
+});
+document.addEventListener('change',async function(e){
+  const sel=e.target.closest('[data-lb-type]');
+  if(sel){
+    const card=sel.closest('[data-lb-q]');
+    card.querySelector('[data-lb-body]').innerHTML=lbBodyHtml(card.dataset.lbQ,sel.value);
+    return;
+  }
+  const f=e.target.closest('[data-lb-img]');
+  if(!f)return;
+  const card=f.closest('[data-lb-q]'); const file=f.files&&f.files[0]; f.value='';
+  if(!card||!file)return;
+  if(!/^image\//.test(file.type)){alert('Faqat rasm fayli (JPG, PNG, WEBP) yuklang.');return;}
+  if(file.size>15*1024*1024){alert('Rasm juda katta (15 MB dan oshmasin).');return;}
+  card.dataset.uploading='1'; lbRenderImg(card);
+  try{
+    const dataUrl=await shrinkImage(file);
+    const r=await call('imageUpload',{mime:'image/jpeg',data:dataUrl});
+    if(!r||!r.ok)throw new Error(r&&r.error||'Rasmni yuklab bo‘lmadi.');
+    card.dataset.img=r.id; card._thumb=dataUrl;
+  }catch(err){
+    if(!err.auth)alert(err.message||'Rasmni yuklab bo‘lmadi.');
+  }finally{
+    card.dataset.uploading='0';
+    if(document.body.contains(card))lbRenderImg(card);
+  }
 });
 $('liveNewGameBtn').addEventListener('click',lbOpenGameEditor);
+
+/* ---------- O‘yinni yaratish ---------- */
 async function lbCreateStandaloneGame(){
   const title=($('lbGameTitle')?.value||'').trim();
   const cards=Array.from(document.querySelectorAll('#lbQuestionEditor [data-lb-q]'));
+  if(!title){alert('O‘yin nomini kiriting.');return;}
+  if(!cards.length){alert('Kamida bitta savol qo‘shing.');return;}
   const questions=[];
   for(let i=0;i<cards.length;i++){
-    const c=cards[i], q=(c.querySelector('[data-lb-text]')?.value||'').trim();
-    const options=[0,1,2,3].map(n=>(c.querySelector('[data-lb-opt="'+n+'"]')?.value||'').trim());
-    const correctIndex=Number(c.querySelector('[data-lb-correct]')?.value||0);
-    if(!q||options.some(x=>!x)){alert((i+1)+'-savolning matni va barcha 4 ta variantini to‘ldiring.');return;}
-    questions.push({q:q,options:options,correctIndex:correctIndex});
+    const c=cards[i], n=i+1;
+    if(c.dataset.uploading==='1'){alert('Rasm yuklanmoqda, biroz kuting.');return;}
+    const q=(c.querySelector('[data-lb-text]')?.value||'').trim();
+    if(!q){alert(n+'-savol matnini yozing.');return;}
+    const type=c.querySelector('[data-lb-type]').value;
+    const time=Number(c.querySelector('[data-lb-time]').value)||20;
+    const img=c.dataset.img||'';
+    const checked=c.querySelector('input[type=radio]:checked');
+    if(type==='type'){
+      const answers=(c.querySelector('[data-lb-ans]')?.value||'').split(/[\n|]/).map(x=>x.trim()).filter(Boolean);
+      if(!answers.length){alert(n+'-savolning to‘g‘ri javobini yozing.');return;}
+      questions.push({type:'type',q:q,time:time,img:img,answers:answers});
+    }else if(type==='tf'){
+      questions.push({type:'tf',q:q,time:time,img:img,correctIndex:checked?Number(checked.value):0});
+    }else{
+      const options=[0,1,2,3].map(k=>(c.querySelector('[data-lb-opt="'+k+'"]')?.value||'').trim());
+      if(options.some(x=>!x)){alert(n+'-savolning barcha 4 ta variantini to‘ldiring.');return;}
+      questions.push({type:'quiz',q:q,time:time,img:img,options:options,correctIndex:checked?Number(checked.value):0});
+    }
   }
-  if(!title){alert('O‘yin nomini kiriting.');return;}
-  if(!questions.length){alert('Kamida bitta savol qo‘shing.');return;}
-  const seconds=Number($('lbQuestionSeconds')?.value||15);
   const btn=document.querySelector('[data-m="lb-create-game"]'); if(btn)btn.disabled=true;
   try{
-    const r=await call('lbCreate',{title:title,questions:questions,questionSeconds:seconds});
+    const r=await call('lbCreate',{title:title,questions:questions});
     if(!r||r.ok===false)throw new Error(r&&r.error||'O‘yin xonasi yaratilmadi.');
-    const d=lbPick(r,['room','state','data'],r)||{};
+    const code=lbPick(r,['code','roomId'],'');
+    if(!code)throw new Error('Server xona kodini qaytarmadi. Apps Script kodini tekshiring.');
     closeModal();
-    lbTeacherRoom={title:title,code:lbPick(d,['code','roomId'],lbPick(r,['code','roomId'],'')),roomId:lbPick(d,['roomId','code'],lbPick(r,['roomId','code'],'')),testId:''};
-    if(!lbTeacherRoom.code)throw new Error('Server xona kodini qaytarmadi. Apps Script kodini tekshiring.');
-    await lbTeacherRefresh(false,r);
+    lbTeacherRoom={title:title,code:code,roomId:code,testId:''};
+    await lbTeacherRefresh(false);
     await lbLoadSavedGames();
-    if(lbTeacherPoll)clearInterval(lbTeacherPoll);lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),4000);
-  }catch(e){alert(e.message||'O‘yin yaratishda xatolik yuz berdi.');if(btn)btn.disabled=false;}
+    lbStartPoll();
+  }catch(e){
+    if(!e.auth)alert(e.message||'O‘yin yaratishda xatolik yuz berdi.');
+    if(btn)btn.disabled=false;
+  }
+}
+function lbStartPoll(){
+  if(lbTeacherPoll)clearInterval(lbTeacherPoll);
+  lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),2000);
+  if(!lbTick)lbTick=setInterval(lbTickTimer,500);
+}
+function lbTickTimer(){
+  const el=$('lbTimer'); if(!el||!lbLastState||!lbLastState.question)return;
+  const left=Math.max(0,Math.ceil((lbLastState.question.endsAt-(Date.now()+lbOffset))/1000));
+  el.textContent=left;
 }
 
+/* ---------- Saqlangan o‘yinlar ---------- */
 async function lbLoadSavedGames(){
   const box=$('liveGamesList');
   if(!box)return;
@@ -1301,9 +1460,10 @@ async function lbLoadSavedGames(){
       return;
     }
     box.innerHTML='<div class="table-wrap"><table><thead><tr><th>O‘yin</th><th>Xona kodi</th><th>Savollar</th><th>Holat</th><th>Yaratilgan</th><th></th></tr></thead><tbody>'+
-      rooms.map(x=>'<tr><td class="name">'+esc(x.title||'Jonli o‘yin')+'</td><td><b style="letter-spacing:2px">'+esc(x.code||'')+'</b></td><td>'+esc(x.questionCount||0)+'</td><td>'+esc(x.status||'waiting')+'</td><td>'+esc(x.createdAt||'')+'</td><td style="white-space:nowrap"><button class="btn small primary" type="button" data-m="lb-open-saved" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">Ochish</button> <button class="btn small danger" type="button" data-m="lb-delete-room" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">O‘chirish</button></td></tr>').join('')+
+      rooms.map(x=>'<tr><td class="name">'+esc(x.title||'Jonli o‘yin')+'</td><td><b style="letter-spacing:2px">'+esc(x.code||'')+'</b></td><td>'+esc(x.questionCount||0)+'</td><td>'+esc(LB_STATUS[x.status]||x.status||'')+'</td><td>'+esc(x.createdAt?tk(x.createdAt).full:'')+'</td><td style="white-space:nowrap"><button class="btn small primary" type="button" data-m="lb-open-saved" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">Ochish</button> <button class="btn small danger" type="button" data-m="lb-delete-room" data-code="'+esc(x.code||'')+'" data-title="'+esc(x.title||'Jonli o‘yin')+'">O‘chirish</button></td></tr>').join('')+
       '</tbody></table></div>';
   }catch(e){
+    if(e.auth)return;
     box.innerHTML='<div class="msg error">Saqlangan o‘yinlarni yuklab bo‘lmadi: '+esc(e.message||'Noma’lum xato')+'</div>';
   }
 }
@@ -1313,70 +1473,120 @@ async function lbDeleteSavedRoom(code,title){
   try{
     const r=await call('lbDelete',{code:code,roomId:code});
     if(!r||r.ok===false)throw new Error(r&&r.error||'Xonani o‘chirib bo‘lmadi.');
-    if(lbTeacherRoom&&lbTeacherRoom.code===code){lbTeacherRoom=null;if(lbTeacherPoll){clearInterval(lbTeacherPoll);lbTeacherPoll=null;}const current=$('lbCurrentRoom');if(current)current.innerHTML='';}
+    if(lbTeacherRoom&&lbTeacherRoom.code===code){
+      lbTeacherRoom=null; lbLastState=null;
+      if(lbTeacherPoll){clearInterval(lbTeacherPoll);lbTeacherPoll=null;}
+      const current=$('lbCurrentRoom'); if(current)current.innerHTML='';
+    }
     await lbLoadSavedGames();
-    alert('Jonli bellashuv xonasi o‘chirildi.');
   }catch(e){if(!e.auth)alert(e.message||'Xonani o‘chirishda xatolik yuz berdi.');}
 }
 async function lbOpenSavedRoom(code,title){
   if(!code)return;
+  lbInjectCss();
   lbTeacherRoom={title:title||'Jonli o‘yin',code:code,roomId:code,testId:''};
   try{
-    const r=await call('lbState',{code:code,roomId:code});
-    if(!r||r.ok===false)throw new Error(r&&r.error||'Xona holatini olib bo‘lmadi.');
-    lbTeacherRefresh(false,r);
-    if(lbTeacherPoll)clearInterval(lbTeacherPoll);
-    lbTeacherPoll=setInterval(()=>lbTeacherRefresh(false),4000);
+    await lbTeacherRefresh(true);
+    lbStartPoll();
   }catch(e){alert(e.message||'Xonani ochib bo‘lmadi.');}
 }
-function lbTeacherView(data){
-  const room=lbPick(data,['room','state','data'],data)||{};
-  const code=lbPick(room,['code','roomId'],lbTeacherRoom&&lbTeacherRoom.code||'');
-  const status=String(lbPick(room,['status','state','phase'],'waiting'));
-  const q=lbPick(room,['currentQuestion','question','current_question'],null);
-  const players=lbPick(room,['players','leaderboard','ranking'],[]);
-  const qtext=typeof q==='string'?q:lbPick(q,['q','text','question','title'],'Savol hali ochilmadi');
-  const list=Array.isArray(players)?players:[];
-  const rows=list.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(lbPick(p,['name','student','studentName'],'Ishtirokchi'))+'</td><td>'+esc(lbPick(p,['score','points','total'],0))+'</td></tr>').join('');
-  const rawQnum=lbPick(room,['questionNumber','questionIndex','currentIndex','current_question_number'],null); const qnum=rawQnum===null?'—':(Number(rawQnum)>=0?Number(rawQnum)+1: '—');
-  const qcount=lbPick(room,['questionCount'],'—');
-  const games=$('lbCurrentRoom');
-  if(games)games.innerHTML='<div class="card" style="padding:18px;margin-top:12px"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><b>'+esc(lbTeacherRoom.title)+'</b><div class="muted" style="margin-top:5px">Holat: '+esc(status)+' · Savol: '+esc(qnum)+' / '+esc(qcount)+'</div></div><div style="font-size:28px;font-weight:900;letter-spacing:4px;color:#0758c9">'+esc(code)+'</div></div><div class="modal-actions"><button class="btn" type="button" data-m="lb-copy" data-code="'+esc(code)+'">Kodni nusxalash</button><button class="btn primary" type="button" data-m="lb-start">Boshlash</button><button class="btn primary" type="button" data-m="lb-next">Javobni ko‘rsatish / Keyingi savol</button><button class="btn danger" type="button" data-m="lb-finish">Yakunlash</button><button class="btn" type="button" data-m="lb-refresh">Yangilash</button></div><div style="margin-top:14px;padding:14px;background:#f7f9fc;border-radius:10px"><b>Joriy savol</b><p style="margin-bottom:0">'+esc(qtext)+'</p></div><h3 style="margin-top:20px;color:#0d2a5b">Jonli reyting</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>O‘quvchi</th><th>Ball</th></tr></thead><tbody>'+(rows||'<tr><td colspan="3">Hali ishtirokchilar yo‘q</td></tr>')+'</tbody></table></div></div>';
+
+/* ---------- O‘qituvchi boshqaruv paneli ---------- */
+function lbMedal(i){return ['#d89e00','#8a94a6','#c0763a'][i]||'#46178f';}
+function lbTeacherView(r){
+  lbInjectCss();
+  lbLastState=r;
+  lbOffset=(Number(r.serverNow)||Date.now())-Date.now();
+  const code=r.code||(lbTeacherRoom&&lbTeacherRoom.code)||'';
+  const status=String(r.status||'lobby');
+  const players=Array.isArray(r.players)?r.players:[];
+  const qNum=Number(r.questionIndex)>=0?Number(r.questionIndex)+1:0;
+  const qCount=Number(r.questionCount)||0;
+  const q=r.question||null, rev=r.reveal||null;
+
+  let controls='<button class="btn" type="button" data-m="lb-copy" data-code="'+esc(code)+'">Kodni nusxalash</button>';
+  if(status==='lobby') controls+='<button class="btn primary" type="button" data-m="lb-start"'+(players.length?'':' title="Hali ishtirokchi yo‘q"')+'>▶ Boshlash</button>';
+  if(status==='question') controls+='<button class="btn primary" type="button" data-m="lb-next">Savolni tugatish</button>';
+  if(status==='reveal') controls+='<button class="btn primary" type="button" data-m="lb-next">'+(qNum>=qCount?'Yakuniy natija':'Keyingi savol ›')+'</button>';
+  if(status!=='finished') controls+='<button class="btn danger" type="button" data-m="lb-finish">Yakunlash</button>';
+  controls+='<button class="btn" type="button" data-m="lb-refresh">Yangilash</button>';
+
+  let body='';
+  if(status==='lobby'){
+    body='<div class="lbqbox"><b>Kutish zali</b><div class="muted" style="margin:6px 0 10px">O‘quvchilar saytda xona kodi va ismini kiritib qo‘shiladi. Hamma kirgach «Boshlash» ni bosing.</div>'+
+      (players.length?players.map(p=>'<span class="chip">'+esc(p.name)+'</span>').join(''):'<span class="muted">Hali hech kim kirmadi...</span>')+'</div>';
+  }else if(status==='question'&&q){
+    const left=Math.max(0,Math.ceil((q.endsAt-(Date.now()+lbOffset))/1000));
+    const typeName=q.type==='tf'?'To‘g‘ri / Noto‘g‘ri':(q.type==='type'?'Yozma javob':'Test');
+    body='<div class="lbqbox"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'+
+      '<div><div class="muted" style="font-size:13px">'+qNum+' / '+qCount+' · '+typeName+'</div><div style="font-size:19px;font-weight:800;margin-top:6px;color:#12203b">'+esc(q.q||q.text||'')+'</div></div>'+
+      '<div style="text-align:center"><div class="lbtimer" id="lbTimer">'+left+'</div><div class="muted" style="font-size:12px;margin-top:4px">Javob berdi: <b>'+esc(r.answerCount||0)+' / '+players.length+'</b></div></div></div>'+
+      (q.type==='type'?'<div class="muted" style="margin-top:12px">O‘quvchilar javobni yozib yuboradi.</div>':
+        '<div class="lbans">'+(q.options||[]).map((o,i)=>'<div style="background:'+(q.type==='tf'?(i===0?'#26890c':'#e21b3c'):LB_COLORS[i])+'"><span>'+(q.type==='tf'?(i===0?'✔':'✖'):LB_SHAPES[i])+'</span>'+esc(o)+'</div>').join('')+'</div>')+
+      '</div>';
+  }else if(status==='reveal'&&rev){
+    const dist=Array.isArray(rev.dist)?rev.dist:[]; const total=dist.reduce((a,b)=>a+b,0);
+    body='<div class="lbqbox"><div class="muted" style="font-size:13px">'+qNum+' / '+qCount+' · natija</div>'+
+      '<div style="font-size:19px;font-weight:800;margin:6px 0">'+esc(rev.question||'')+'</div>'+
+      '<div style="margin-bottom:8px">To‘g‘ri javob: <b style="color:#1f7a44">'+esc(rev.correctText||'')+'</b>'+(rev.accepted&&rev.accepted.length>1?' <span class="muted">(qabul qilinadi: '+esc(rev.accepted.join(', '))+')</span>':'')+' · to‘g‘ri javob berganlar: <b>'+esc(rev.correctCount||0)+' / '+esc(r.answerCount||0)+'</b></div>'+
+      (rev.type!=='type'&&dist.length?'<div class="lbans">'+(rev.options||[]).map((o,i)=>'<div class="'+(i===Number(rev.correctIndex)?'':'wrong')+'" style="background:'+(rev.type==='tf'?(i===0?'#26890c':'#e21b3c'):LB_COLORS[i])+'"><span>'+(rev.type==='tf'?(i===0?'✔':'✖'):LB_SHAPES[i])+'</span>'+esc(o)+'<b>'+(dist[i]||0)+'</b></div>').join('')+'</div>':'')+
+      '</div>';
+  }else if(status==='finished'){
+    const top=players.slice(0,3);
+    const order=top.length===3?[1,0,2]:top.map((_,i)=>i);
+    const heights=[130,100,80];
+    body='<div class="lbqbox"><b>🏆 O‘yin yakunlandi</b><div class="lbpod">'+
+      order.map(i=>{const p=top[i];return '<div style="background:'+lbMedal(i)+';height:'+heights[i]+'px"><div style="font-size:22px">'+(i+1)+'</div>'+esc(p.name)+'<div style="font-weight:600;font-size:13px">'+esc(p.score)+' ball</div></div>';}).join('')+
+      '</div></div>';
+  }
+
+  const rows=players.map((p,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(p.name)+(p.group?'<span class="sub">'+esc(p.group)+'</span>':'')+'</td><td><b>'+esc(p.score)+'</b></td></tr>').join('');
+  const host=$('lbCurrentRoom');
+  if(host)host.innerHTML='<div class="card lbhost">'+
+    '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><div><b style="font-size:18px">'+esc(r.title||lbTeacherRoom.title)+'</b><div class="muted" style="margin-top:5px">'+esc(LB_STATUS[status]||status)+' · ishtirokchilar: '+players.length+'</div></div><div class="lbcode">'+esc(code)+'</div></div>'+
+    '<div class="modal-actions">'+controls+'</div>'+body+
+    '<h3 style="margin:20px 0 8px;color:#0d2a5b">Jonli reyting</h3><div class="table-wrap"><table><thead><tr><th>№</th><th>O‘quvchi</th><th>Ball</th></tr></thead><tbody>'+(rows||'<tr><td colspan="3">Hali ishtirokchilar yo‘q</td></tr>')+'</tbody></table></div></div>';
 }
+
 $('liveGamesList').addEventListener('click',function(e){
   const b=e.target.closest('[data-m]'); if(!b)return;
   const a=b.dataset.m;
-  if(a==='lb-open-saved'){lbOpenSavedRoom(b.dataset.code,b.dataset.title);}
-  else if(a==='lb-delete-room'){lbDeleteSavedRoom(b.dataset.code,b.dataset.title);}
-  else if(a==='lb-copy'){
-    const code=b.dataset.code||'';
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+code));else alert('Xona kodi: '+code);
-  }else if(a==='lb-start')lbTeacherAction('lbStart');
-  else if(a==='lb-next')lbTeacherAction('lbNext');
-  else if(a==='lb-finish'){if(confirm('Jonli bellashuvni yakunlaysizmi?'))lbTeacherAction('lbFinish');}
-  else if(a==='lb-refresh')lbTeacherRefresh();
+  if(a==='lb-open-saved')lbOpenSavedRoom(b.dataset.code,b.dataset.title);
+  else if(a==='lb-delete-room')lbDeleteSavedRoom(b.dataset.code,b.dataset.title);
 });
-// Joriy xona panelidagi boshqaruv tugmalari uchun alohida hodisa tinglovchisi.
+// Joriy xona panelidagi boshqaruv tugmalari
 $('lbCurrentRoom').addEventListener('click',function(e){
   const b=e.target.closest('[data-m]'); if(!b)return;
   const a=b.dataset.m;
   if(a==='lb-copy'){
     const code=b.dataset.code||'';
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(()=>alert('Xona kodi nusxalandi.')).catch(()=>alert('Xona kodi: '+code));else alert('Xona kodi: '+code);
-  } else if(a==='lb-start') lbTeacherAction('lbStart');
-  else if(a==='lb-next') lbTeacherAction('lbNext');
+  }else if(a==='lb-start')lbTeacherAction('lbStart');
+  else if(a==='lb-next')lbTeacherAction('lbNext');
   else if(a==='lb-finish'){if(confirm('Jonli bellashuvni yakunlaysizmi?'))lbTeacherAction('lbFinish');}
-  else if(a==='lb-refresh') lbTeacherRefresh();
+  else if(a==='lb-refresh')lbTeacherRefresh(true);
 });
 
 async function lbTeacherAction(action){
-  if(!lbTeacherRoom||lbTeacherBusy)return;lbTeacherBusy=true;
-  try{const r=await call(action,{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});if(!r||r.ok===false)throw new Error(r&&r.error||'Jonli bellashuv so‘rovi bajarilmadi.');await lbTeacherRefresh(false,r)}
-  catch(e){if(!e.auth)alert(e.message||'Xatolik yuz berdi.')}finally{lbTeacherBusy=false}
+  if(!lbTeacherRoom||lbTeacherBusy)return;
+  lbTeacherBusy=true;
+  try{
+    const r=await call(action,{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});
+    if(!r||r.ok===false)throw new Error(r&&r.error||'Jonli bellashuv so‘rovi bajarilmadi.');
+    await lbTeacherRefresh(false);
+  }catch(e){if(!e.auth)alert(e.message||'Xatolik yuz berdi.');}
+  finally{lbTeacherBusy=false;}
 }
-async function lbTeacherRefresh(showError=true,known){
+async function lbTeacherRefresh(showError){
   if(!lbTeacherRoom)return;
-  try{const r=known||await call('lbState',{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});if(!r||r.ok===false)throw new Error(r&&r.error||'Xona holatini olib bo‘lmadi.');const d=lbPick(r,['room','state','data'],r)||{};lbTeacherRoom.code=lbPick(d,['code','roomId'],lbTeacherRoom.code);lbTeacherView(r)}catch(e){if(showError)alert(e.message||'Xona holatini olib bo‘lmadi.')}}
+  try{
+    const r=await call('lbState',{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});
+    if(!r||r.ok===false)throw new Error(r&&r.error||'Xona holatini olib bo‘lmadi.');
+    if(r.title)lbTeacherRoom.title=r.title;
+    lbTeacherView(r);
+  }catch(e){if(showError&&!e.auth)alert(e.message||'Xona holatini olib bo‘lmadi.');}
+}
+/* ================= Jonli bellashuv bloki tugadi ================= */
 
 async function deleteTest(id){
   const t=tests.find(x=>x.id===id); if(!t) return;
