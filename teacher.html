@@ -1509,6 +1509,7 @@ function lbTeacherView(r){
   if(status==='question') controls+='<button class="btn primary" type="button" data-m="lb-next">Savolni tugatish</button>';
   if(status==='reveal') controls+='<button class="btn primary" type="button" data-m="lb-next">'+(qNum>=qCount?'Yakuniy natija':'Keyingi savol ›')+'</button>';
   if(status!=='finished') controls+='<button class="btn danger" type="button" data-m="lb-finish">Yakunlash</button>';
+  if(status==='finished') controls+='<button class="btn primary" type="button" data-m="lb-restart-clear" title="Hamma xona kodi bilan qaytadan kiradi">🔄 Qayta o‘ynash</button><button class="btn" type="button" data-m="lb-restart-keep" title="Ismlar qoladi, ballar nolga tushadi">Qayta o‘ynash (ishtirokchilar qoladi)</button>';
   controls+='<button class="btn" type="button" data-m="lb-refresh">Yangilash</button>';
 
   let body='';
@@ -1564,14 +1565,16 @@ $('lbCurrentRoom').addEventListener('click',function(e){
   }else if(a==='lb-start')lbTeacherAction('lbStart');
   else if(a==='lb-next')lbTeacherAction('lbNext');
   else if(a==='lb-finish'){if(confirm('Jonli bellashuvni yakunlaysizmi?'))lbTeacherAction('lbFinish');}
+  else if(a==='lb-restart-clear'){if(confirm('O‘yin qaytadan boshlanadi: natijalar va ishtirokchilar tozalanadi. O‘quvchilar xona kodi bilan qayta kiradi. Davom etasizmi?'))lbTeacherAction('lbStart',{restart:'clear'});}
+  else if(a==='lb-restart-keep'){if(confirm('O‘yin qaytadan boshlanadi: ballar nolga tushadi, ishtirokchilar ro‘yxatda qoladi. Davom etasizmi?'))lbTeacherAction('lbStart',{restart:'keep'});}
   else if(a==='lb-refresh')lbTeacherRefresh(true);
 });
 
-async function lbTeacherAction(action){
+async function lbTeacherAction(action,extra){
   if(!lbTeacherRoom||lbTeacherBusy)return;
   lbTeacherBusy=true;
   try{
-    const r=await call(action,{code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code});
+    const r=await call(action,Object.assign({code:lbTeacherRoom.code,roomId:lbTeacherRoom.roomId||lbTeacherRoom.code},extra||{}));
     if(!r||r.ok===false)throw new Error(r&&r.error||'Jonli bellashuv so‘rovi bajarilmadi.');
     await lbTeacherRefresh(false);
   }catch(e){if(!e.auth)alert(e.message||'Xatolik yuz berdi.');}
