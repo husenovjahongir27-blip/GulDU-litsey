@@ -63,6 +63,24 @@ body{font-family:Arial,Helvetica,sans-serif;background:#46178f;color:#fff;overfl
 #toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:90%;text-align:center}
 #toast.show{opacity:1}
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* ---------- O‘yin sahifasi (bosh ro‘yxat) ---------- */
+.hub{flex:1;display:flex;flex-direction:column;color:#12203b;background:linear-gradient(180deg,#f3f7fc 0,#fff 420px)}
+.hub-head{background:linear-gradient(110deg,#071d43,#0b4fae);color:#fff}
+.hub-in{max-width:1000px;margin:auto;display:flex;align-items:center;gap:16px;padding:18px 20px}
+.hub-logo{width:56px;height:56px;border-radius:50%;border:3px solid rgba(255,255,255,.75);background:rgba(255,255,255,.1);object-fit:contain}
+.hub-t{font-size:22px;font-weight:800}.hub-s{font-size:13px;opacity:.9;margin-top:4px}
+.hub-main{width:100%;max-width:1000px;margin:0 auto;padding:22px 20px 40px;text-align:left}
+.hub-back{display:inline-block;color:#0758c9;font-weight:700;text-decoration:none;margin-bottom:10px;font-size:15px}
+.hub-main h1{margin:6px 0 4px;font-size:28px;color:#0d2a5b}
+.hub-main p{margin:0 0 18px;color:#526178;font-size:16px}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.gcard{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:#fff;border:1px solid #e3eaf3;border-radius:18px;padding:20px;box-shadow:0 8px 28px rgba(13,42,91,.10);cursor:pointer;font-family:inherit;color:#12203b}
+.gcard:hover{border-color:#8db7ed;transform:translateY(-2px)}
+.gcard .gic{display:grid;place-items:center;width:54px;height:54px;border-radius:14px;background:#46178f;color:#fff;font-size:28px}
+.gcard b{display:block;font-size:20px;color:#0d2a5b}.gcard small{display:block;margin-top:4px;color:#526178;font-size:14px;line-height:1.45}
+.gcard .gbtn{margin-top:4px;background:#46178f;color:#fff;font-weight:800;padding:10px 18px;border-radius:10px;box-shadow:0 3px 0 #2d0e5f}
+.hub-note{margin-top:18px;padding:14px;border:1px dashed #c9d6e8;border-radius:12px;color:#6b7484;font-size:14px;text-align:center}
 </style>
 </head>
 <body>
@@ -119,16 +137,30 @@ async function api(action,payload){
   return data;
 }
 
+/* ---------- O‘yin sahifasi: o‘yinlar ro‘yxati ---------- */
+function paintHub(){
+  S.running=false; S.key='';
+  document.body.style.background='#f3f7fc'; document.body.style.color='#12203b';
+  $('muteBtn').style.display='none';
+  $('app').innerHTML='<div class="hub"><header class="hub-head"><div class="hub-in"><img class="hub-logo" src="favicon.png" alt=""><div><div class="hub-t">Test Markaz Edu</div><div class="hub-s">Dasturchi: <b>Husenov Jahongir</b></div></div></div></header>'+
+    '<main class="hub-main"><a class="hub-back" href="index.html">← Bosh sahifa</a><h1>🎮 O‘yin sahifasi</h1><p>Ustoz tayyorlagan o‘yinlardan birini tanlang va o‘ynang.</p>'+
+    '<div class="games"><button class="gcard" id="gLive" type="button"><span class="gic">⚡</span><span><b>Jonli bellashuv</b><small>Kahoot usulidagi o‘yin: ustoz bergan xona kodi bilan kiring va butun sinf bilan bellashing.</small></span><span class="gbtn">O‘ynash →</span></button></div>'+
+    '<div class="hub-note">Yangi o‘yinlar tez orada qo‘shiladi.</div></main></div>';
+  $('gLive').addEventListener('click',()=>paintJoin(''));
+}
+
 /* ---------- Kirish ---------- */
 function paintJoin(msg){
   S.running=false; S.key='';
+  document.body.style.background='#46178f'; document.body.style.color='#fff'; $('muteBtn').style.display='';
   const urlCode=(new URLSearchParams(location.search).get('kod')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
   $('app').innerHTML='<div class="screen"><div class="logo">⚡ Jonli o‘yin</div><div class="card">'+
     '<label for="code">Xona kodi</label><input id="code" maxlength="6" autocomplete="off" autocapitalize="characters" inputmode="text" placeholder="ABC123" value="'+esc(S.code||urlCode)+'">'+
     '<label for="name">Ism-familiyangiz</label><input id="name" maxlength="50" autocomplete="name" placeholder="Masalan: Ali Valiyev" value="'+esc(S.name||localStorage.getItem('lb_name')||'')+'">'+
     '<label for="group">Sinf (ixtiyoriy)</label><input id="group" maxlength="30" autocomplete="off" placeholder="Masalan: 9-A">'+
-    '<button class="btn" id="joinBtn" type="button">Kirish</button><div class="msg" id="joinMsg">'+esc(msg||'')+'</div></div></div>';
+    '<button class="btn" id="joinBtn" type="button">Kirish</button><div class="msg" id="joinMsg">'+esc(msg||'')+'</div></div><button class="btn dark" id="backHub" type="button" style="max-width:420px">← O‘yinlar ro‘yxati</button></div>';
   $('joinBtn').addEventListener('click',doJoin);
+  $('backHub').addEventListener('click',paintHub);
   ['code','name','group'].forEach(id=>$(id).addEventListener('keydown',e=>{ if(e.key==='Enter')doJoin(); }));
 }
 async function doJoin(){
@@ -155,7 +187,7 @@ async function tryResume(){
       S.code=code; S.pid=r.playerId; S.name=r.name||name; S.poll=Math.max(1000,Number(r.pollMs)||1500); startLoop(); return;
     }catch(e){ store('lb_pid',null); store('lb_code',null); }
   }
-  paintJoin('');
+  if(urlCode)paintJoin(''); else paintHub();
 }
 function leave(msg){
   S.running=false; S.pid=''; S.st=null; S.key='';
